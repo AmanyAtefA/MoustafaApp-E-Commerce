@@ -1,0 +1,277 @@
+
+<hr class="lineStyle conDetails">
+
+<p class="StyleP fs-3"> Home > Shop > Men > T-shirts </p>
+
+<div class="container ">
+  <div class="row ">
+
+    <div class="col-6 d-flex gap-3">
+      <div class="divImage d-flex flex-column">
+        <img class="imagePrev" src="assets/images/image-D1.png" />
+        <img class="imagePrev" src="assets/images/image-D2.png" />
+        <img class="imagePrev" src="assets/images/image-D3.png" />
+      </div>
+
+      <div class="imageLarg">
+        <img src="assets/images/imageLarge.png" />
+      </div>
+
+    </div>
+
+
+
+    <div class="col-6 productDetails">
+      <h1 class="styleTitleP"> ONE LIFE GRAPHIC T-SHERT</h1>
+      <div class="stars">
+        <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
+      </div>
+
+      <div class="price">
+        <p>$260</p>
+        <p class="afterDis">$300</p>
+        <p class="dis">-40%</p>
+      </div>
+
+      <p class="styleDetailsP">
+        This graphic t-shirt which is perfect for any occasion.
+        Crafted from a soft and breathable fabric, it offers superior comfort and style.
+      </p>
+
+      <hr class="lineStyle ">
+
+      <div>
+        <p>Select Colors</p>
+
+        <div class="colors">
+          <button class="btn btn-success colorBtn"></button>
+          <button class="btn btn-dark colorBtn"></button>
+          <button class="btn btn-danger colorBtn"></button>
+        </div>
+
+      </div>
+
+      <hr class="lineStyle">
+
+
+      <div>
+        <p>Choose Size</p>
+
+        <div class="size">
+          <button class="btn btn-success ">Small</button>
+          <button class="btn btn-dark ">Medium</button>
+          <button class="btn btn-danger ">Large</button>
+          <button class="btn btn-secondary ">X-Large</button>
+        </div>
+      </div>
+
+
+      <div class="divAddToCart">
+        <div class="butAddNom">
+          <button class="addNomStyle">-</button>
+          <span> 1 </span>
+          <button class="addNomStyle">+</button>
+        </div>
+        <button class="butAddCart">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container mt-4">
+
+  <div class="tap">
+    <ul class="nav custom-tabs mt-5 mb-4" role="tablist">
+
+      <li class="nav-item flex-fill text-center">
+        <a class="nav-link active" data-bs-toggle="tab" href="#tab1">Product Details</a>
+      </li>
+
+      <li class="nav-item flex-fill text-center">
+        <a class="nav-link" data-bs-toggle="tab" href="#tab2">Rating & Reviews</a>
+      </li>
+
+      <li class="nav-item flex-fill text-center">
+        <a class="nav-link" data-bs-toggle="tab" href="#tab3">FAQs</a>
+      </li>
+
+    </ul>
+  </div>
+
+
+  <div class="tab-content pt-4 text-center">
+    <!--<div class="tab-pane fade show active" id="tab1">Content Tab 1</div>
+    <div class="tab-pane fade" id="tab2">Content Tab 2</div>
+    <div class="tab-pane fade" id="tab3">Content Tab 3</div>-->
+  </div>
+
+</div>
+
+
+
+<div class="container ">
+  <div class="divReviews">
+    <p class="reviews">All Reviews <span class="spanReviews">(451)</span> </p>
+
+    <div class="filterReviews">
+      <div class="fontIFilter">
+        <i class="bi bi-sliders2"></i>
+      </div>
+
+
+      <div class="filter-dropdown gap-5"
+           (mouseenter)="open = true"
+           (mouseleave)="open = false">
+
+        <button class="filter-btn Latest">
+          Latest
+          <i class="bi bi-chevron-compact-down"></i>
+        </button>
+
+        <div class="filter-menu" *ngIf="open">
+          <div class="item">Newest</div>
+          <div class="item">Oldest</div>
+          <div class="item">Highest Rating</div>
+          <div class="item">Lowest Rating</div>
+        </div>
+      </div>
+
+      <button class="butstyle">Write a Review</button>
+
+    </div>
+  </div>
+
+
+  <div class=" row g-3">
+
+    <div class="col-12 col-md-6">
+      <div class="card">
+        <div class="divLarge">
+          <div class="divSmall">
+            <div class="stars">
+              <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
+            </div>
+            <h4>Samantha D.</h4>
+            <p style="color:gray;">
+              "I absolutely love this t-shirt! The design is unique and
+              the fabric feels so comfortable. As a fellow designer,
+              I appreciate the attention to detail.It's become my favorite go-to shirt."
+            </p>
+          </div>
+          <p class="sizeP"> ... </p>
+        </div>
+        <p class="postIn" style="color:gray;">Posted on August 14, 2023</p>
+
+      </div>
+    </div>
+
+
+    <div class="col-12 col-md-6">
+      <div class="card">
+        <div class="divLarge">
+          <div class="divSmall">
+            <div class="stars">
+              <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
+            </div>
+            <h1>Alex M.</h1>
+            <p>
+              "The t-shirt exceeded my expectations! The colors are vibrant and the print quality
+              is top-notch.Being a UI/UX designer myself, I'm quite picky about aesthetics,
+              and this t-shirt definitely gets a thumbs up from me."
+            </p>
+          </div>
+          <p class="sizeP"> ... </p>
+        </div>
+        <p class="postIn" style="color:gray;">Posted on August 14, 2023</p>
+
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card">
+        <div class="divLarge">
+          <div class="divSmall">
+            <div class="stars">
+              <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
+            </div>
+            <h1>Ethan R.</h1>
+            <p>
+              "This t-shirt is a must-have for anyone who appreciates good design.
+              The minimalistic yet stylish pattern caught my eye, and the fit is perfect.
+              I can see the designer's touch in every aspect of this shirt."
+            </p>
+          </div>
+          <p class="sizeP"> ... </p>
+        </div>
+        <p class="postIn" style="color:gray;">Posted on August 14, 2023</p>
+
+      </div>
+    </div>
+
+
+    <div class="col-12 col-md-6">
+      <div class="card">
+        <div class="divLarge">
+          <div class="divSmall">
+            <div class="stars">
+              <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
+            </div>
+            <h1>Olivia P.</h1>
+            <p>
+              "As a UI/UX enthusiast, I value simplicity and functionality.
+              This t-shirt not only represents those principlesto wear.
+              It's evident that the designer poured their creativity into making this t-shirt stand out."
+            </p>
+          </div>
+          <p class="sizeP"> ... </p>
+        </div>
+        <p class="postIn" style="color:gray;">Posted on August 14, 2023</p>
+
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card">
+        <div class="divLarge">
+          <div class="divSmall">
+            <div class="stars">
+              <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
+            </div>
+            <h1>Liam K.</h1>
+            <p>
+              "This t-shirt is a fusion of comfort and creativity.
+              The fabric is soft, and the design speaks volumes about the designer's skill.
+              It's like wearing a piece of art that reflects my passion for both design and fashion."
+            </p>
+          </div>
+          <p class="sizeP"> ... </p>
+        </div>
+        <p class="postIn" style="color:gray;">Posted on August 14, 2023</p>
+
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card">
+        <div class="divLarge">
+          <div class="divSmall">
+            <div class="stars">
+              <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
+            </div>
+            <h1>Ava H.</h1>
+            <p>
+              "I'm not just wearing a t-shirt; I'm wearing a piece of design philosophy.
+              The intricate details and thoughtful layout of the design make this
+              shirt a conversation starter."
+            </p>
+          </div>
+          <p class="sizeP"> ... </p>
+        </div>
+        <p class="postIn" style="color:gray;">Posted on August 14, 2023</p>
+
+      </div>
+    </div>
+  </div>
+</div>

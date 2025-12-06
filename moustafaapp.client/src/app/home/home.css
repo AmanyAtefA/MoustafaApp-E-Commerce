@@ -1,0 +1,147 @@
+
+.textInLogo {
+  width: 100%;
+  min-height: 600px;
+  background-image: url('/assets/images/logo.png');
+  background-size: contain;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+.h1Style {
+  font-family: "Integral CF", sans-serif;
+  font-weight: 800;
+  font-size: 64px;
+  line-height: 64px;
+  max-width: 600px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.h4Style {
+  max-width: 500px;
+  font-size: 17px;
+  color: gray;
+  margin-bottom: 25px;
+}
+
+.butstyle {
+  width: 200px;
+  height: 50px;
+  border-radius: 50px;
+  background: black;
+  color: white;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+/* الأرقام */
+.boxItems {
+  width: 550px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itemNumber {
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.textBox {
+  font-size: 14px;
+  margin-top: 5px;
+  color: gray;
+}
+
+.line {
+  width: 1px;
+  height: 50px;
+  background-color: #ccc;
+}
+
+
+
+@media (max-width: 768px) {
+
+  .textInLogo {
+    background-image: none; 
+    background-color: #f5f5f5;
+  }
+
+  .mobileHero {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    content: url('/assets/images/Models.png');
+  }
+
+  .textInLogo {
+    padding: 0 !important;
+  }
+
+  .h1Style {
+    padding: 25px;
+    font-size: 32px;
+    line-height: 38px;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .h4Style {
+    font-size: 14px;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .butstyle {
+    width: 100%;
+  }
+
+  .boxItems {
+    width: 85%; 
+    margin: 0 auto;
+    padding-bottom:5px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 20px;
+    text-align: center;
+    position: relative;
+  }
+
+    .boxItems::after {
+      content: "";
+      width: 2px; 
+      height: 50%;
+      background: #ccc; 
+      position: absolute;
+      top: 0%; 
+      left: 50%; 
+      transform: translateX(-50%);
+    }
+
+    
+    .boxItems .itemNumber:nth-child(5) {
+      grid-column: 1 / -1;
+    }
+
+ 
+  .line {
+    display: none !important;
+  }
+
+  .itemNumber {
+    font-size: 22px;
+  }
+}

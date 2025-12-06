@@ -1,0 +1,78 @@
+<div class="container">
+  <nav class="navStyle">
+
+    <div class="left-wrapper">
+
+      <i id="toggleMenu"
+         class="bi bi-list toggleMenu d-md-none"
+         (click)="toggleMenu()">
+      </i>
+
+      <h1 class="logo">Shop.Co</h1>
+    </div>
+
+    <ul class="menu d-none d-md-flex list-unstyled m-0 gap-4">
+      <li class="dropdown"
+          (mouseenter)="showMenu()"
+          (mouseleave)="hideMenu()"
+          [class.open]="shopOpenDesktop">
+
+        <a class="nav-link">Shop</a>
+
+        <ul class="submenu"
+            [class.open]="shopOpenDesktop"
+            (mouseenter)="showMenu()"
+            (mouseleave)="hideMenu()">
+          <li><a>Shop1</a></li>
+          <li><a>Shop2</a></li>
+          <li><a>Shop3</a></li>
+        </ul>
+
+      </li>
+
+      <li><a class="nav-link">On Sale</a></li>
+      <li><a class="nav-link">New Arrivals</a></li>
+      <li><a class="nav-link">Brands</a></li>
+    </ul>
+    
+
+    <div class="inputSearch">
+      <i class="bi bi-search "></i>
+      <input type="text" class="form-control "
+             placeholder="Search for product ..." />
+    </div>
+
+    <div class="right-icons">
+
+      <i class="bi bi-cart"></i>
+      <i class="bi bi-person"></i>
+
+    </div>
+
+    <div id="mobileMenu" class="mobileMenu" [class.active]="menuOpen">
+      <ul class="list-unstyled m-0">
+
+        <li class="mobile-dropdown" (click)="toggleShopMobile()">
+          <div class="mobile-dropdown-header">
+            <a>Shop</a>
+            <i class="bi bi-chevron-down dropdown-arrow"
+               [class.rotate]="shopOpenMobile"></i>
+          </div>
+
+
+          <ul class="mobile-submenu" [class.open]="shopOpenMobile">
+            <li><a>Men</a></li>
+            <li><a>Women</a></li>
+            <li><a>Kids</a></li>
+          </ul>
+        </li>
+
+        <li><a>On Sale</a></li>
+        <li><a>New Arrivals</a></li>
+        <li><a>Brands</a></li>
+
+      </ul>
+    </div>
+
+  </nav>
+</div>

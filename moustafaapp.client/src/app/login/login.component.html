@@ -1,0 +1,45 @@
+
+<form [formGroup]="UserLoginForm" (submit)="Login()">
+  <div class="container-fluid">
+    <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+      <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+        <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <a href="index.html" class="">
+              <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+            </a>
+            <h3>Sign In</h3>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" name="UserName" formControlName="UserName" class="form-control" id="floatingInput" placeholder="UserName">
+            <label for="floatingInput">UserName</label>
+            <div class="text-bg-danger" *ngIf="UserLoginForm.get('UserName')?.invalid && UserLoginForm.get('UserName')?.touched">
+              <p *ngIf="UserLoginForm.get('UserName')?.errors?.['required']">Name is Required</p>
+              <p *ngIf="UserLoginForm.get('UserName')?.errors?.['pattern']">Name must be between 3 and 20 alphabetic characters</p>
+            </div>
+          </div>
+
+          <div class="form-floating mb-4">
+            <input type="Password" name="Password" formControlName="Password" class="form-control" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+            <div class="text-bg-danger" *ngIf="UserLoginForm.get('Password')?.invalid && UserLoginForm.get('Password')?.touched">
+              <p *ngIf="UserLoginForm.get('Password')?.errors?.['required']">Password is required</p>
+              <p *ngIf="UserLoginForm.get('Password')?.errors?.['minlength']">Password must be at least 6 characters</p>
+              <p *ngIf="UserLoginForm.get('Password')?.errors?.['maxlength']">Password must not exceed 20 characters</p>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <!--<div class="form-check">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div>
+            <a href="">Forgot Password</a>-->
+          </div>
+          <button [disabled]="UserLoginForm.invalid" type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
+          <p class="text-center mb-0">Don't have an Account? <a href="" routerLink="/Register">Sign Up</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+

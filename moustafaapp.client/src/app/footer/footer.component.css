@@ -1,0 +1,192 @@
+
+.conStyle {
+  width: 100%;
+  max-width: 1441px;
+  height: auto;
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 1;
+  margin-top: 170px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.latestOffers {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding: 50px;
+  max-width: 1240px;
+  width: 100%;
+  gap: 30px;
+  height: auto;
+  background: #000000;
+  border-radius: 20px;
+  align-items: center;
+  justify-content: space-evenly;
+  position: static;
+  margin-top: -100px;
+}
+
+.latestText {
+  max-width: 551px;
+  width: 100%;
+  height: 94px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Integral CF';
+  font-weight: 900;
+  font-size: 40px;
+  line-height: 45px;
+  color: #FFFFFF;
+}
+
+.divInput {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 349px;
+  width: 100%;
+  height: 108px;
+}
+
+.input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 12px;
+  width: 100%;
+  max-width: 349px;
+  height: 48px;
+  background: #FFFFFF;
+  border-radius: 62px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 0px;
+  gap: 80px;
+  max-width: 1240px;
+  width: 100%;
+  font-size: 14px;
+  margin-top: 30px;
+}
+
+.logo {
+  font-size: 30px;
+  font-weight: 900;
+  font-family: "Integral CF", sans-serif;
+}
+
+.footerShop {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  max-width: 300px;
+  font-size: 16px;
+  
+}
+
+.latestCompany {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 26px;
+  width: 104px;
+  height: 177px;
+ 
+}
+
+.footerHelp {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 26px;
+  width: 136px;
+  height: 177px;
+ 
+}
+
+.footerFAQ {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 26px;
+  width: 149px;
+  height: 177px;
+ 
+}
+
+.footerResources {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 26px;
+  width: 149px;
+  height: 177px;
+
+}
+
+.lineStyle {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #000000;
+}
+
+.latestCompany p,
+.footerHelp p,
+.footerFAQ p,
+.footerResources p {
+  margin: 0;
+  line-height: .5;
+}
+
+.end {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  max-width: 1240px;
+  width: 100%;
+  font-size: 18px;
+}
+
+.divLogos {
+  width: 400px;
+  height: auto;
+  opacity: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+@media (max-width: 768px) {
+
+  .footer {
+    justify-content: flex-start;
+    gap: 50px;
+    margin-top: 40px;
+    padding-left:10px;
+  }
+
+  .latestCompany {
+    margin-right: 40px;
+  }
+
+  .end {
+      margin-left:40px;
+  }
+}

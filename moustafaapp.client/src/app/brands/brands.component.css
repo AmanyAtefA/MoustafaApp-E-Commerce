@@ -1,0 +1,60 @@
+
+.style {
+  max-width: 1440px;
+  height: 122px;
+  opacity: 1;
+  align-items: center;
+  justify-content: space-evenly;
+  background: black;
+  display: flex;
+  flex-wrap: wrap;
+}
+.imgBrand {
+  width: 500px;
+  width: 194px;
+  height: 31px;
+  opacity: 1;
+  border-width: 1.02px;
+}
+.zara {
+  width: 91px;
+  height: 37.984291076660156px;
+  opacity: 1;
+}
+.gucci {
+  width: 155.99998474121094px;
+  height: 32.28535461425781px;
+  opacity: 1;
+}
+.versace {
+  width: 166.48175048828125px;
+  height: 33.16448211669922px;
+  opacity: 1;
+}
+.prada {
+  width: 194px;
+  height: 31.19556427001953px;
+  opacity: 1;
+  border-width: 1.02px;
+}
+.calvinKline {
+  width: 206.78785705566406px;
+  height: 33.34809494018555px;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+
+  .style {
+    padding: 20px 20px;
+    gap: 20px; 
+    height: auto; 
+  }
+
+  .imgBrand {
+    width: 100px !important; 
+    opacity: 1;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

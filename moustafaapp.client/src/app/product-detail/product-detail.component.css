@@ -1,0 +1,578 @@
+
+.StyleP {
+  padding-left: 100px;
+  margin-bottom: 30px;
+}
+
+.conDetails {
+  align-items: center;
+  justify-content: space-evenly;
+  display: flex;
+  width: 100%;
+}
+.divImage {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 30%;
+  height: 500px;
+  
+}
+.imagePrev {
+  width: 100%;
+  max-width: 152px;
+  height: 160px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  object-fit: cover;
+}
+.imageLarg {
+  width: 70%;
+}
+.imageLarg img {
+  width: 100%;
+  max-width: 444px;
+  height: 500px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  object-fit: cover;
+}
+
+
+.productDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  flex-wrap: wrap;
+  height: 100%;
+  max-height: 530px;
+}
+.styleTitleP {
+  font-weight: 1000;
+  height: 48px;
+}
+.styleDetailsP {
+  width: 590px;
+  height: 33px;
+  flex-wrap: wrap;
+  line-height: 1.8;
+  margin-bottom: 25px;
+}
+.stars {
+  display: flex;
+  gap: 5px;
+  margin: 14px 0;
+  width: 18.49px;
+  height: 18.49px;
+}
+
+.star {
+  width: 25px;
+  height: 20.49px;
+}
+
+.price {
+  opacity: 1;
+  gap: 10px;
+  display: flex;
+  font-size: 18px;
+  width: 295px;
+  font-weight: 900;
+}
+
+.afterDis {
+  color: gray;
+  text-decoration: line-through;
+}
+
+.dis {
+  color: rgba(255, 51, 51, 1);
+  background: rgba(255, 51, 51, 0.1);
+  border-radius: 20px;
+  display: inline-block;
+  line-height: 1.2;
+  font-size: 12px;
+  padding: 4px 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 45px;
+  min-height: 25px;
+}
+
+.colors {
+  display: flex;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.colorBtn {
+  width: 50px;
+  height: 35px;
+  border-radius: 50%; 
+  border: 2px solid #ccc;
+  cursor: pointer;
+}
+
+.size {
+  display: flex;
+  width: 100%;
+  height: 46px;
+  gap: 18px;
+  align-items: center;
+  justify-content: start;
+  border-radius: 60px;
+  flex-wrap: wrap;
+}
+
+.divAddToCart {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  height: auto !important;
+  max-height: none !important;
+}
+
+.butAddNom {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background: #f3ecec;
+  width: 130px;
+  height: 45px;
+}
+
+.addNomStyle {
+  width: 40px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40px;
+  background: white;
+  
+}
+
+.butAddCart {
+  width: 220px;
+  height: 50px;
+  border-radius: 62px;
+  background: black;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+  text-align: center;
+  align-self: flex-start;
+  margin: 15px;
+  border: 1px solid #999;
+}
+
+.lineStyle {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #999;
+    margin: 15px 0;
+  }
+
+
+@media (max-width: 768px) {
+
+.col-6 
+ {
+  width: 100% !important;
+  display: flex;
+  flex-direction: column !important;
+}
+
+.imageLarg {
+  order: 1;
+  width: 100% !important;
+  height: auto !important;
+}
+
+  .imageLarg img {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+.divImage {
+  order: 2;
+  width: 100% !important;
+  height: auto !important;
+  display: flex;
+  flex-direction: row !important;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 10px !important;
+}
+
+.imagePrev {
+  width: 100% !important;
+  max-width: 145px;
+  max-height: 160px;
+}
+
+.productDetails{
+    margin-top:10px;
+}
+
+.styleDetailsP {
+  max-width: 358px;
+  width: 100% !important;
+  height: 50px;
+  font-size: 14px;
+  
+}
+.divAddToCart {
+  justify-content: start;
+  align-items: start;
+
+}
+.butAddCart {
+  width: 210px;
+  align-items: start;
+
+}
+
+}
+
+
+.card {
+  border-radius: 20px;
+
+ 
+}
+
+
+
+@media (max-width: 768px) {
+
+.productDetails {
+  display: flex;
+  flex-direction: column;
+  height: auto !important;
+  max-height: none !important;
+  width: 100%;
+}
+
+.divAddToCart {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  margin-top: 25px !important;
+  order: 999 !important; 
+}
+
+.size {
+  gap: 18px;
+}
+
+}
+
+
+/*  التابات */
+.custom-tabs .nav-link {
+  padding: 8px 16px;
+  padding-bottom: 20px; 
+  font-size: 20px;
+  color: #555;
+  font-weight: 400;
+  border: none;
+  position: relative;
+  background: transparent;
+  line-height: 1; 
+}
+
+
+.tap {
+  width: 100%;
+  max-width: 1240px;
+  margin: auto;
+}
+
+
+  /* خط خفيف ثابت لأسفل كل التابات*/
+
+.custom-tabs {
+  position: relative;
+  border: none;
+}
+
+.custom-tabs::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0; 
+  width: 100%;
+  height: 2px;
+  background: #ddd;
+}
+
+
+ /*  شكل اللينكات (التابات)*/
+
+.custom-tabs .nav-link {
+  position: relative;
+  font-size: 20px;
+  font-weight: 400;
+  padding: 10px 0;
+  color: #555;
+  border: none !important;
+}
+
+.custom-tabs .nav-link::after {
+  display: none !important;
+}
+
+
+ /*  الاكتيف*/
+ 
+.custom-tabs .nav-link.active {
+  font-size: 22px;   
+  font-weight: 400;  
+  color: #000;
+}
+
+
+.custom-tabs .nav-link.active::before {
+  content: "";
+  position: absolute;
+  left: 10%;  
+  bottom: 0;  
+  width: 80%; 
+  height: 2px;
+  background: #000;
+  border-radius: 8px;
+  z-index: 5;
+}
+
+.reviews {
+  font-size: 28px;
+  width: 295px;
+  font-weight: 600;
+  padding: 0px;
+  margin: 0px;
+}
+
+.spanReviews {
+  font-size: 20px; 
+  font-weight: 400; 
+  color: #555; 
+}
+
+.filter-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-btn {
+  padding: 10px 16px;
+  cursor: pointer;
+  background: #f3ecec;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.arrow {
+  margin-left: 6px;
+  font-size: 14px;
+}
+
+.filter-menu {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  width: 180px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  z-index: 20;
+}
+
+.item {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.item:hover {
+  background: #f6f6f6;
+}
+
+
+.divReviews {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+
+.butstyle {
+  max-width: 188px;
+  width: 100%;
+  height: 45px;
+  border-radius: 50px;
+  background: black;
+  color: white;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+
+.fontIFilter {
+  width: 45px;
+  height: 45px;
+  background: #f3ecec;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.fontIFilter i {
+  font-size: 22px;
+  line-height: 1 !important;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+.filterReviews {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.Latest {
+  border-radius: 40px;
+  background: #f3ecec;
+  padding: 0 20px;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  max-width: 140px;
+  width: 100%;
+  white-space: nowrap;
+  gap: 15px;
+}
+
+.filter-menu {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background: white;
+  border-radius: 10px;
+  width: 160px;
+  padding: 10px 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.filter-menu .item {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.filter-menu .item:hover {
+  background: #f7f7f7;
+}
+
+
+
+.card {
+  max-width: 570px;
+  width: 100%;
+  height: 240px;
+  border-radius: 20px;
+  border-width: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding-bottom: 15px;
+}
+
+.divLarge {
+  max-width: 546px;
+  width: 100%;
+  height: 139px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px
+}
+
+.divSmall {
+  max-width:522px;
+  width: 100%;
+  height: 139px;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  font-size: 14px;
+}
+.sizeP {
+  font-weight: 900;
+  margin-bottom: 80px;
+  font-size: 20px;
+  margin-right: 15px;
+  color:gray;
+}
+
+
+.postIn {
+  max-width: 546px;
+  width: 100%;
+  height: 22px;
+  padding: 25px;
+  font-size: 18px;
+  font-weight: 400;
+}
+@media (max-width: 600px) {
+
+ 
+.Latest {
+  display: none !important;
+}
+
+
+.divReviews {
+  flex-wrap: nowrap !important;
+}
+
+.filterReviews {
+  flex-wrap: nowrap !important;
+}
+
+
+.butstyle {
+  max-width: 140px; 
+  font-size: 15px;
+  flex-shrink: 1; 
+  padding: 0 10px;
+}
+
+
+.fontIFilter {
+  flex-shrink: 0;
+}
+}

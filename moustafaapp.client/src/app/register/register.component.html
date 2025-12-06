@@ -1,0 +1,69 @@
+
+<form [formGroup]="RegesterUserForm" (ngSubmit)="RegisterUser()">
+  <div class="container-fluid">
+    <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+      <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+        <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <a href="index.html" class="">
+              <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+            </a>
+            <h3>Sign Up</h3>
+          </div>
+          <div class="form-floating mb-3">
+            <input formControlName="userName" name="userName" type="text" class="form-control" id="User Name" placeholder="User Name" required>
+            <label for="User Name">Username</label>
+            <div class="text-bg-danger" *ngIf="RegesterUserForm.get('userName')?.invalid && RegesterUserForm.get('userName')?.touched">
+              <p *ngIf="RegesterUserForm.get('userName')?.errors?.['required']">Name is Required</p>
+              <p *ngIf="RegesterUserForm.get('userName')?.errors?.['pattern']">Name must be between 3 and 20 alphabetic characters</p>
+            </div>
+          </div>
+          <div class="form-floating mb-3">
+            <input formControlName="phoneNumber" name="phoneNumber" type="text" class="form-control" id="PhoneNumber" placeholder="PhoneNumber" required>
+            <label for="PhoneNumber">PhoneNumber</label>
+            <div class="text-bg-danger" *ngIf="RegesterUserForm.get('phoneNumber')?.invalid && RegesterUserForm.get('phoneNumber')?.touched">
+              <p *ngIf="RegesterUserForm.get('phoneNumber')?.errors?.['required']">phoneNumber is required</p>
+              <p *ngIf="RegesterUserForm.get('phoneNumber')?.errors?.['maxlength']">phoneNumber must not exceed 11 characters</p>
+              <p *ngIf="RegesterUserForm.get('phoneNumber')?.errors?.['pattern']">phoneNumber must number only </p>
+            </div>
+          </div>
+          <div class="form-floating mb-3">
+            <input formControlName="email" name="email" type="email" class="form-control" id="Email" placeholder="name@example.com" required>
+            <label for="Email">Email address</label>
+            <div class="text-bg-danger" *ngIf="RegesterUserForm.get('email')?.invalid && RegesterUserForm.get('email')?.touched">
+              <p *ngIf="RegesterUserForm.get('email')?.errors?.['required']">Email is required</p>
+              <p *ngIf="RegesterUserForm.get('email')?.errors?.['email']">Email is invaled</p>
+            </div>
+          </div>
+          <div class="form-floating mb-4">
+            <input formControlName="password" name="password" type="password" class="form-control" id="Password" placeholder="Password" required>
+            <label for="Password">Password</label>
+            <div class="text-bg-danger" *ngIf="RegesterUserForm.get('password')?.invalid && RegesterUserForm.get('password')?.touched">
+              <p *ngIf="RegesterUserForm.get('password')?.errors?.['required']">Password is required</p>
+              <p *ngIf="RegesterUserForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</p>
+              <p *ngIf="RegesterUserForm.get('password')?.errors?.['maxlength']">Password must not exceed 20 characters</p>
+            </div>
+          </div>
+          <div class="form-floating mb-4">
+            <input formControlName="confirmPassword" name="confirmPassword" type="password" class="form-control" id="ConfirmPassword" placeholder="Confirm Password" required>
+            <label for="ConfirmPassword">Confirm Password</label>
+            <div class="text-bg-danger" *ngIf="RegesterUserForm.get('confirmPassword')?.invalid && RegesterUserForm.get('confirmPassword')?.touched">
+              <p *ngIf="RegesterUserForm.get('confirmPassword')?.errors?.['required']">confirmPassword is required</p>
+              <p *ngIf="RegesterUserForm.get('confirmPassword')?.errors?.['minlength']">confirmPassword must be at least 6 characters</p>
+              <p *ngIf="RegesterUserForm.get('confirmPassword')?.errors?.['maxlength']">confirmPassword must not exceed 20 characters</p>
+            </div>
+          </div>
+          <!--<div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div>
+            <a href="">Forgot Password</a>
+          </div>-->
+          <button type="submit" [disabled]="RegesterUserForm.invalid" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
+          <p class="text-center mb-0">Already have an Account? <a routerLink="/Login">Sign In</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

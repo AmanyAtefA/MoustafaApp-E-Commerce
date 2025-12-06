@@ -1,0 +1,16 @@
+
+.style {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
+  margin-bottom:20px;
+}
+
+
+.h4Style {
+  color: white;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
