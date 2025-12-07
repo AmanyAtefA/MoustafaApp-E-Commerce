@@ -1,4 +1,6 @@
-﻿public class ProductDto
+﻿using MoustafaApp.Server.Dtos.ProductDtos;
+
+public class ProductDto
 {
     public int ProductId { get; set; }
     public string Name { get; set; } = null!;

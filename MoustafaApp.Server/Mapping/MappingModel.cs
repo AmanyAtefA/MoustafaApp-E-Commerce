@@ -1,6 +1,10 @@
 ﻿
 
 
+using MoustafaApp.Server.Dtos.CartDtos;
+using MoustafaApp.Server.Dtos.CategoryDtos;
+using MoustafaApp.Server.Dtos.ProductDtos;
+
 namespace moustafapp.Server.Mapping
 {
     public class MappingModel : AutoMapper.Profile
@@ -9,16 +13,18 @@ namespace moustafapp.Server.Mapping
         {
     
             CreateMap<Brand, BrandDto>().ReverseMap();
-          
 
-            CreateMap<Department, DepartmentDto>().ReverseMap();
+
+            CreateMap<Department, DepartmentDto>();
+            CreateMap<Department, DepartmentWithProductDto>();
 
 
             CreateMap<CreateReviewDto, Review>().ReverseMap();
 
 
 
-            CreateMap<Category, CategoryDto>()
+            CreateMap<Category, CategoryDto>();
+            CreateMap<Category, CategoryWithProducDto>()
                 .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
 
             CreateMap<CreateCategoryDto, Category>()

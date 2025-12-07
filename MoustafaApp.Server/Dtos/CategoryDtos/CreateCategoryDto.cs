@@ -1,5 +1,4 @@
-﻿
-namespace moustafapp.Server.Dtos
+﻿namespace MoustafaApp.Server.Dtos.CategoryDtos
 {
     public class CreateCategoryDto
     {

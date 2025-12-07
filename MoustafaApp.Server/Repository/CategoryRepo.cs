@@ -12,7 +12,7 @@ namespace moustafapp.Server.Repository
             
         } 
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesWithProductsThenInclude()
+        public async Task<IEnumerable<Category>> GetAllCategoriesWithProducts()
         {
             var Categories = await _context.Categories
                 .Include(x => x.Products).ThenInclude(p => p.Images)
@@ -26,7 +26,7 @@ namespace moustafapp.Server.Repository
 
 
 
-        public async Task<Category> GetCategoryByIdWithProductsThenInclude(int id)
+        public async Task<Category> GetCategoryByIdWithProducts(int id)
         {
 
             var Category = await _context.Categories

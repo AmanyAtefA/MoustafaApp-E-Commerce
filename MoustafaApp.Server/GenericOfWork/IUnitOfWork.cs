@@ -8,12 +8,12 @@ namespace moustafapp.Server.GenericOfWork
         RoleManager<IdentityRole> RoleManager { get; }
         ProductIRepo Products  { get; }
         CategoryIRepo Categories { get; }
-
+        DepartmentIRepo Departments { get; }
         CartIRepo Carts { get; }
+       
         IBaseRepository<CartItem> CartItems { get;}
         IBaseRepository<ProductImage> ProductImage { get; }
         IBaseRepository<ApplicationUser> Users { get; }
-        IBaseRepository<Department> Departments { get; }
         IBaseRepository<Brand> Brands { get; }
         IBaseRepository<ProductColor> ProductColors { get; }
         IBaseRepository<ProductSize> ProductSizes { get; }

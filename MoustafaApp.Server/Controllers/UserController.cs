@@ -1,6 +1,7 @@
 ﻿
 
 using Microsoft.IdentityModel.Tokens;
+using MoustafaApp.Server.Dtos.UserDtos;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

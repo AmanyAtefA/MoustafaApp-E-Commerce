@@ -1,4 +1,4 @@
-﻿namespace MoustafaApp.Server.Dtos
+﻿namespace MoustafaApp.Server.Dtos.ProductDtos
 {
     public class ProductSizeDto
     {

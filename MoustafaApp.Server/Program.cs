@@ -61,6 +61,7 @@ namespace moustafapp.Server
             builder.Services.AddTransient<ProductIRepo, ProductRepo>();
             builder.Services.AddTransient<CategoryIRepo, CategoryRepo>();
             builder.Services.AddTransient<CartIRepo, CartRepo>();
+            builder.Services.AddTransient<DepartmentIRepo, DepartmentRepo>();
             builder.Services.AddScoped<IImageService, ImageService>();
 
 

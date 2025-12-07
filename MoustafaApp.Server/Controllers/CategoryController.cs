@@ -1,5 +1,6 @@
 ﻿
 
+using MoustafaApp.Server.Dtos.CategoryDtos;
 using MoustafaApp.Server.Models;
 
 namespace moustafapp.Server.Controllers
@@ -37,15 +38,15 @@ namespace moustafapp.Server.Controllers
 
 
 
-        [HttpGet("GetAllCategoriesWithProductsThenInclude")]
-        public async Task<IActionResult> GetAllCategoriesWithProductsThenInclude()
+        [HttpGet("GetAllCategoriesWithProducts")]
+        public async Task<IActionResult> GetAllCategoriesWithProducts()
         {
             try
             {
                 var Categories = await _unitOfWork.Categories
-                                .GetAllCategoriesWithProductsThenInclude();
+                                .GetAllCategoriesWithProducts();
 
-                var result = _mapper.Map<IEnumerable<CategoryDto>>(Categories);
+                var result = _mapper.Map<IEnumerable<CategoryWithProducDto>>(Categories);
 
                 return Ok(result);
             }
@@ -81,45 +82,18 @@ namespace moustafapp.Server.Controllers
 
 
 
-        [HttpGet("GetCategoryByIdWithProductsThenInclude/{id}")]
-        public async Task<IActionResult> GetCategoryByIdWithProductsThenInclude(int id)
-        {
-            try
-            {
-                var Category = await _unitOfWork.Categories
-                                .GetCategoryByIdWithProductsThenInclude(id);
-
-                var result = _mapper.Map<CategoryDto>(Category);
-
-                if (Category == null)
-                    return NotFound(new { message = "Category Not Found" });
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
-        }
-
-
-
-
         [HttpGet("GetCategoryByIdWithProducts/{id}")]
-        public async Task<IActionResult> GetByCategoryByIdWithProducts(int id)
+        public async Task<IActionResult> GetCategoryByIdWithProducts(int id)
         {
             try
             {
                 var Category = await _unitOfWork.Categories
-                    .GetByIdWithIncludes(
-                        x => x.CategoryId == id,
-                        y => y.Products
-                    );
+                                .GetCategoryByIdWithProducts(id);
+
+                var result = _mapper.Map<CategoryWithProducDto>(Category);
 
                 if (Category == null)
                     return NotFound(new { message = "Category Not Found" });
-
-                var result = _mapper.Map<CategoryDto>(Category);
 
                 return Ok(result);
             }
@@ -128,8 +102,6 @@ namespace moustafapp.Server.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
-
-
 
 
         [HttpPost("CreateCategory")]
