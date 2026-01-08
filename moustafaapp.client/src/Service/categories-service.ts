@@ -21,7 +21,7 @@ export class CategoriesService {
   }
 
   refreshCategories(): Observable<ICategory[]> {
-    return this.http.get<ICategory[]>(environment.baseUrl + "Article/GetAllCategories").pipe(
+    return this.http.get<ICategory[]>(environment.baseUrl + "Article/getAllCategoriesWithProducts").pipe(
       tap(Categories => {
         console.log('Loaded Categories:', Categories);
         this.CategoriesSubject.next(Categories)
@@ -38,7 +38,7 @@ export class CategoriesService {
 
 
   GetAllCategories(): Observable<ICategory[]> {
-    return this.http.get<ICategory[]>(environment.baseUrl + 'Category/getAllCategoriesWithProductsThenInclude').pipe(
+    return this.http.get<ICategory[]>(environment.baseUrl + 'Category/getAllCategories').pipe(
       tap(Categoris => {
         console.log('Loaded All Categories:', Categoris);
       }),
@@ -51,8 +51,8 @@ export class CategoriesService {
     );
   }
 
-  getAllCategoriesWithProductsThenInclude(): Observable<ICategory[]> {
-    return this.http.get<ICategory[]>(environment.baseUrl + 'Category/getAllCategoriesWithProductsThenInclude').pipe(
+  getAllCategoriesWithProducts(): Observable<ICategory[]> {
+    return this.http.get<ICategory[]>(environment.baseUrl + 'Category/getAllCategoriesWithProducts').pipe(
       tap(Categoris => {
         console.log('Loaded Categories With Products ThenInclude:', Categoris);
       }),

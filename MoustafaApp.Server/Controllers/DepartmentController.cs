@@ -7,19 +7,19 @@ namespace MoustafaApp.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DipartmentController : ControllerBase
+    public class DepartmentController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public DipartmentController(IUnitOfWork unitOfWork, IMapper mapper)
+        public DepartmentController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
 
-        [HttpGet ("GetAllDipartments")]
-        public async Task<IActionResult> GetAllDipartments()
+        [HttpGet ("GetAllDepartments")]
+        public async Task<IActionResult> GetAllDepartments()
         {
             try
             { 

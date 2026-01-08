@@ -23,9 +23,9 @@
             [class.open]="shopOpenDesktop"
             (mouseenter)="showMenu()"
             (mouseleave)="hideMenu()">
-          <li><a>Shop1</a></li>
-          <li><a>Shop2</a></li>
-          <li><a>Shop3</a></li>
+          <li *ngFor="let dept of Departments$ | async"><a>{{dept.departmentName}}</a></li>
+          <!--<li><a>Shop2</a></li>
+          <li><a>Shop3</a></li>-->
         </ul>
 
       </li>

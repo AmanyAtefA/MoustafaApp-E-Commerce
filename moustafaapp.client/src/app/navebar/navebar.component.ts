@@ -1,11 +1,14 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { IDepartment } from '../../IModels/IDepartment';
+import { Observable } from 'rxjs';
+import { DepartmentsService } from '../../Service/departments.service';
 
 @Component({
   selector: 'app-navebar',
   templateUrl: './navebar.component.html',
   styleUrl: './navebar.component.css'
 })
-export class NavebarComponent   {
+export class NavebarComponent implements OnInit {
 
 
   menuOpen = false;
@@ -13,6 +16,18 @@ export class NavebarComponent   {
   shopOpenDesktop = false;
 
   timeout: any;
+
+  Departments$!:Observable<IDepartment[]>
+
+  constructor(private _DepartmentsService :DepartmentsService) {
+
+  }
+
+  ngOnInit(): void {
+
+    this.Departments$ = this._DepartmentsService.Departments$;
+    this._DepartmentsService.loadDepartments(); 
+  }
 
   showMenu() {
     clearTimeout(this.timeout);
