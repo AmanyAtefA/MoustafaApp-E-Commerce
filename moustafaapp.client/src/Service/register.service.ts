@@ -14,12 +14,12 @@ import { IRegisterUser } from '../IModels/Iregister-user';
 })
 export class RegisterService {
 
-  private isLogedSubject: BehaviorSubject<boolean>;
+  private isLogedSubject: new BehaviorSubject<boolean>(this.IsLoged);
 
   private currentUserSubject = new BehaviorSubject<any>(null);
-  public currentUserObservable = this.currentUserSubject.asObservable();
+  public currentUserObservable$ = this.currentUserSubject.asObservable();
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {
-    this.isLogedSubject = new BehaviorSubject<boolean>(this.IsLoged)
+   
     this.getUserFromLocalStorage();
   }
 

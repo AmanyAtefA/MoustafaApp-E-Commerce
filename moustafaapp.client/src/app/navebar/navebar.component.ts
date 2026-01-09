@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { IDepartment } from '../../IModels/IDepartment';
 import { Observable } from 'rxjs';
 import { DepartmentsService } from '../../Service/departments.service';
+import { RegisterService } from '../../Service/register.service';
 
 @Component({
   selector: 'app-navebar',
@@ -9,6 +10,7 @@ import { DepartmentsService } from '../../Service/departments.service';
   styleUrl: './navebar.component.css'
 })
 export class NavebarComponent implements OnInit {
+  [x: string]: any;
 
 
   menuOpen = false;
@@ -17,15 +19,17 @@ export class NavebarComponent implements OnInit {
 
   timeout: any;
 
-  Departments$!:Observable<IDepartment[]>
-
-  constructor(private _DepartmentsService :DepartmentsService) {
+  Departments$!: Observable<IDepartment[]>
+  currentUser$!: Observable<any>
+  constructor(private _DepartmentsService: DepartmentsService,
+    private _RegisterService: RegisterService) {
 
   }
 
   ngOnInit(): void {
 
     this.Departments$ = this._DepartmentsService.Departments$;
+    this.currentUser$ = this._RegisterService.currentUserObservable$;
     this._DepartmentsService.loadDepartments(); 
   }
 

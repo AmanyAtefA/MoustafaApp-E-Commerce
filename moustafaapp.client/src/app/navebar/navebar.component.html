@@ -25,7 +25,7 @@
             (mouseleave)="hideMenu()">
           <li *ngFor="let dept of Departments$ | async"><a>{{dept.departmentName}}</a></li>
           <!--<li><a>Shop2</a></li>
-          <li><a>Shop3</a></li>-->
+        <li><a>Shop3</a></li>-->
         </ul>
 
       </li>
@@ -34,7 +34,7 @@
       <li><a class="nav-link">New Arrivals</a></li>
       <li><a class="nav-link">Brands</a></li>
     </ul>
-    
+
 
     <div class="inputSearch">
       <i class="bi bi-search "></i>
@@ -45,9 +45,18 @@
     <div class="right-icons">
 
       <i class="bi bi-cart"></i>
-      <i class="bi bi-person"></i>
+
+      <ng-container *ngIf="currentUser$ | async as user; else guest">
+        <i class="bi bi-person"></i>
+        <span class="ms-1">Welcome, {{ user.userName  }}</span>
+      </ng-container>
+
+      <ng-template #guest>
+        <i class="bi bi-person"></i>
+      </ng-template>
 
     </div>
+
 
     <div id="mobileMenu" class="mobileMenu" [class.active]="menuOpen">
       <ul class="list-unstyled m-0">

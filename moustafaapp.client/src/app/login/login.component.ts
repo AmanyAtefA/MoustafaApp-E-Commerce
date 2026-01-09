@@ -43,10 +43,12 @@ export class LoginComponent implements OnInit {
           (res) => {
               localStorage.setItem("token", res.token);
             console.log('Login successful', res);
-            this.router.navigate(['/SealsBill']);
+            alert("Wellcom to Shop.Co")
+            this.router.navigate(['/Home']);
           },
           (error) => {
             console.error('Login failed', error);
+            alert("UserName Or Password is invalid")
             if (error.error) {
               console.log(' the error:', error.error);
             }
