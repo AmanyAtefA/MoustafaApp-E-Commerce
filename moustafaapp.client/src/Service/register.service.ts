@@ -14,7 +14,7 @@ import { IRegisterUser } from '../IModels/Iregister-user';
 })
 export class RegisterService {
 
-  private isLogedSubject: new BehaviorSubject<boolean>(this.IsLoged);
+  private isLogedSubject = new BehaviorSubject<boolean>(this.IsLoged);
 
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUserObservable$ = this.currentUserSubject.asObservable();

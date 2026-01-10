@@ -19,10 +19,11 @@
 
         <a class="nav-link">Shop</a>
 
-        <ul class="submenu"
+        <ul class="user-dropdown-menu submenu"
             [class.open]="shopOpenDesktop"
             (mouseenter)="showMenu()"
             (mouseleave)="hideMenu()">
+
           <li *ngFor="let dept of Departments$ | async"><a>{{dept.departmentName}}</a></li>
           <!--<li><a>Shop2</a></li>
         <li><a>Shop3</a></li>-->
@@ -46,14 +47,24 @@
 
       <i class="bi bi-cart"></i>
 
-      <ng-container *ngIf="currentUser$ | async as user; else guest">
-        <i class="bi bi-person"></i>
-        <span class="ms-1">Welcome, {{ user.userName  }}</span>
-      </ng-container>
+      <div class="user-dropdown" *ngIf="currentUser$ | async as user">
 
-      <ng-template #guest>
-        <i class="bi bi-person"></i>
-      </ng-template>
+        <div class="user-name" (click)="toggleDropdown()">
+          <i class="bi bi-person"></i>
+
+          <span class="username">{{ user.userName }}</span>
+
+          <i class="bi bi-caret-down-fill dropdown-icon"
+             [class.rotate]="isDropdownOpen">
+          </i>
+        </div>
+
+        <div class="user-dropdown-menu" *ngIf="isDropdownOpen">
+          <div><a routerLink="" routerLinkActive>Profile</a></div>
+          <div><a routerLink="" routerLinkActive (click)="logout()">Logout </a></div>
+        </div>
+
+      </div>
 
     </div>
 
@@ -69,7 +80,8 @@
           </div>
 
 
-          <ul class="mobile-submenu" [class.open]="shopOpenMobile">
+          <ul class="submenu user-dropdown-menu"
+              [class.open]="shopOpenMobile">
             <li><a>Men</a></li>
             <li><a>Women</a></li>
             <li><a>Kids</a></li>

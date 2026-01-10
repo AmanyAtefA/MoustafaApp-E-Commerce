@@ -10,27 +10,30 @@ import { RegisterService } from '../../Service/register.service';
   styleUrl: './navebar.component.css'
 })
 export class NavebarComponent implements OnInit {
-  [x: string]: any;
-
 
   menuOpen = false;
-  shopOpenMobile = false;
+  isDropdownOpen = false;
   shopOpenDesktop = false;
+  shopOpenMobile = false;
 
   timeout: any;
 
-  Departments$!: Observable<IDepartment[]>
-  currentUser$!: Observable<any>
-  constructor(private _DepartmentsService: DepartmentsService,
-    private _RegisterService: RegisterService) {
+  Departments$!: Observable<IDepartment[]>;
+  currentUser$!: Observable<any>;
 
-  }
+  constructor(
+    private _DepartmentsService: DepartmentsService,
+    private _RegisterService: RegisterService
+  ) { }
 
   ngOnInit(): void {
-
     this.Departments$ = this._DepartmentsService.Departments$;
     this.currentUser$ = this._RegisterService.currentUserObservable$;
-    this._DepartmentsService.loadDepartments(); 
+    this._DepartmentsService.loadDepartments();
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
   showMenu() {
@@ -56,15 +59,7 @@ export class NavebarComponent implements OnInit {
     this.shopOpenDesktop = !this.shopOpenDesktop;
   }
 
-  @HostListener('window:resize', ['$event'])
-
-  onResize(event: any) {
-    if (window.innerWidth > 768) {
-      this.menuOpen = false; 
-      this.shopOpenMobile = false;
-    }
+  logout() {
+    this._RegisterService.Logout();
   }
-
-
-
 }
