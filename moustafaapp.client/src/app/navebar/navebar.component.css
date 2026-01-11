@@ -1,6 +1,7 @@
 
 .container {
   padding: 0 !important;
+  max-width: 100%;
 }
 
 
@@ -10,7 +11,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 0 !important;
+  padding: 6px;
   height: 45px;
   position: relative;
 }
@@ -25,6 +26,13 @@
   font-size: 30px;
   font-weight: 900;
   font-family: "Integral CF", sans-serif;
+}
+
+.logo-link {
+  text-decoration: none; 
+  color: inherit;
+  display: inline-block;
+  cursor: pointer;
 }
 
 .right-icons {
@@ -261,11 +269,12 @@
 
   .inputSearch i {
     font-size: 20px;
-    padding-left: 50px;
+    padding-left: 90px;
+    padding-bottom: 3px;
   }
 
   .navStyle {
-    margin: 20px;
+    margin: 25px;
     justify-content: space-between;
   }
 

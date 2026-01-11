@@ -1,0 +1,36 @@
+
+
+
+<div class=" container ">
+  <h1 class="h1Style" *ngIf="titleProducts">
+    Products
+  </h1>
+</div>
+
+<div class="imgDiv">
+  <div *ngFor="let Prod of Products$ | async">
+    <a [routerLink]="['/ProductDetail']">
+      <img class="img-fluid rounded imgArrivals" src={{Prod.photo}} />
+    </a>
+
+    <div class="textImg">
+      <p>{{Prod.name}}</p>
+      <div class="stars">
+        <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
+      </div>
+
+      <div class="price">
+        <span>${{ calcolatePriceAfterDiscount(Prod.price, Prod.discount) }}</span>
+        <div *ngIf="Prod.discount" class="d-flex gap-2 align-items-center">
+          <span class="afterDis">${{Prod.price}}</span>
+          <span class="dis"> - {{Prod.discount}}%</span>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!--<button class="butstyle">View All</button>-->
+
+  <hr class="lineStyle">
+
+</div>

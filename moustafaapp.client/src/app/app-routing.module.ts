@@ -6,6 +6,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { LayoutComponent } from './layout/layout.component';
+import { ProductsComponent } from './products/products.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'Home' },
       { path: 'Home', component: Home },
+      { path: 'Products', component: ProductsComponent },
       { path: 'ProductDetail', component: ProductDetailComponent },
     ]
 
@@ -27,4 +29,8 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+
+  titleProducts = true;
+
+}

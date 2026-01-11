@@ -25,7 +25,7 @@ export class ProductsService {
   }
 
   refreshProducts(): Observable<IProduct[]> {
-    return this.http.get<IProduct[]>(environment.baseUrl + "Article/getAllProductsWithDetails").pipe(
+    return this.http.get<IProduct[]>(environment.baseUrl + "Product/GetAllProductsWithDetails").pipe(
       tap(Products => {
         console.log('Loaded Products:', Products);
         this.ProductsSubject.next(Products)

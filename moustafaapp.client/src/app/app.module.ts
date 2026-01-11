@@ -19,6 +19,7 @@ import { LoginComponent } from './login/login.component';
 import { RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
+import { ProductsComponent } from './products/products.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +35,8 @@ import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
     FooterComponent,
     ProductDetailComponent,
     ReviewsComponent,
-    LayoutComponent
+    LayoutComponent,
+    ProductsComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,
