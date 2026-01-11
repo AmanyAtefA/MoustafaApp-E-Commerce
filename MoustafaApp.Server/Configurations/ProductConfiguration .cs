@@ -20,7 +20,9 @@ namespace MoustafaApp.Server.Configurations
                     Stock = 100,
                     BrandId = 1, 
                     CategoryId = 1, 
-                    DepartmentId = 1
+                    DepartmentId = 1,
+                    CreatedAt = DateTime.UtcNow
+
                 },
                 new Product
                 {
@@ -35,7 +37,8 @@ namespace MoustafaApp.Server.Configurations
                     Stock = 50,
                     BrandId = 2, 
                     CategoryId = 2, 
-                    DepartmentId = 1 
+                    DepartmentId = 1,
+                    CreatedAt = DateTime.UtcNow
                 },
                 new Product
                 {
@@ -50,7 +53,8 @@ namespace MoustafaApp.Server.Configurations
                     Stock = 80,
                     BrandId = 5, 
                     CategoryId = 3, 
-                    DepartmentId = 1, 
+                    DepartmentId = 1,
+                    CreatedAt = DateTime.UtcNow
                 },
                 new Product
                 {
@@ -65,7 +69,8 @@ namespace MoustafaApp.Server.Configurations
                     Stock = 70,
                     BrandId = 4, 
                     CategoryId = 1, 
-                    DepartmentId = 1
+                    DepartmentId = 1,
+                    CreatedAt = DateTime.UtcNow
                 }
             );
         }

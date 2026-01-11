@@ -13,5 +13,7 @@ export interface IProduct {
   category?: ICategory | null;
   productImages: IProductImage[];
   amount?: number ;
-  discount?: number ;
+  discount?: number;
+  CreatedAt: Date;
+
 }

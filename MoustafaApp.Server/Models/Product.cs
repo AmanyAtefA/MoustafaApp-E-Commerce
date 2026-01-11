@@ -33,7 +33,8 @@ namespace MoustafaApp.Server.Models
         [ForeignKey("Department")]
         public int DepartmentId { get; set; }
         public Department? Department { get; set; }
-        
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
 
 
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();

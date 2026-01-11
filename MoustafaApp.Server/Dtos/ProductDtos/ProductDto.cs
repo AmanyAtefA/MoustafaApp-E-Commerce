@@ -11,7 +11,7 @@ public class ProductDto
     public decimal? Rating { get; set; }
     public int Stock { get; set; }
     public string? Photo { get; set; }
-
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
 
     public int? BrandId { get; set; }
