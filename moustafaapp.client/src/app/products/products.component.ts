@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProductsService } from '../../Service/products.service';
 import { IProduct } from '../../IModels/Iproduct';
 import { Observable } from 'rxjs';
@@ -11,16 +11,16 @@ import { Observable } from 'rxjs';
 export class ProductsComponent implements OnInit{
 
 
-  titleProducts = true;
-  Products$ = this._ProductsService.Products$;
+  @Input() title: string = 'Products';
 
+  @Input() Products: IProduct[] = [];
 
     constructor(private _ProductsService: ProductsService) { }
 
   ngOnInit(): void {
-    this.Products$;
+   
     this._ProductsService.loadProducts();
-    console.log(this.Products$);
+    console.log(this.Products);
   }
 
 

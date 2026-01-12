@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MoustafaApp.Server.Models;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -42,6 +43,9 @@ public class ProductController : ControllerBase
         try {
             var Product = await _unitOfWork.Products.GetProductyByIdWithDetails(id);
 
+            if (Product == null)
+                return NotFound(new { message = "Product not found" });
+
             var result = _mapper.Map<ProductDto>(Product);
 
             return Ok(result);
@@ -51,6 +55,18 @@ public class ProductController : ControllerBase
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+
+
+
+    [HttpGet("GetAllProductsPagedinationaNewArrivals")]
+    public async Task<ActionResult<PagedResult<ProductDto>>> GetAllProductsNewArrivals(int page = 1, int pageSize = 8)
+    {
+        var result = await _unitOfWork.Products
+            .GetAllProductsNewArrivalsAsync(page, pageSize);
+
+        return Ok(result);
+    }
+
 
 
 

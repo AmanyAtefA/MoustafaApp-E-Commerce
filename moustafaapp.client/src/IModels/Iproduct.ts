@@ -5,15 +5,24 @@ export interface IProduct {
 
   id: number;
   name: string;
-  description: string;
+  description?: string;
   price: number;
   qty: number;
   photo: string;
-  categoryId: number;
-  category?: ICategory | null;
+  categoryId?: number;
+  categoryName?: ICategory | null;
   productImages: IProductImage[];
-  amount?: number ;
   discount?: number;
-  CreatedAt: Date;
+ 
+  oldPrice?: number;
+  rating?: number;
+  stock: number;
+  createdAt: Date;
 
+  brandId?: number;
+  brandName?: string;
+  departmentId: number;
+  departmentName?: string;
 }
+
+

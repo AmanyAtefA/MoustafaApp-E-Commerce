@@ -20,6 +20,7 @@ import { RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { ProductsComponent } from './products/products.component';
+import { PaginationComponent } from './pagination/pagination.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +37,8 @@ import { ProductsComponent } from './products/products.component';
     ProductDetailComponent,
     ReviewsComponent,
     LayoutComponent,
-    ProductsComponent
+    ProductsComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

@@ -5,21 +5,23 @@ namespace moustafapp.Server.GenericOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         
-        public UnitOfWork(AppDbContext context,
+        public UnitOfWork(AppDbContext context, IMapper mapper,
                           UserManager<ApplicationUser> userManager,
                           RoleManager<IdentityRole> roleManager )
         {
             _context = context;
+            _mapper = mapper;
             _userManager = userManager;
             _roleManager = roleManager;
             
             UserManager = userManager;
             RoleManager = roleManager;
 
-            Products = new ProductRepo(_context);
+            Products = new ProductRepo(_context,_mapper);
             Categories = new CategoryRepo(_context);
             Departments = new DepartmentRepo(_context);
             Carts     = new CartRepo(_context);

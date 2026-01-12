@@ -19,6 +19,7 @@ namespace MoustafaApp.Server.Models
         public int Stock { get; set; }
         public string? Photo { get; set; }
 
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("Brand")]
         public int? BrandId { get; set; }
@@ -33,7 +34,7 @@ namespace MoustafaApp.Server.Models
         [ForeignKey("Department")]
         public int DepartmentId { get; set; }
         public Department? Department { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+       
 
 
 

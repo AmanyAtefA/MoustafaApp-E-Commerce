@@ -40,7 +40,7 @@
       <div class="price">
         <p>$145</p>
         <!--<p class="afterDis">$260</p>
-      <p class="dis">-20%</p>-->
+        <p class="dis">-20%</p>-->
       </div>
     </div>
   </div>
@@ -59,7 +59,7 @@
       <div class="price">
         <p>$80</p>
         <!--<p class="afterDis"></p>
-      <p class="dis"></p>-->
+        <p class="dis"></p>-->
       </div>
     </div>
   </div>
@@ -78,14 +78,24 @@
       <div class="price">
         <p>$210</p>
         <!--<p class="afterDis">$160</p>
-      <p class="dis">-30%</p>-->
+        <p class="dis">-30%</p>-->
       </div>
     </div>
   </div>
 
 
-  <button class="butstyle">View All</button>
- 
+
+  <!--<div class="pt-3">
+    <app-pagination *ngIf="showPagination"
+                    [page]="data.page" [totalPages]="data.totalPages"
+                    (pageChange)="onPageChange($event)"></app-pagination>
+  </div>-->
+
+
+
+  <div class="butDiv">
+    <button class="butstyle" [routerLink]="['/TopSelling']">View All</button>
+  </div>
 
 </div>
 

@@ -7,6 +7,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { LayoutComponent } from './layout/layout.component';
 import { ProductsComponent } from './products/products.component';
+import { NewArrivalsComponent } from './new-arrivals/new-arrivals.component';
+import { TopSellingComponent } from './top-selling/top-selling.component';
 
 const routes: Routes = [
   {
@@ -16,6 +18,8 @@ const routes: Routes = [
       { path: 'Home', component: Home },
       { path: 'Products', component: ProductsComponent },
       { path: 'ProductDetail', component: ProductDetailComponent },
+      { path: 'NewArrivals', component: NewArrivalsComponent },
+      { path: 'TopSelling', component: TopSellingComponent },
     ]
 
   },

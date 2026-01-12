@@ -2,14 +2,14 @@
 
 
 <div class=" container ">
-  <h1 class="h1Style" *ngIf="titleProducts">
-    Products
+  <h1 class="h1Style" *ngIf="title">
+    {{title}}
   </h1>
 </div>
 
 <div class="imgDiv">
-  <div *ngFor="let Prod of Products$ | async">
-    <a [routerLink]="['/ProductDetail']">
+  <div *ngFor="let Prod of Products">
+    <a [routerLink]="['/ProductDetail', Prod.id]">
       <img class="img-fluid rounded imgArrivals" src={{Prod.photo}} />
     </a>
 
@@ -28,9 +28,5 @@
       </div>
     </div>
   </div>
-
-  <!--<button class="butstyle">View All</button>-->
-
-  <hr class="lineStyle">
 
 </div>

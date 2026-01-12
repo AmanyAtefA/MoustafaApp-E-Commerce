@@ -2,14 +2,16 @@
 
 
 
+using AutoMapper.QueryableExtensions;
+
 namespace moustafapp.Server.Repository
 {
     public class ProductRepo : BaseRepository<Product>, ProductIRepo
     {
-
-        public ProductRepo(AppDbContext context) : base(context)
+        private readonly IMapper _mapper;
+        public ProductRepo(AppDbContext context, IMapper mapper) : base(context)
         {
-
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsWithDetails()
@@ -36,10 +38,35 @@ namespace moustafapp.Server.Repository
                   .Include(p => p.Colors)
                   .Include(p => p.Sizes)
                   .ThenInclude(ps => ps.Size)
-                  .FirstOrDefaultAsync();
+                  .FirstOrDefaultAsync(p => p.ProductId == id);
 
           
             return (Product);
+        }
+
+
+
+        public async Task<PagedResult<ProductDto>> GetAllProductsNewArrivalsAsync( int page, int pageSize)
+        {
+            var query = _context.Products
+                .AsNoTracking()
+                .OrderByDescending(p => p.CreatedAt);
+
+            var totalCount = await query.CountAsync();
+
+            var products = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return new PagedResult<ProductDto>
+            {
+                Items = products,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
         }
 
     }

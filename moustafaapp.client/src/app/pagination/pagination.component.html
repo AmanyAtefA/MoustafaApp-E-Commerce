@@ -1,0 +1,20 @@
+
+
+<div class="pagination d-flex justify-content-center gap-3 mt-4">
+  <button class="btn btn-outline-secondary"
+          (click)="prevPage()"
+          [disabled]="page === 1">
+    Prev
+  </button>
+
+  <span>
+    Page {{ page }} of {{ totalPages }}
+  </span>
+
+  <button class="btn btn-outline-secondary"
+          (click)="nextPage()"
+          [disabled]="page === totalPages">
+    Next
+  </button>
+
+</div>
