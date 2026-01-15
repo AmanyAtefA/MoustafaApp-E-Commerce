@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MoustafaApp.Server.Dtos.ProductDtos;
 using MoustafaApp.Server.Models;
 
 [Route("api/[controller]")]
@@ -187,4 +188,32 @@ public class ProductController : ControllerBase
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+
+
+    //[HttpGet("filter")]
+    //public async Task<IActionResult> FilterProducts([FromQuery] ProductFilterDto filter)
+    //{
+    //    var query = _unitOfWork.Products
+    //        .Include(p => p.ProductSizes)
+    //        .AsQueryable();
+
+    //    if (filter.SizeId.HasValue)
+    //    {
+    //        query = query.Where(p =>
+    //            p.ProductSizes.Any(ps =>
+    //                ps.SizeId == filter.SizeId && ps.Stock > 0));
+    //    }
+
+    //    var products = await query
+    //        .Select(p => new ProductDto
+    //        {
+    //            ProductId = p.ProductId,
+    //            Name = p.Name,
+    //            Price = p.Price
+    //        })
+    //        .ToListAsync();
+
+    //    return Ok(products);
+    //}
+
 }

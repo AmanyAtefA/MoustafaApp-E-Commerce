@@ -1,6 +1,7 @@
 ﻿
 
 
+using MoustafaApp.Server.Dtos;
 using MoustafaApp.Server.Dtos.CartDtos;
 using MoustafaApp.Server.Dtos.CategoryDtos;
 using MoustafaApp.Server.Dtos.ProductDtos;
@@ -13,6 +14,7 @@ namespace moustafapp.Server.Mapping
         {
     
             CreateMap<Brand, BrandDto>().ReverseMap();
+            CreateMap<Size, SizetDto>().ReverseMap();
 
 
             CreateMap<Department, DepartmentDto>();

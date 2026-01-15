@@ -61,13 +61,13 @@ export class ProductsService {
   }
 
   getProductyByIdWithDetails(id: number): Observable<IProduct> {
-    return this.http.get<IProduct>(environment.baseUrl + "Product/getProductyByIdWithDetails/" + id).pipe(
+    return this.http.get<IProduct>(environment.baseUrl + "Product/GetProductyByIdWithDetails/" + id).pipe(
       tap(Product => {
         console.log(' Product By Id', Product);
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error('Error loading Category:', error);
-        alert('Error loading Category');
+        console.error('Error loading Product:', error);
+        alert('Error loading Product');
         return of(null as any);
       }
       ));

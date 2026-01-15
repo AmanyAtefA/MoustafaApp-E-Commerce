@@ -31,6 +31,7 @@ namespace moustafapp.Server.GenericOfWork
             Brands = new BaseRepository<Brand>(_context);
             ProductColors = new BaseRepository<ProductColor>(_context);
             ProductSizes = new BaseRepository<ProductSize>(_context);
+            Sizes = new BaseRepository<Size>(_context);
             Reviews = new BaseRepository<Review>(_context);
 
         }
@@ -48,6 +49,7 @@ namespace moustafapp.Server.GenericOfWork
         public IBaseRepository <Brand> Brands { get; private set; }
         public IBaseRepository <ProductColor> ProductColors { get; private set; }
         public IBaseRepository <ProductSize> ProductSizes { get; private set; }
+        public IBaseRepository <Size> Sizes { get; private set; }
         public IBaseRepository <Review> Reviews { get; private set; }
 
         public int CommitChanges()

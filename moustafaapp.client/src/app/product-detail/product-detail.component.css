@@ -1,6 +1,10 @@
 
+.row {
+  align-items: stretch;
+}
+
 .StyleP {
-  padding-left: 100px;
+ 
   margin-bottom: 30px;
 }
 
@@ -14,9 +18,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 30%;
+  flex: 0 0 25%;
   height: 500px;
-  
 }
 .imagePrev {
   width: 100%;
@@ -27,7 +30,7 @@
   object-fit: cover;
 }
 .imageLarg {
-  width: 70%;
+  flex: 1;
 }
 .imageLarg img {
   width: 100%;
@@ -42,27 +45,29 @@
 .productDetails {
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: start;
-  flex-wrap: wrap;
-  height: 100%;
-  max-height: 530px;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  height: auto !important;
+  max-height: none !important;
+  height: 500px;
 }
+
 .styleTitleP {
   font-weight: 1000;
   height: 48px;
 }
+
 .styleDetailsP {
-  width: 590px;
-  height: 33px;
-  flex-wrap: wrap;
-  line-height: 1.8;
-  margin-bottom: 25px;
+  width: 100%;
+  margin: 0; 
+  line-height: 1.7;
 }
+
+
 .stars {
   display: flex;
   gap: 5px;
-  margin: 14px 0;
+  
   width: 18.49px;
   height: 18.49px;
 }
@@ -76,9 +81,10 @@
   opacity: 1;
   gap: 10px;
   display: flex;
-  font-size: 18px;
+  font-size: 22px;
   width: 295px;
-  font-weight: 900;
+  font-weight: 700;
+  margin-top: 15px;
 }
 
 .afterDis {
@@ -103,28 +109,69 @@
 
 .colors {
   display: flex;
-  gap: 15px;
-  margin: 10px 0;
+  gap: 10px;
 }
 
 .colorBtn {
-  width: 50px;
-  height: 35px;
-  border-radius: 50%; 
-  border: 2px solid #ccc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border:none;
+  padding: 0;
+  background: transparent;
   cursor: pointer;
 }
 
+.colorBtn.active {
+  border: 2px solid black;
+
+}
+
+
+.checkMark {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+
 .size {
   display: flex;
-  width: 100%;
-  height: 46px;
-  gap: 18px;
-  align-items: center;
-  justify-content: start;
-  border-radius: 60px;
+  gap: 12px;
   flex-wrap: wrap;
 }
+
+.sizeBtn {
+  padding: 8px 22px;
+  border-radius: 20px;
+  background: #f3ecec;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  position: relative;
+}
+
+ 
+.sizeBtn.active {
+  background: black;
+  color: white;
+
+}
+
+ 
+.sizeBtn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+
+.sold {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 14px;
+  color: red;
+}
+
 
 .divAddToCart {
   display: flex;
@@ -134,32 +181,50 @@
   width: 100%;
   height: auto !important;
   max-height: none !important;
+  gap: 20px;
+  margin-top: auto;
 }
 
 .butAddNom {
   display: flex;
-  gap: 10px;
+  gap: 16px;
   justify-content: center;
   align-items: center;
   border-radius: 20px;
   background: #f3ecec;
-  width: 130px;
+  width: 163px;
   height: 45px;
-}
-
-.addNomStyle {
-  width: 40px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 40px;
-  background: white;
   
 }
 
+
+.addNomStyle {
+  font-size: 30px;
+  font-weight: 400;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  width: 35px;
+  height: 27px;
+  /* padding-bottom:2px;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.qty {
+  font-size: 18px;
+  font-weight: 600; 
+  min-width: 20px;
+  text-align: center;
+}
+
+
 .butAddCart {
-  width: 220px;
-  height: 50px;
+  width: 363px;
+  height: 45px;
   border-radius: 62px;
   background: black;
   color: white;
@@ -167,16 +232,17 @@
   cursor: pointer;
   text-align: center;
   align-self: flex-start;
-  margin: 15px;
+ 
   border: 1px solid #999;
 }
 
 .lineStyle {
-    width: 100%;
-    border: none;
-    border-top: 1px solid #999;
-    margin: 15px 0;
-  }
+  width: 100%;
+  border: none;
+  border-top: 1px solid #999;
+  margin: 15px 0; 
+}
+
 
 
 @media (max-width: 768px) {
@@ -216,14 +282,13 @@
   max-height: 160px;
 }
 
-.productDetails{
-    margin-top:10px;
-}
+  .productDetails {
+   
+  }
 
 .styleDetailsP {
   max-width: 358px;
   width: 100% !important;
-  height: 50px;
   font-size: 14px;
   
 }

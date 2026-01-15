@@ -1,9 +1,11 @@
+import { IColors } from "./IColors";
+import { ISizes } from "./ISizes";
 import { ICategory } from "./Icategory";
 import { IProductImage } from "./Iproduct-image";
 
 export interface IProduct {
 
-  id: number;
+  productId: number;
   name: string;
   description?: string;
   price: number;
@@ -11,9 +13,11 @@ export interface IProduct {
   photo: string;
   categoryId?: number;
   categoryName?: ICategory | null;
-  productImages: IProductImage[];
+  images: IProductImage[];
   discount?: number;
- 
+
+  colors: IColors[];
+  sizes: ISizes[];
   oldPrice?: number;
   rating?: number;
   stock: number;

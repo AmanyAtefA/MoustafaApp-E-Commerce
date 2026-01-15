@@ -17,6 +17,7 @@ namespace moustafapp.Server.GenericOfWork
         IBaseRepository<Brand> Brands { get; }
         IBaseRepository<ProductColor> ProductColors { get; }
         IBaseRepository<ProductSize> ProductSizes { get; }
+        IBaseRepository<Size> Sizes { get; }
        
         IBaseRepository<Review> Reviews { get; }
 

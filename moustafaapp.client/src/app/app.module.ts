@@ -21,6 +21,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { ProductsComponent } from './products/products.component';
 import { PaginationComponent } from './pagination/pagination.component';
+import { CartComponent } from './cart/cart.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +39,8 @@ import { PaginationComponent } from './pagination/pagination.component';
     ReviewsComponent,
     LayoutComponent,
     ProductsComponent,
-    PaginationComponent
+    PaginationComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,
