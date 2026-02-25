@@ -11,13 +11,17 @@
             <h3>Sign Up</h3>
           </div>
           <div class="form-floating mb-3">
-            <input formControlName="userName" name="userName" type="text" class="form-control" id="User Name" placeholder="User Name" required>
-            <label for="User Name">Username</label>
-            <div class="text-bg-danger" *ngIf="RegesterUserForm.get('userName')?.invalid && RegesterUserForm.get('userName')?.touched">
-              <p *ngIf="RegesterUserForm.get('userName')?.errors?.['required']">Name is Required</p>
-              <p *ngIf="RegesterUserForm.get('userName')?.errors?.['pattern']">Name must be between 3 and 20 alphabetic characters</p>
+            <input formControlName="fullName" name="fullName" type="text" class="form-control" id="Full Name" placeholder="Full Name" required>
+            <label for="Full Name">Full Name</label>
+            <div class="text-bg-danger" *ngIf="RegesterUserForm.get('fullName')?.invalid && RegesterUserForm.get('fullName')?.touched">
+              <p *ngIf="RegesterUserForm.get('fullName')?.errors?.['required']">Name is Required</p>
+              <p *ngIf="RegesterUserForm.get('fullName')?.errors?.['pattern']">Name must be between 3 and 20 alphabetic characters</p>
             </div>
           </div>
+          <!--<div class="form-floating mb-3">
+            <input formControlName="userName" type="text" class="form-control" placeholder="Username" readonly>
+            <label>Username</label>
+          </div>-->
           <div class="form-floating mb-3">
             <input formControlName="phoneNumber" name="phoneNumber" type="text" class="form-control" id="PhoneNumber" placeholder="PhoneNumber" required>
             <label for="PhoneNumber">PhoneNumber</label>
@@ -54,12 +58,12 @@
             </div>
           </div>
           <!--<div class="d-flex align-items-center justify-content-between mb-4">
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
-            <a href="">Forgot Password</a>
-          </div>-->
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="exampleCheck1">
+      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <a href="">Forgot Password</a>
+  </div>-->
           <button type="submit" [disabled]="RegesterUserForm.invalid" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
           <p class="text-center mb-0">Already have an Account? <a routerLink="/Login">Sign In</a></p>
         </div>

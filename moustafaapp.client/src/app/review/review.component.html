@@ -1,0 +1,120 @@
+
+
+<div class="container mt-4">
+
+  <div class="tap">
+    <ul class="nav custom-tabs mt-5 mb-4" role="tablist">
+
+      <li class="nav-item flex-fill text-center">
+        <a class="nav-link active" data-bs-toggle="tab" href="#tab1">Product Details</a>
+      </li>
+
+      <li class="nav-item flex-fill text-center">
+        <a class="nav-link" data-bs-toggle="tab" href="#tab2">Rating & Reviews</a>
+      </li>
+
+      <li class="nav-item flex-fill text-center">
+        <a class="nav-link" data-bs-toggle="tab" href="#tab3">FAQs</a>
+      </li>
+
+    </ul>
+  </div>
+
+
+  <div class="tab-content pt-4 text-center">
+    <div class="tab-pane fade show active" id="tab1">Content Tab 1</div>
+    <div class="tab-pane fade" id="tab2">Content Tab 2</div>
+    <div class="tab-pane fade" id="tab3">Content Tab 3</div>
+  </div>
+
+</div>
+
+
+<div class="container ">
+  <div class="divReviews">
+    <p class="reviews">All Reviews <span class="spanReviews">(451)</span> </p>
+
+    <div class="filterReviews">
+      <div class="fontIFilter">
+        <i class="bi bi-sliders2"></i>
+      </div>
+
+
+      <div class="filter-dropdown gap-5"
+           (mouseenter)="open = true"
+           (mouseleave)="open = false">
+
+        <button class="filter-btn Latest">
+          Latest
+          <i class="bi bi-chevron-compact-down"></i>
+        </button>
+
+        <div class="filter-menu" *ngIf="open">
+          <div class="item">Newest</div>
+          <div class="item">Oldest</div>
+          <div class="item">Highest Rating</div>
+          <div class="item">Lowest Rating</div>
+        </div>
+      </div>
+
+      <button class="butstyle">Write a Review</button>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+    <div class=" row g-3" >
+
+      <div class="col-12 col-md-6" *ngFor="let Rev of reviews">
+        <div class="card" >
+          <div class="divLarge">
+            <div class="divSmall">
+              <div class="stars">
+                <img class="star" style="padding-bottom:4px;" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
+              </div>
+              <h4>{{ Rev.fullName | shortFullName }}</h4>
+              <p class="text-muted">
+                {{Rev.reviewText}}
+              </p>
+            </div>
+            <p class="sizeP"> ... </p>
+          </div>
+          <p class="postIn" style="color:gray;">{{Rev.datePosted}}</p>
+
+        </div>
+      </div>
+
+    </div>
+</div>
+
+
+
+<!--Rating Summary
+<div class="rating-summary">
+  <app-stars [value]="stats?.averageRating"></app-stars>
+  <span>({{ stats?.reviewCount }} Reviews)</span>
+</div>-->
+
+<hr />
+
+<!--Reviews
+<div *ngFor="let review of reviews" class="review">
+  <strong>{{ review.userName }}</strong>
+  <app-stars [value]="review.rating"></app-stars>
+  <p>{{ review.reviewText }}</p>
+</div>-->
+
+
+ <!--Pagination-->
+<!--<div class="pt-3">
+  <app-pagination *ngIf="showPagination"
+                  [page]="data.pageNumber"
+                  [totalPages]="data.totalPages"
+                  (pageChange)="onPageChange($event)">
+  </app-pagination>
+</div>-->

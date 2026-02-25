@@ -56,7 +56,8 @@
   align-items: center;
   gap: 2px;
   padding: 0 15px;
-  background: #e4e1e1;
+  background: rgba(240, 240, 240, 1);
+  font-size: 16px;
 }
 
 .inputSearch i {
@@ -64,10 +65,10 @@
   padding-top: 5px;
 }
 
-.inputSearch input {
-  font-size: 16px;
-  background: #e4e1e1;
-}
+  .inputSearch input {
+    background: none;
+    border:none;
+  }
 
  .inputSearch input:focus {
    outline: none !important;

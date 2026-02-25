@@ -1,0 +1,250 @@
+
+
+* {
+  box-sizing: border-box;
+}
+
+.StyleP {
+  margin-bottom: 10px;
+}
+
+.conDetails {
+  align-items: center;
+  justify-content: space-evenly;
+  display: flex;
+  width: 100%;
+}
+
+.pTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 40px;
+  margin: 20px  0px ;
+}
+
+.item {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 20px 20px;
+  gap: 20px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 20px;
+  background: #fff;
+  width: 100%;
+  max-width: 100%;
+}
+
+.imgItem {
+  width: 124px;
+  height: 124px;
+  background: #F0EEED;
+  border-radius: 8.65772px;
+  flex: none;
+  order: 0;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.ditailsItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-family: Satoshi;
+  font-weight: 700;
+  font-size: 20px;
+  white-space: nowrap;
+
+}
+
+.span {
+  font-family: Satoshi;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.price {
+  font-family: Satoshi;
+  font-weight: 700;
+  font-size: 28px;
+ 
+
+}
+
+.act {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 15px;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 124px;
+}
+
+.divAddToCart {
+  display: flex;
+  justify-content: end;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  width: 124px;
+  height: auto !important;
+  max-height: none !important;
+  gap: 15px;
+  margin-top: auto;
+
+}
+
+.butAddNom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 10px;
+  border-radius: 30px;
+  background: #f5f5f5;
+}
+
+.addNomStyle {
+  font-size: 22px;
+  border: none;
+  background: none;
+}
+
+.qty {
+  font-weight: 600;
+  width: 20px;
+  text-align: center;
+}
+
+
+.lineStyle {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #999;
+  margin: 15px 0;
+}
+
+.iDelite {
+  font-size: 24px;
+  border: none;
+  background: none;
+  color:red;
+  cursor: pointer;
+}
+
+
+.divorderSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 15px 20px ;
+  width: 100%;
+  min-width: 300px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 20px;
+  background: #fff;
+  height: fit-content;
+  max-width: 100%;
+}
+
+.totalRow {
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.subtotal {
+  font-family: Satoshi;
+  font-weight: 400;
+  font-size: 20px;
+
+}
+
+.numSubtotal {
+  font-family: Satoshi;
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: 0%;
+  text-align: right;
+}
+
+.colorSubtotal {
+  color: #e53935; 
+  
+}
+.checkout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #777;
+  font-size: 18px;
+}
+
+.inputCheckout:focus {
+  outline: none;
+  background: #eeeeee;
+}
+
+.inputCheckout {
+  width: 100%;
+  height: 45px;
+  border-radius: 62px;
+  background: #f5f5f5;
+  border: none;
+  padding-left: 40px;
+  font-size: 14px;
+}
+
+
+.butCheckout {
+  width: 120px;
+  height: 45px;
+  border-radius: 62px;
+  background: black;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+  border: none;
+}
+
+.butAddCart {
+  width: 100%;
+  height: 45px;
+  border-radius: 62px;
+  background: black;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+  text-align: center;
+  align-self: flex-start;
+  border: 1px solid #999;
+}
+
+

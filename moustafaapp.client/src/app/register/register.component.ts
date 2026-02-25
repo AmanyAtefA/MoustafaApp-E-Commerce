@@ -24,89 +24,100 @@ export class RegisterComponent implements OnInit{
   }
     ngOnInit(): void {
       this.CreatRegisterForm();
+      this.autoGenerateUsername();
     }
+
+
+  autoGenerateUsername() {
+    this.RegesterUserForm.get('fullName')?.valueChanges.subscribe(name => {
+      if (name) {
+        const username = name.replace(/\s+/g, '').toLowerCase();
+
+        this.RegesterUserForm.get('userName')
+          ?.setValue(username, { emitEvent: false });
+      }
+    });
+  }
 
   CreatRegisterForm() {
     this.RegesterUserForm = this.fb.group({
-      userName: ["", [Validators.required,
-      Validators.pattern('^[a-zA-Z]{3,20}$')]],
+      fullName: ["", [Validators.required,
+        Validators.pattern('^[a-zA-Z ]{3,20}$') ]],
+      userName: [""],
       phoneNumber: ["", [Validators.required,
-      Validators.maxLength(11), Validators.pattern("^[0-9]*$")]],
+        Validators.maxLength(11), Validators.pattern("^[0-9]*$")]],
       email: ["", [Validators.required,
-      Validators.email,
-      Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
+        Validators.email,
+        Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
       password: ["", [Validators.required,
-      Validators.minLength(6), Validators.maxLength(20)]],
+        Validators.minLength(6), Validators.maxLength(20)]],
       confirmPassword: ["", [Validators.required,
-      Validators.minLength(6), Validators.maxLength(20)]]
+        Validators.minLength(6), Validators.maxLength(20)]]
     })
   }
-  
 
-  IsExistEmail() {
-    this._RegisterService.IsExistEmail(this.ModelRegester.Email).subscribe(
-      result => {
-        this.ExistEmail = result
-      })
-  }
-  IsExistUserName() {
-    this._RegisterService.IsExistUserName(this.ModelRegester.UserName).subscribe(
-      result => {
-        this.ExistUserName = result
-      })
-  }
 
-  IsExistPhoneNo() {
-    this._RegisterService.IsExistPhoneNo(this.ModelRegester.PhoneNumber).subscribe(
-      result => {
-        this.ExistPhoneNo = result
-      })
-  }
 
   SaveRegister() {
+    console.log(this.ModelRegester);
+
     this._RegisterService.RegisterUser(this.ModelRegester).subscribe(
       result => {
         console.log('Register Successful');
         console.log(this.ModelRegester);
         alert("Regester is Successful")
-          this.router.navigate(['/Login']);  
+        this.router.navigate(['/Login'], {
+          state: {
+            email: this.ModelRegester.email,
+            password: this.ModelRegester.password
+          }
+        }); 
       },
 
-      Error=> {
-        console.error("Error:", Error);
-        alert("Check Password and Confirm.");
+      error => {
+        console.log(error.error);
       }
     );
   }
 
   RegisterUser() {
-    if (!this.RegesterUserForm.valid)
-    {
-      console.log('Form is invalid');
-      alert("Regester is invalid")
+
+    if (this.RegesterUserForm.invalid) {
+      alert("Register is invalid");
+      return;
     }
 
     this.ModelRegester = this.RegesterUserForm.value;
-    this.IsExistEmail();
-    this.IsExistUserName();
-    this.IsExistPhoneNo();
-    
-        if (this.ExistEmail) {
-          alert("Email already exists.");
-          return; 
+
+    this._RegisterService.IsExistEmail(this.ModelRegester.email).subscribe(emailExists => {
+
+      if (emailExists) {
+        alert("Email already exists");
+        return;
+      }
+
+      this._RegisterService.IsExistUserName(this.ModelRegester.userName).subscribe(userExists => {
+
+        if (userExists) {
+          alert("Username already exists");
+          return;
         }
 
-         if (this.ExistUserName) {
-          alert("User Name already exists.");
-          return; 
-         }
+        this._RegisterService.IsExistPhoneNo(this.ModelRegester.phoneNumber).subscribe(phoneExists => {
 
-             if (this.ExistPhoneNo) {
-          alert("PhoneNo already exists.");
-          return; 
-         }
+          if (phoneExists) {
+            alert("Phone already exists");
+            return;
+          }
 
-    this.SaveRegister();
+         
+          this.SaveRegister();
+
+        });
+
+      });
+
+    });
   }
 }
 

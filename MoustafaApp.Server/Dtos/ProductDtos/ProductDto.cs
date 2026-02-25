@@ -27,4 +27,5 @@ public class ProductDto
     public List<ProductImageDto> Images { get; set; } = new List<ProductImageDto>();
     public List<ProductColorDto> Colors { get; set; } = new List<ProductColorDto>();
     public List<ProductSizeDto> Sizes { get; set; } = new List<ProductSizeDto>();
+    public List<ReviewDto> Reviews { get; set; } = new List<ReviewDto>();
 }

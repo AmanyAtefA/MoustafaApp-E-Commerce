@@ -12,7 +12,6 @@ import { TopSellingComponent } from './top-selling/top-selling.component';
 import { DressStyleComponent } from './dress-style/dress-style.component';
 import { FooterComponent } from './footer/footer.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
-import { ReviewsComponent } from './reviews/reviews.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
@@ -22,6 +21,8 @@ import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { ProductsComponent } from './products/products.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { CartComponent } from './cart/cart.component';
+import { ReviewComponent } from './review/review.component';
+import { ShortFullNamePipe } from './Pips/short-full-name.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,11 +37,13 @@ import { CartComponent } from './cart/cart.component';
     DressStyleComponent,
     FooterComponent,
     ProductDetailComponent,
-    ReviewsComponent,
+    ReviewComponent,
     LayoutComponent,
     ProductsComponent,
     PaginationComponent,
-    CartComponent
+    CartComponent,
+    ReviewComponent,
+    ShortFullNamePipe
   ],
   imports: [
     BrowserModule, HttpClientModule,

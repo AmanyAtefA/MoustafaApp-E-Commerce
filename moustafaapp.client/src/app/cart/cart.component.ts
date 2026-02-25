@@ -7,4 +7,19 @@ import { Component } from '@angular/core';
 })
 export class CartComponent {
 
+  quantity: number = 1;
+  constructor() { }
+
+
+  increase() {
+    this.quantity++;
+  }
+
+
+  decrease() {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
+
 }

@@ -65,6 +65,7 @@ export class RegisterService {
           const decoded = this.jwtHelper.decodeToken(result.token);
           const user = {
             userName: decoded["userName"],
+            fullName: decoded["fullName"],
             userId: decoded["userId"],
             role: decoded["role"],
             phone: decoded["phone"],

@@ -1,11 +1,11 @@
 export interface IRegisterUser {
 
- 
-  UserName: string;
-  Email: string;
-  PhoneNumber: string;
-  Password: string;
-  ConfirmPassword: string;
+  fullName: string;
+  userName: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
   message?: string;
 }
 

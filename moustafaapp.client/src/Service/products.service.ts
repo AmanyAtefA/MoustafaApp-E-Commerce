@@ -1,9 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '../environments/environment.development';
 import { IProduct } from '../IModels/Iproduct';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { tap, catchError, of, throwError, map } from 'rxjs';
 import { PagedResult } from '../IModels/paged-result';
 
@@ -138,9 +137,8 @@ export class ProductsService {
     const params = { page: this.Page, pageSize: this.PageSize };
 
     return this.http.get<PagedResult<IProduct>>(
-      environment.baseUrl + 'Product/GetAllProductsPagedinationaNewArrivals/',
-        { params }
-      )
+      environment.baseUrl + 'Product/GetAllProductsNewArrivalsAsync/',
+        { params } )
       .pipe(
         tap(res => {
           console.log('Loaded NewArrivals:', res);

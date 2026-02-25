@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MoustafaApp.Server.Dtos.ProductDtos;
 using MoustafaApp.Server.Models;
+using MoustafaApp.Server.Service.ProductService;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -10,12 +11,15 @@ public class ProductController : ControllerBase
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IImageService _imgService;
-
-    public ProductController(IUnitOfWork unitOfWork, IMapper mapper, IImageService imgService)
+    private readonly IProductService _productService;
+    public ProductController(IUnitOfWork unitOfWork, IMapper mapper, IImageService imgService,
+                                 IProductService productService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _imgService = imgService;
+        _productService = productService;
+
     }
 
     [HttpGet("GetAllProductsWithDetails")]
@@ -24,11 +28,8 @@ public class ProductController : ControllerBase
 
         try
         {
-            var Products = await _unitOfWork.Products.GetAllProductsWithDetails();
-
-            var result = _mapper.Map<IEnumerable<ProductDto>>(Products);
-
-            return Ok(result);
+            var products = await _unitOfWork.Products.GetAllProductsWithDetails();
+            return Ok(products);
         }
         catch (Exception ex)
         {
@@ -42,30 +43,20 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> GetProductyByIdWithDetails(int id)
     {
         try {
-            var Product = await _unitOfWork.Products.GetProductyByIdWithDetails(id);
+            if (id <= 0)
+                return BadRequest("Invalid product id");
 
-            if (Product == null)
-                return NotFound(new { message = "Product not found" });
+            var product = await _unitOfWork.Products.GetProductByIdWithDetails(id);
 
-            var result = _mapper.Map<ProductDto>(Product);
+            if (product == null)
+                return NotFound("Product not found");
 
-            return Ok(result);
+            return Ok(product);
         }
         catch (Exception ex)
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
-    }
-
-
-
-    [HttpGet("GetAllProductsPagedinationaNewArrivals")]
-    public async Task<ActionResult<PagedResult<ProductDto>>> GetAllProductsNewArrivals(int page = 1, int pageSize = 8)
-    {
-        var result = await _unitOfWork.Products
-            .GetAllProductsNewArrivalsAsync(page, pageSize);
-
-        return Ok(result);
     }
 
 
@@ -74,87 +65,23 @@ public class ProductController : ControllerBase
     [HttpPost("CreateProduct")]
     public async Task<IActionResult> CreateProduct([FromForm] CreateProductDto dto)
     {
-        try { 
-        
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var Product = _mapper.Map<Product>(dto);
-        Product.Images ??= new List<ProductImage>();
-
-
-        if (dto.Photo != null)
-        {
-            Product.Photo = _imgService.Save(dto.Photo);
-        }
-
-
-        if (dto.Images != null)
-        {
-            foreach (var img in dto.Images)
-            {
-                if (img.Photo == null)
-                    continue;
-                var url = _imgService.Save(img.Photo);
-                Product.Images.Add(new ProductImage { ImageUrl = url });
-            }
-
-        }
-
-        await _unitOfWork.Products.AddAsync(Product);
-        _unitOfWork.CommitChanges();
-
-        return Ok(new { Message = "Product Created Successfully.", Product = Product });
-    
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+        var result = await _productService.CreateAsync(dto);
+        return Ok(new { Message = "Product Created Successfully", Product = result });
     }
 
 
 
-
-[HttpPut("UpdateProduct/{id}")]
+    [HttpPut("UpdateProduct/{id}")]
     public async Task<IActionResult> UpdateProduct(int id, [FromForm] UpdateProductDto dto)
     {
-        try
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-            var OldProduct = await _unitOfWork.Products.GetByIdWithIncludes(
-                p => p.ProductId == id,
-                x => x.Images);
-
-            if (OldProduct == null)
-                return NotFound(new { message = "Product Not Found" });
-
-
-            _mapper.Map(dto, OldProduct);
-
-
-            if (dto.Photo != null)
-            {
-                if (!string.IsNullOrEmpty(OldProduct.Photo))
-                    _imgService.Delete(OldProduct.Photo);
-
-                OldProduct.Photo = _imgService.Save(dto.Photo);
-            }
-
-
-            _unitOfWork.Products.Update(OldProduct);
-            _unitOfWork.CommitChanges();
-
-            var UpdatedProduct = _mapper.Map<ProductDto>(OldProduct);
-            return Ok(new { Message = "Product Updated Successfully.", UpdatedProduct });
-        }
-
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+        var result = await _productService.UpdateAsync(id, dto);
+        return Ok(new { Message = "Product Updated Successfully", Product = result });
     }
 
 
@@ -162,58 +89,147 @@ public class ProductController : ControllerBase
     [HttpDelete("DeleteProduct/{id}")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
-
-        try
-        {
-            var Product = await _unitOfWork.Products.GetByIdWithIncludes(
-                p => p.ProductId == id,
-                x => x.Images);
-
-            if (Product == null)
-                return NotFound(new { message = "Product Not Found" });
-
-            if (!string.IsNullOrEmpty(Product.Photo))
-                _imgService.Delete(Product.Photo);
-
-            foreach (var img in Product.Images)
-                _imgService.Delete(img.ImageUrl);
-
-            _unitOfWork.Products.Delete(Product);
-            _unitOfWork.CommitChanges();
-
-            return Ok(new { message = "Product Deleted Successfully" });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+        await _productService.DeleteAsync(id);
+        return Ok(new { Message = "Product Deleted Successfully" });
     }
 
 
-    //[HttpGet("filter")]
-    //public async Task<IActionResult> FilterProducts([FromQuery] ProductFilterDto filter)
-    //{
-    //    var query = _unitOfWork.Products
-    //        .Include(p => p.ProductSizes)
-    //        .AsQueryable();
 
-    //    if (filter.SizeId.HasValue)
+    //    [HttpPost("CreateProduct")]
+    //    public async Task<IActionResult> CreateProduct([FromForm] CreateProductDto dto)
     //    {
-    //        query = query.Where(p =>
-    //            p.ProductSizes.Any(ps =>
-    //                ps.SizeId == filter.SizeId && ps.Stock > 0));
+    //        try { 
+
+    //        if (!ModelState.IsValid)
+    //            return BadRequest(ModelState);
+
+    //        var Product = _mapper.Map<Product>(dto);
+    //        Product.Images ??= new List<ProductImage>();
+
+
+    //        if (dto.Photo != null)
+    //        {
+    //            Product.Photo = _imgService.Save(dto.Photo);
+    //        }
+
+
+    //        if (dto.Images != null)
+    //        {
+    //            foreach (var img in dto.Images)
+    //            {
+    //                if (img.Photo == null)
+    //                    continue;
+    //                var url = _imgService.Save(img.Photo);
+    //                Product.Images.Add(new ProductImage { ImageUrl = url });
+    //            }
+
+    //        }
+
+    //        await _unitOfWork.Products.AddAsync(Product);
+    //        _unitOfWork.CommitChanges();
+
+    //        return Ok(new { Message = "Product Created Successfully.", Product = Product });
+
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            return StatusCode(500, $"Internal server error: {ex.Message}");
+    //        }
     //    }
 
-    //    var products = await query
-    //        .Select(p => new ProductDto
-    //        {
-    //            ProductId = p.ProductId,
-    //            Name = p.Name,
-    //            Price = p.Price
-    //        })
-    //        .ToListAsync();
 
-    //    return Ok(products);
-    //}
+
+
+    //[HttpPut("UpdateProduct/{id}")]
+    //    public async Task<IActionResult> UpdateProduct(int id, [FromForm] UpdateProductDto dto)
+    //    {
+    //        try
+    //        {
+    //            if (!ModelState.IsValid)
+    //                return BadRequest(ModelState);
+
+    //            var OldProduct = await _unitOfWork.Products.GetByIdWithIncludes(
+    //                p => p.ProductId == id,
+    //                x => x.Images);
+
+    //            if (OldProduct == null)
+    //                return NotFound(new { message = "Product Not Found" });
+
+
+    //            _mapper.Map(dto, OldProduct);
+
+
+    //            if (dto.Photo != null)
+    //            {
+    //                if (!string.IsNullOrEmpty(OldProduct.Photo))
+    //                    _imgService.Delete(OldProduct.Photo);
+
+    //                OldProduct.Photo = _imgService.Save(dto.Photo);
+    //            }
+
+
+    //            _unitOfWork.Products.Update(OldProduct);
+    //            _unitOfWork.CommitChanges();
+
+    //            var UpdatedProduct = _mapper.Map<ProductDto>(OldProduct);
+    //            return Ok(new { Message = "Product Updated Successfully.", UpdatedProduct });
+    //        }
+
+    //        catch (Exception ex)
+    //        {
+    //            return StatusCode(500, $"Internal server error: {ex.Message}");
+    //        }
+    //    }
+
+
+
+    //    [HttpDelete("DeleteProduct/{id}")]
+    //    public async Task<IActionResult> DeleteProduct(int id)
+    //    {
+
+    //        try
+    //        {
+    //            var Product = await _unitOfWork.Products.GetByIdWithIncludes(
+    //                p => p.ProductId == id,
+    //                x => x.Images);
+
+    //            if (Product == null)
+    //                return NotFound(new { message = "Product Not Found" });
+
+    //            if (!string.IsNullOrEmpty(Product.Photo))
+    //                _imgService.Delete(Product.Photo);
+
+    //            foreach (var img in Product.Images)
+    //                _imgService.Delete(img.ImageUrl);
+
+    //            _unitOfWork.Products.Delete(Product);
+    //            _unitOfWork.CommitChanges();
+
+    //            return Ok(new { message = "Product Deleted Successfully" });
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            return StatusCode(500, $"Internal server error: {ex.Message}");
+    //        }
+    //    }
+
+
+
+
+    [HttpGet("GetProducts")]
+    public async Task<IActionResult> GetProducts([FromQuery] ProductQueryDto query)
+    {
+        var result = await _unitOfWork.Products.GetProductsAsync(query);
+        return Ok(result);
+    }
+
+    [HttpGet("GetAllProductsNewArrivalsAsync")]
+    public async Task<IActionResult> GetAllProductsNewArrivalsAsync(int page, int pageSize)
+    {
+        var result = await _unitOfWork.Products.GetAllProductsNewArrivalsAsync( page, pageSize);
+        return Ok(result);
+    }
+
+
 
 }

@@ -10,8 +10,10 @@
 
   <div class="pt-3">
     <app-pagination *ngIf="showPagination"
-                    [page]="data.page" [totalPages]="data.totalPages"
-                    (pageChange)="onPageChange($event)"></app-pagination>
+                    [page]="data.pageNumber"
+                    [totalPages]="data.totalPages"
+                    (pageChange)="onPageChange($event)">
+    </app-pagination>
   </div>
 
 

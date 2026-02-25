@@ -1,5 +1,5 @@
 ﻿
-using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace MoustafaApp.Server.Models
 {
@@ -12,7 +12,7 @@ namespace MoustafaApp.Server.Models
         [MaxLength(500)]
         public string? ReviewText { get; set; }
         public DateTime DatePosted { get; set; } = DateTime.UtcNow;
-
+        public DateTime? UpdatedAt { get; set; }
 
         [ForeignKey("Product")]
        

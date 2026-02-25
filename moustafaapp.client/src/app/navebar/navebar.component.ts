@@ -30,6 +30,7 @@ export class NavebarComponent implements OnInit {
     this.Departments$ = this._DepartmentsService.Departments$;
     this.currentUser$ = this._RegisterService.currentUserObservable$;
     this._DepartmentsService.loadDepartments();
+    console.log(this.currentUser$)
   }
 
   toggleDropdown() {

@@ -15,6 +15,7 @@ namespace MoustafaApp.Server.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+
         public UserController(IUnitOfWork unitOfWork, IConfiguration configuration, IMapper mapper)
 
         {
@@ -47,21 +48,18 @@ namespace MoustafaApp.Server.Controllers
         {
             try
             {
-                var Users = await _unitOfWork.UserManager.Users.ToListAsync();
-                var UserWithRoles = _mapper.Map<List<UserDto>>(Users);
+                var users = await _unitOfWork.UserManager.Users.ToListAsync();
 
-                for (int i = 0; i < Users.Count; i++)
+                var result = new List<UserDto>();
+
+                foreach (var user in users)
                 {
-                    var roles = await _unitOfWork.UserManager.GetRolesAsync(Users[i]);
-                    UserWithRoles[i].Roles = roles.ToList();
-
-                    //UserWithRoles[i].IsActive =
-                    //    Users[i].LockoutEnabled == false ||
-                    //    Users[i].LockoutEnd == null ||
-                    //    Users[i].LockoutEnd <= DateTimeOffset.Now;
+                    var dto = _mapper.Map<UserDto>(user);
+                    dto.Roles = (await _unitOfWork.UserManager.GetRolesAsync(user)).ToList();
+                    result.Add(dto);
                 }
-
-                return Ok(UserWithRoles);
+            
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -100,12 +98,8 @@ namespace MoustafaApp.Server.Controllers
             try
             {
 
-                var ExistPhone = await _unitOfWork.UserManager.Users.AnyAsync(y => y.PhoneNumber == PhoneNo);
-                if (ExistPhone != null)
-                {
-                    return Ok(true);
-                }
-                return Ok(false);
+                bool Exists = await _unitOfWork.UserManager.Users.AnyAsync(y => y.PhoneNumber == PhoneNo);
+                return Ok(Exists);
             }
             catch (Exception ex)
             {
@@ -148,54 +142,65 @@ namespace MoustafaApp.Server.Controllers
 
 
 
+        private async Task<string> GenerateUsername(string fullName)
+        {
+            var baseUsername = fullName.Replace(" ", "").ToLower();
+            var username = baseUsername;
+            int counter = 1;
+
+            while (await _unitOfWork.UserManager.FindByNameAsync(username) != null)
+            {
+                username = baseUsername + counter;
+                counter++;
+            }
+
+            return username;
+        }
+
+
+
+        
         [HttpPost("RegisterUser")]
-        public async Task<ActionResult> RegisterUser([FromBody] RegisterDto dtoRegister) 
+        public async Task<ActionResult> RegisterUser([FromBody] RegisterDto dtoRegister)
         {
             try
             {
                 if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                    return BadRequest(ModelState);
 
-            var PhoneExit = await _unitOfWork.UserManager.Users.AnyAsync(y => y.PhoneNumber == dtoRegister.PhoneNumber);
-            var NameExit = await _unitOfWork.UserManager.FindByNameAsync(dtoRegister.UserName);
-            var ExistEmail = await _unitOfWork.UserManager.FindByEmailAsync(dtoRegister.Email);
+                var user = _mapper.Map<ApplicationUser>(dtoRegister);
 
-            if (ExistEmail != null)
-            {
-                return Ok(new { message = "Email already exists" });
-            }
+                user.UserName = await GenerateUsername(dtoRegister.UserName);
 
-            if (NameExit != null )
-            {
-                return Ok(new { message = "UserName already exists" });
-            }
+                if (await _unitOfWork.UserManager.FindByEmailAsync(dtoRegister.Email) != null)
+                    return BadRequest("Email already exists");
 
-            if (PhoneExit == true)
-            {
-                return Ok(new { message = " Phone Number already exists" });
-            }
+                if (await _unitOfWork.UserManager.FindByNameAsync(user.UserName) != null)
+                    return BadRequest("Username already exists");
 
-                var User = new ApplicationUser
+                if (await _unitOfWork.UserManager.Users
+                    .AnyAsync(x => x.PhoneNumber == dtoRegister.PhoneNumber))
+                    return BadRequest("Phone number already exists");
+
+                var result = await _unitOfWork.UserManager.CreateAsync(user, dtoRegister.Password);
+
+                if (!result.Succeeded)
+                    return BadRequest(result.Errors);
+
+                await _unitOfWork.UserManager.AddToRoleAsync(user, "User");
+
+                return Ok(new
                 {
-                    UserName = dtoRegister.UserName,
-                    Email = dtoRegister.Email,
-                    PhoneNumber = dtoRegister.PhoneNumber,
-                };
-                var result = await _unitOfWork.UserManager.CreateAsync(User, dtoRegister.Password);
-
-                if (result.Succeeded)
-                {
-                    await _unitOfWork.UserManager.AddToRoleAsync(User, "User");
-                    return Ok(new { message = "User registered successfully" });
-                }
-                return BadRequest(result.Errors);
-  
+                    message = "User registered successfully",
+                    username = user.UserName
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Internal server error", error = ex.Message }); 
-            } 
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
         }
+
 
 
         [HttpPost("Login")]
@@ -208,18 +213,20 @@ namespace MoustafaApp.Server.Controllers
                     return BadRequest(new { message = "Invalid data submitted", errors = ModelState });
                 }
 
-                var user = await _unitOfWork.UserManager.FindByNameAsync(dtoLogin.UserName);
+
+                var user = await _unitOfWork.UserManager.FindByEmailAsync(dtoLogin.Email.Trim().ToLower());
+
 
                 if (user == null)
                 {
-                    return BadRequest(new { message = "Username is invalid" });
+                    return Unauthorized(new { message = "Invalid email or password" });
                 }
-
+                
                 var passwordValid = await _unitOfWork.UserManager.CheckPasswordAsync(user, dtoLogin.Password);
 
                 if (!passwordValid)
                 {
-                    return Unauthorized(new { message = "Invalid Password" });
+                    return Unauthorized(new { message = "Invalid email or password" });
                 }
 
                 var roles = await _unitOfWork.UserManager.GetRolesAsync(user);
@@ -246,6 +253,7 @@ namespace MoustafaApp.Server.Controllers
             var claims = new List<Claim>
             {
               new Claim("userName", User.UserName),
+              new Claim("fullName", User.FullName),
               new Claim("userId", User.Id),
               new Claim("email", User.Email),
               new Claim("phone", User.PhoneNumber),
@@ -324,7 +332,7 @@ namespace MoustafaApp.Server.Controllers
 
             user.Email = dto.Email;
             user.PhoneNumber = dto.PhoneNumber;
-            user.UserName = dto.UserName;
+            user.FullName = dto.FullName;
 
             var result = await _unitOfWork.UserManager.UpdateAsync(user);
 

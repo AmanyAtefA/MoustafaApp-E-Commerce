@@ -85,14 +85,14 @@ export class CategoriesService {
         this.refreshCategories().subscribe(),
           console.log('Category added'),
           alert("Category added")
+      }),
 
         catchError((error: HttpErrorResponse) => {
           console.error('Error adding Category:', error);
           alert("Error in adding Category")
           return throwError(() => error);
         })
-      }
-    ));
+      );
   }
   
 
@@ -101,15 +101,15 @@ export class CategoriesService {
       tap(() => {
         this.refreshCategories().subscribe()
         console.log('Category is Deleted'),
-          alert("Category is Deleted"),
+          alert("Category is Deleted")
+      }),
 
       catchError((error: HttpErrorResponse) => {
         console.error('Error deleting Category:', error);
         alert("Error in Deleting Category")
         return throwError(() => error);
       })
-    }
-    ));
+    );
   }
 
 
@@ -118,15 +118,14 @@ export class CategoriesService {
       tap(() => {
         this.refreshCategories().subscribe(),
           console.log('Category Update:'),
-          alert("Category Updated"),
-
+          alert("Category Updated")
+      }),
       catchError((error: HttpErrorResponse) => {
         console.error('Error updating Category:', error);
         alert("Error in Updating Category")
         return throwError(() => error);
         })
-      }
-    ));
+      );
   }
   
 

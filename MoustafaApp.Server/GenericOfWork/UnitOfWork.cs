@@ -25,6 +25,7 @@ namespace moustafapp.Server.GenericOfWork
             Categories = new CategoryRepo(_context);
             Departments = new DepartmentRepo(_context);
             Carts     = new CartRepo(_context);
+            Reviews = new ReviewRepo(_context,_mapper);
             CartItems = new BaseRepository<CartItem>(_context);
             ProductImage = new BaseRepository<ProductImage>(_context);
             Users = new BaseRepository<ApplicationUser>(_context);
@@ -32,7 +33,6 @@ namespace moustafapp.Server.GenericOfWork
             ProductColors = new BaseRepository<ProductColor>(_context);
             ProductSizes = new BaseRepository<ProductSize>(_context);
             Sizes = new BaseRepository<Size>(_context);
-            Reviews = new BaseRepository<Review>(_context);
 
         }
 
@@ -42,15 +42,16 @@ namespace moustafapp.Server.GenericOfWork
         public CategoryIRepo Categories { get; private set; }
         public DepartmentIRepo Departments { get; private set; }
         public CartIRepo Carts { get; private set; }
+        public ReviewIRepo Reviews { get; private set; }
+
         public IBaseRepository<ProductImage> ProductImage { get; private set; }  
-    
+
         public IBaseRepository <CartItem> CartItems { get; private set; }
         public IBaseRepository <ApplicationUser> Users { get; private set; }
         public IBaseRepository <Brand> Brands { get; private set; }
         public IBaseRepository <ProductColor> ProductColors { get; private set; }
         public IBaseRepository <ProductSize> ProductSizes { get; private set; }
         public IBaseRepository <Size> Sizes { get; private set; }
-        public IBaseRepository <Review> Reviews { get; private set; }
 
         public int CommitChanges()
         {

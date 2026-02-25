@@ -20,7 +20,6 @@ export class ProductDetailComponent implements OnInit {
 
   productId!: number;
 
-  open = false;
 
   selectedColorId: number |null = null;
   selectedSizeId: number | null =null;
@@ -49,7 +48,10 @@ export class ProductDetailComponent implements OnInit {
       map(params => params.get('id')),
       filter((id): id is string => id !== null),
       map(id => +id),
-      switchMap(id => this._ProductsService.getProductyByIdWithDetails(id)
+      switchMap(id => {
+        this.productId = id;
+        return this._ProductsService.getProductyByIdWithDetails(id)
+      }
     ));
 
 

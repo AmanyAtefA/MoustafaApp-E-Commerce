@@ -18,15 +18,38 @@ export class LoginComponent implements OnInit {
     private router: Router, private fb: FormBuilder) {
 
   }
-    ngOnInit(): void {
-      this.CreatLoginForm();
-     
+
+
+  ngOnInit(): void {
+    this.CreatLoginForm();
+    this.getDataFromRegisterComponent();
+    
+  }
+
+
+  getDataFromRegisterComponent() {
+    const nav = this.router.getCurrentNavigation();
+    const state = nav?.extras?.state as {
+      email: string;
+      password: string;
+    };
+
+    if (state) {
+      this.UserLoginForm.patchValue({
+        email: state.email,
+        Password: state.password
+      });
     }
+  }
+
 
   CreatLoginForm() {
     this.UserLoginForm = this.fb.group({
-      UserName: ['', [Validators.required,
-      Validators.pattern('^[a-zA-Z]{3,20}$')]],
+      //UserName: ['', [Validators.required,
+      //Validators.pattern('^[a-zA-Z]{3,30}$')]],
+      email: ["", [Validators.required,
+      Validators.email,
+      Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")]],
       Password: ['', [Validators.required,
         Validators.minLength(6), Validators.maxLength(20),
       ]]

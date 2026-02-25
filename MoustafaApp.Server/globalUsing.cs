@@ -17,3 +17,6 @@ global using moustafapp.Server.Mapping;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using MoustafaApp.Server.IRepository;
 global using MoustafaApp.Server.Repository;
+global using AutoMapper.QueryableExtensions;
+global using MoustafaApp.Server.Dtos.Review;
+global using MoustafaApp.Server.Dtos.ReviewDtos;

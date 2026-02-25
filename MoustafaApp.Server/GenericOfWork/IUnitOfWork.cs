@@ -10,8 +10,8 @@ namespace moustafapp.Server.GenericOfWork
         CategoryIRepo Categories { get; }
         DepartmentIRepo Departments { get; }
         CartIRepo Carts { get; }
-       
-        IBaseRepository<CartItem> CartItems { get;}
+        ReviewIRepo Reviews { get; }
+         IBaseRepository<CartItem> CartItems { get;}
         IBaseRepository<ProductImage> ProductImage { get; }
         IBaseRepository<ApplicationUser> Users { get; }
         IBaseRepository<Brand> Brands { get; }
@@ -19,7 +19,7 @@ namespace moustafapp.Server.GenericOfWork
         IBaseRepository<ProductSize> ProductSizes { get; }
         IBaseRepository<Size> Sizes { get; }
        
-        IBaseRepository<Review> Reviews { get; }
+       
 
         int CommitChanges();
     }

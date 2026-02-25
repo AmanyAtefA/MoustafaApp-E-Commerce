@@ -1,10 +1,10 @@
-﻿
-
-
-using MoustafaApp.Server.Dtos;
+﻿using MoustafaApp.Server.Dtos.BrandDtos;
 using MoustafaApp.Server.Dtos.CartDtos;
 using MoustafaApp.Server.Dtos.CategoryDtos;
 using MoustafaApp.Server.Dtos.ProductDtos;
+using MoustafaApp.Server.Dtos.Review;
+using MoustafaApp.Server.Dtos.ReviewDtos;
+using MoustafaApp.Server.Dtos.UserDtos;
 
 namespace moustafapp.Server.Mapping
 {
@@ -21,9 +21,19 @@ namespace moustafapp.Server.Mapping
             CreateMap<Department, DepartmentWithProductDto>();
 
 
-            CreateMap<CreateReviewDto, Review>().ReverseMap();
+            
+            CreateMap<Review, ReviewDto>()
+             .ForMember( dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+             .ForMember(dest => dest.UserName,opt => opt.MapFrom(src => src.User.UserName))
+             .ForMember(dest => dest.FullName,opt => opt.MapFrom(src => src.User.FullName));
 
+            CreateMap<CreateReviewDto, Review>();
+            CreateMap<Review, ReviewDto>()
+            .ForMember(d => d.ProductName, o => o.MapFrom(s => s.Product.Name))
+            .ForMember(d => d.UserName, o => o.MapFrom(s => s.User.UserName));
 
+            CreateMap<UpdateReviewDto, Review>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Category, CategoryDto>();
             CreateMap<Category, CategoryWithProducDto>()
@@ -39,7 +49,8 @@ namespace moustafapp.Server.Mapping
                 .ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department.DepartmentName))
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Images))
                 .ForMember(dest => dest.Colors, opt => opt.MapFrom(src => src.Colors))
-               .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.Sizes));
+               .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.Sizes))
+               .ForMember(dest => dest.Reviews, opt => opt.MapFrom(src => src.Reviews));
 
 
             CreateMap<UpdateProductDto, Product>()
@@ -75,7 +86,6 @@ namespace moustafapp.Server.Mapping
                 .ForMember(dest => dest.CartItemId, opt => opt.Ignore())
                 .ForMember(dest => dest.PriceOfUnit, opt => opt.Ignore()) 
                 .ForMember(dest => dest.Cart, opt => opt.Ignore());
-
 
 
 

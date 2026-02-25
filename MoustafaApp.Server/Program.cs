@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MoustafaApp.Server.Service.ProductService;
 using System.Text;
 
 namespace moustafapp.Server
@@ -74,8 +75,10 @@ namespace moustafapp.Server
             builder.Services.AddTransient<ProductIRepo, ProductRepo>();
             builder.Services.AddTransient<CategoryIRepo, CategoryRepo>();
             builder.Services.AddTransient<CartIRepo, CartRepo>();
+            builder.Services.AddTransient<IProductService, ProductService>();
             builder.Services.AddTransient<DepartmentIRepo, DepartmentRepo>();
             builder.Services.AddScoped<IImageService, ImageService>();
+            builder.Services.AddScoped<ReviewIRepo, ReviewRepo>();
 
 
             builder.Services.AddControllers();
@@ -85,6 +88,25 @@ namespace moustafapp.Server
 
 
             var app = builder.Build();
+
+
+            // اضافة رول تلقائي
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider
+                    .GetRequiredService<RoleManager<IdentityRole>>();
+
+                string[] roles = { "User", "Admin", "Manager" };
+
+                foreach (var role in roles)
+                {
+                    var exists = roleManager.RoleExistsAsync(role).Result;
+
+                    if (!exists)
+                        roleManager.CreateAsync(new IdentityRole(role)).Wait();
+                }
+            }
 
             app.UseCors("AllowAngular");
 

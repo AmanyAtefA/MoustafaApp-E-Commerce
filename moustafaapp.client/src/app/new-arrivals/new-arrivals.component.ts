@@ -24,16 +24,17 @@ export class NewArrivalsComponent implements OnInit{
   constructor(private _ProductsService: ProductsService) { }
 
   ngOnInit(): void {
-    this.load();
+    this.loadProductNewArrivals();
   }
 
-  load() {
+  loadProductNewArrivals() {
     this.newArrivals$ =
       this._ProductsService.loadProductNewArrivals(this.page, this.pageSize);
   }
+
   onPageChange(page: number) {
     this.page = page;
-    this.load();
+    this.loadProductNewArrivals();
   }
   
 }

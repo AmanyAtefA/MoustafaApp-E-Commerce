@@ -6,9 +6,10 @@
     <ShouldRunBuildScript>false</ShouldRunBuildScript>
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\moustafapp.client\browser\</BuildOutputFolder>
-
     <DebugType>full</DebugType>
     <WarningLevel>4</WarningLevel>
-
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="src\app\Pips\" />
+  </ItemGroup>
 </Project>

@@ -524,7 +524,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 1,
                             BrandId = 1,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2026, 1, 11, 13, 5, 1, 583, DateTimeKind.Utc).AddTicks(9024),
+                            CreatedAt = new DateTime(2026, 1, 15, 20, 34, 38, 707, DateTimeKind.Utc).AddTicks(9789),
                             DepartmentId = 1,
                             Description = "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style.",
                             Discount = 13,
@@ -540,7 +540,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 2,
                             BrandId = 2,
                             CategoryId = 2,
-                            CreatedAt = new DateTime(2026, 1, 11, 13, 5, 1, 583, DateTimeKind.Utc).AddTicks(9035),
+                            CreatedAt = new DateTime(2026, 1, 15, 20, 34, 38, 707, DateTimeKind.Utc).AddTicks(9806),
                             DepartmentId = 1,
                             Description = "Comfortable skinny fit jeans",
                             Discount = 8,
@@ -556,7 +556,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 3,
                             BrandId = 5,
                             CategoryId = 3,
-                            CreatedAt = new DateTime(2026, 1, 11, 13, 5, 1, 583, DateTimeKind.Utc).AddTicks(9043),
+                            CreatedAt = new DateTime(2026, 1, 15, 20, 34, 38, 707, DateTimeKind.Utc).AddTicks(9859),
                             DepartmentId = 1,
                             Description = "Classic checkered shirt",
                             Discount = 0,
@@ -572,7 +572,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 4,
                             BrandId = 4,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2026, 1, 11, 13, 5, 1, 583, DateTimeKind.Utc).AddTicks(9051),
+                            CreatedAt = new DateTime(2026, 1, 15, 20, 34, 38, 707, DateTimeKind.Utc).AddTicks(9872),
                             DepartmentId = 1,
                             Description = "Striped raglan tee",
                             Discount = 18,
@@ -840,6 +840,9 @@ namespace MoustafaApp.Server.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -923,22 +926,22 @@ namespace MoustafaApp.Server.Migrations
                         new
                         {
                             SizeId = 1,
-                            SizeName = "S"
+                            SizeName = "Small"
                         },
                         new
                         {
                             SizeId = 2,
-                            SizeName = "M"
+                            SizeName = "Medium"
                         },
                         new
                         {
                             SizeId = 3,
-                            SizeName = "L"
+                            SizeName = "Large"
                         },
                         new
                         {
                             SizeId = 4,
-                            SizeName = "XL"
+                            SizeName = "X-Large"
                         });
                 });
 
