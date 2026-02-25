@@ -1,4 +1,13 @@
 
+
+.container {
+  
+  opacity: 1;
+  width: 100%;
+  max-width: 1239px;
+  margin: 0 auto;
+  padding: 20px;
+}
 .row {
   align-items: stretch;
 }

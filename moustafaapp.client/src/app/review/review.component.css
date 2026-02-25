@@ -1,5 +1,12 @@
 
-
+.container {
+ 
+  opacity: 1;
+  width: 100%;
+  max-width: 1239px;
+  margin: 0 auto;
+  padding: 20px;
+}
 /*  التابات */
 .custom-tabs .nav-link {
   padding: 8px 16px;

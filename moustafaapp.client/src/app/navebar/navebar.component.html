@@ -1,104 +1,111 @@
-<div class="container">
-  <nav class="navStyle">
+<nav class="navStyle">
 
-    <div class="left-wrapper">
+  <!-- LEFT: LOGO -->
+  <div class="nav-left">
+    <i class="bi bi-list toggleMenu d-md-none" (click)="toggleMenu()"></i>
 
-      <i id="toggleMenu"
-         class="bi bi-list toggleMenu d-md-none"
-         (click)="toggleMenu()">
-      </i>
+    <a routerLink="/" class="logo-link">
+      <h1 class="logo">Shop.Co</h1>
+    </a>
+  </div>
 
-      <a routerLink="/" class="logo-link">
-        <h1 class="logo h1Style">Shop.Co</h1>
-      </a>
-    </div>
+  <!-- CENTER: MENU -->
+  <ul class="nav-menu d-none d-md-flex">
+    <li class="dropdown"
+    (mouseenter)="showMenu()"
+    (mouseleave)="hideMenu()"
+    [class.open]="shopOpenDesktop">
 
-    <ul class="menu d-none d-md-flex list-unstyled m-0 gap-4">
-      <li class="dropdown"
-          (mouseenter)="showMenu()"
-          (mouseleave)="hideMenu()"
-          [class.open]="shopOpenDesktop">
+      <a class="nav-link">Shop</a>
 
-        <a class="nav-link">Shop</a>
+      <ul class="submenu" [class.open]="shopOpenDesktop">
+        <li *ngFor="let dept of Departments$ | async">
+          <a>{{dept.departmentName}}</a>
+        </li>
+      </ul>
+    </li>
 
-        <ul class="user-dropdown-menu submenu"
-            [class.open]="shopOpenDesktop"
-            (mouseenter)="showMenu()"
-            (mouseleave)="hideMenu()">
+    <li><a class="nav-link">On Sale</a></li>
+    <li><a class="nav-link">New Arrivals</a></li>
+    <li><a class="nav-link">Brands</a></li>
+  </ul>
 
-          <li *ngFor="let dept of Departments$ | async"><a>{{dept.departmentName}}</a></li>
-          <!--<li><a>Shop2</a></li>
-        <li><a>Shop3</a></li>-->
+
+  <div id="mobileMenu" class="mobileMenu" [class.active]="menuOpen">
+    <ul class="list-unstyled m-0">
+
+      <!-- Shop dropdown -->
+      <li class="mobile-dropdown">
+
+        <div class="mobile-dropdown-header"
+             (click)="toggleShopMobile()">
+          <span>Shop</span>
+          <i class="bi bi-chevron-down dropdown-arrow"
+             [class.rotate]="shopOpenMobile"></i>
+        </div>
+
+        <ul class="submenu"
+            [class.open]="shopOpenMobile">
+          <li *ngFor="let dept of Departments$ | async">
+            <a>{{dept.departmentName}}</a>
+          </li>
         </ul>
 
       </li>
 
-      <li><a class="nav-link">On Sale</a></li>
-      <li><a class="nav-link">New Arrivals</a></li>
-      <li><a class="nav-link">Brands</a></li>
+      <li><a>On Sale</a></li>
+      <li><a>New Arrivals</a></li>
+      <li><a>Brands</a></li>
+
     </ul>
+  </div>
 
+  <!-- SEARCH -->
+  <div class="nav-search">
+    <i class="bi bi-search"></i>
+    <input type="text" placeholder="Search products..." />
+  </div>
 
-    <div class="inputSearch">
-      <i class="bi bi-search "></i>
-      <input type="text" class="form-control "
-             placeholder="Search for product ..." />
-    </div>
+  <!-- RIGHT: CART + USER -->
+  <div class="nav-right">
 
-    <div class="right-icons">
+    <a routerLink="/Cart"><i class="bi bi-cart"></i></a>
 
-      <a routerLink="/Cart" class="logo-link"> <i class="bi bi-cart"></i></a>
+    <div class="user-dropdown"
+         (mouseleave)="isDropdownOpen=false">
 
-      <!--<i class="bi bi-cart"></i>-->
+      <!-- زر الايقونة -->
+      <div class="user-trigger"
+           (click)="isDropdownOpen = !isDropdownOpen">
+        <i class="bi bi-person"></i>
 
-      <div class="user-dropdown" *ngIf="currentUser$ | async as user">
-
-        <div class="user-name" (click)="toggleDropdown()">
-          <i class="bi bi-person"></i>
-
-          <!--<span class="username">{{ user.userName }}</span>-->
+        <ng-container *ngIf="currentUser$ | async as user; else guest">
           <span class="username">{{ user.fullName | shortFullName }}</span>
-
           <i class="bi bi-caret-down-fill dropdown-icon"
-             [class.rotate]="isDropdownOpen">
-          </i>
-        </div>
+             [class.rotate]="isDropdownOpen"></i>
+        </ng-container>
 
-        <div class="user-dropdown-menu" *ngIf="isDropdownOpen">
-          <div><a routerLink="" routerLinkActive>Profile</a></div>
-          <div><a routerLink="" routerLinkActive (click)="logout()">Logout </a></div>
-        </div>
+        <ng-template #guest>
+          <span class="username">Login</span>
+        </ng-template>
+      </div>
+
+      <!-- القائمة -->
+      <div class="dropdown-menu" *ngIf="isDropdownOpen">
+
+        <ng-container *ngIf="currentUser$ | async as user; else guestMenu">
+          <a>Profile</a>
+          <a (click)="logout()">Logout</a>
+        </ng-container>
+
+        <ng-template #guestMenu>
+          <a routerLink="/Login">Login</a>
+          <a routerLink="/Register">Register</a>
+        </ng-template>
 
       </div>
 
     </div>
-    
+  </div>
 
-    <div id="mobileMenu" class="mobileMenu" [class.active]="menuOpen">
-      <ul class="list-unstyled m-0">
-
-        <li class="mobile-dropdown" (click)="toggleShopMobile()">
-          <div class="mobile-dropdown-header">
-            <a>Shop</a>
-            <i class="bi bi-chevron-down dropdown-arrow"
-               [class.rotate]="shopOpenMobile"></i>
-          </div>
-
-
-          <ul class="submenu user-dropdown-menu"
-              [class.open]="shopOpenMobile">
-            <li><a>Men</a></li>
-            <li><a>Women</a></li>
-            <li><a>Kids</a></li>
-          </ul>
-        </li>
-
-        <li><a>On Sale</a></li>
-        <li><a>New Arrivals</a></li>
-        <li><a>Brands</a></li>
-
-      </ul>
-    </div>
-
-  </nav>
-</div>
+</nav>
