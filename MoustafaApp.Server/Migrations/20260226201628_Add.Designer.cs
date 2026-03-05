@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoustafaApp.Server.Data;
 
@@ -11,9 +12,11 @@ using MoustafaApp.Server.Data;
 namespace MoustafaApp.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260226201628_Add")]
+    partial class Add
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -444,8 +447,8 @@ namespace MoustafaApp.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CouponType")
-                        .HasColumnType("int");
+                    b.Property<decimal>("DiscountRate")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
@@ -453,12 +456,9 @@ namespace MoustafaApp.Server.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("CouponId");
 
-                    b.ToTable("Coupons");
+                    b.ToTable("Coupon");
                 });
 
             modelBuilder.Entity("MoustafaApp.Server.Models.Department", b =>
@@ -494,45 +494,6 @@ namespace MoustafaApp.Server.Migrations
                             DepartmentId = 3,
                             DepartmentName = "Kids"
                         });
-                });
-
-            modelBuilder.Entity("MoustafaApp.Server.Models.OrderItem", b =>
-                {
-                    b.Property<int>("OrderItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
-
-                    b.Property<string>("CouponCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CouponId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderItemId");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("MoustafaApp.Server.Models.Product", b =>
@@ -598,7 +559,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 1,
                             BrandId = 1,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2026, 3, 4, 18, 17, 0, 418, DateTimeKind.Utc).AddTicks(9913),
+                            CreatedAt = new DateTime(2026, 2, 26, 20, 16, 22, 606, DateTimeKind.Utc).AddTicks(600),
                             DepartmentId = 1,
                             Description = "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style.",
                             Discount = 13,
@@ -614,7 +575,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 2,
                             BrandId = 2,
                             CategoryId = 2,
-                            CreatedAt = new DateTime(2026, 3, 4, 18, 17, 0, 418, DateTimeKind.Utc).AddTicks(9926),
+                            CreatedAt = new DateTime(2026, 2, 26, 20, 16, 22, 606, DateTimeKind.Utc).AddTicks(1409),
                             DepartmentId = 1,
                             Description = "Comfortable skinny fit jeans",
                             Discount = 8,
@@ -630,7 +591,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 3,
                             BrandId = 5,
                             CategoryId = 3,
-                            CreatedAt = new DateTime(2026, 3, 4, 18, 17, 0, 418, DateTimeKind.Utc).AddTicks(9935),
+                            CreatedAt = new DateTime(2026, 2, 26, 20, 16, 22, 606, DateTimeKind.Utc).AddTicks(1464),
                             DepartmentId = 1,
                             Description = "Classic checkered shirt",
                             Discount = 0,
@@ -646,7 +607,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 4,
                             BrandId = 4,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2026, 3, 4, 18, 17, 0, 418, DateTimeKind.Utc).AddTicks(9943),
+                            CreatedAt = new DateTime(2026, 2, 26, 20, 16, 22, 606, DateTimeKind.Utc).AddTicks(1477),
                             DepartmentId = 1,
                             Description = "Striped raglan tee",
                             Discount = 18,
@@ -1019,52 +980,6 @@ namespace MoustafaApp.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("DeliveryFee")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("PaidAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PaymentIntentId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PaymentStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShippingStatus")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Subtotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("MoustafaApp.Server.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -1165,25 +1080,6 @@ namespace MoustafaApp.Server.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("MoustafaApp.Server.Models.OrderItem", b =>
-                {
-                    b.HasOne("Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MoustafaApp.Server.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("MoustafaApp.Server.Models.Product", b =>
                 {
                     b.HasOne("MoustafaApp.Server.Models.Brand", "Brand")
@@ -1265,33 +1161,6 @@ namespace MoustafaApp.Server.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Order", b =>
-                {
-                    b.HasOne("MoustafaApp.Server.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("MoustafaApp.Server.DomainBusiness.OrderBusiness.OrderAddress", "ShippingAddress", b1 =>
-                        {
-                            b1.Property<int>("OrderId")
-                                .HasColumnType("int");
-
-                            b1.HasKey("OrderId");
-
-                            b1.ToTable("Orders");
-
-                            b1.WithOwner()
-                                .HasForeignKey("OrderId");
-                        });
-
-                    b.Navigation("ShippingAddress")
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Cart", b =>
                 {
                     b.Navigation("CartItems");
@@ -1328,11 +1197,6 @@ namespace MoustafaApp.Server.Migrations
             modelBuilder.Entity("MoustafaApp.Server.Models.Size", b =>
                 {
                     b.Navigation("ProductSizes");
-                });
-
-            modelBuilder.Entity("Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("MoustafaApp.Server.Models.ApplicationUser", b =>

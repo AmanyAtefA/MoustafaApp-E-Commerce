@@ -1,5 +1,7 @@
 ﻿
 
+using MoustafaApp.Server.Models;
+
 namespace moustafapp.Server.GenericOfWork
 {
     public class UnitOfWork : IUnitOfWork
@@ -25,6 +27,7 @@ namespace moustafapp.Server.GenericOfWork
             Categories = new CategoryRepo(_context);
             Departments = new DepartmentRepo(_context);
             Carts     = new CartRepo(_context);
+            Coupons = new CouponRepo(_context);
             Reviews = new ReviewRepo(_context,_mapper);
             CartItems = new BaseRepository<CartItem>(_context);
             ProductImage = new BaseRepository<ProductImage>(_context);
@@ -33,6 +36,11 @@ namespace moustafapp.Server.GenericOfWork
             ProductColors = new BaseRepository<ProductColor>(_context);
             ProductSizes = new BaseRepository<ProductSize>(_context);
             Sizes = new BaseRepository<Size>(_context);
+            Orders = new BaseRepository<Order>(_context);
+            OrderItems = new BaseRepository<OrderItem>(_context);
+           
+    
+            
 
         }
 
@@ -43,6 +51,7 @@ namespace moustafapp.Server.GenericOfWork
         public DepartmentIRepo Departments { get; private set; }
         public CartIRepo Carts { get; private set; }
         public ReviewIRepo Reviews { get; private set; }
+        public CouponIRepo Coupons { get; private set; }
 
         public IBaseRepository<ProductImage> ProductImage { get; private set; }  
 
@@ -52,10 +61,12 @@ namespace moustafapp.Server.GenericOfWork
         public IBaseRepository <ProductColor> ProductColors { get; private set; }
         public IBaseRepository <ProductSize> ProductSizes { get; private set; }
         public IBaseRepository <Size> Sizes { get; private set; }
+        public IBaseRepository <Order> Orders { get; private set; }
+        public IBaseRepository <OrderItem> OrderItems { get; private set; }
 
-        public int CommitChanges()
+        public async Task<int> SaveChangesAsync()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
 
         public void Dispose()

@@ -11,16 +11,18 @@ namespace moustafapp.Server.GenericOfWork
         DepartmentIRepo Departments { get; }
         CartIRepo Carts { get; }
         ReviewIRepo Reviews { get; }
-         IBaseRepository<CartItem> CartItems { get;}
+        CouponIRepo Coupons { get; }
+        IBaseRepository<CartItem> CartItems { get;}
         IBaseRepository<ProductImage> ProductImage { get; }
         IBaseRepository<ApplicationUser> Users { get; }
         IBaseRepository<Brand> Brands { get; }
         IBaseRepository<ProductColor> ProductColors { get; }
         IBaseRepository<ProductSize> ProductSizes { get; }
         IBaseRepository<Size> Sizes { get; }
-       
-       
 
-        int CommitChanges();
+        IBaseRepository<Order> Orders { get; }
+        IBaseRepository<OrderItem> OrderItems { get; }
+
+        Task<int> SaveChangesAsync();
     }
 }

@@ -1,94 +1,131 @@
-﻿
-
-
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MoustafaApp.Server.Dtos.CartDtos;
+using MoustafaApp.Server.Service.CartService.CartService;
+using System.Security.Claims;
 
-[Route("api/[controller]")]
-[ApiController]
-public class CartController : ControllerBase
+namespace MoustafaApp.Server.Controllers
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public CartController(IUnitOfWork unitOfWork, IMapper mapper)
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
+    public class CartController : ControllerBase
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+        private readonly ICartService _cartService;
 
-
-    [HttpGet("GetAllCarts")]
-    public async Task<IActionResult> GetAllCarts()
-    {
-        try
+        public CartController(ICartService cartService)
         {
-            var Carts = await _unitOfWork.Carts.GetAllCarts();
-            var result = _mapper.Map<IEnumerable<CartDto>>(Carts);
-
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = ex.Message });
-        }
-    }
-
-
-
-    [HttpGet("GetCartById/{id}")]
-    public async Task<IActionResult> GetCartById(int id)
-    {
-        try
-        {
-            var Cart = await _unitOfWork.Carts.GetCartById(id);
-              
-
-            if (Cart == null)
-                return NotFound(new { message = "Cart Not Found" });
-
-            var result = _mapper.Map<CartDto>(Cart);
-
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = ex.Message });
-        }
-    }
-
-
-
-    //[HttpPost("CreateCart")]
-    //public async Task<IActionResult> CreateCartDto([FromBody] CreateCartDto dto)
-    //{
-        
-    //    return Ok();
-
-    //}
-
-
-
-
-    [HttpDelete("DeleteCart/{id}")]
-    public async Task<IActionResult> DeleteCart(int id)
-    {
-        try { 
-        var Cart = await _unitOfWork.Carts.GetTById(id);
-
-        if (Cart == null)
-            return NotFound();
-
-        _unitOfWork.Carts.Delete(Cart);
-        _unitOfWork.CommitChanges();
-
-            return Ok(new { message = "Carts Deleted Successfully" });
-
+            _cartService = cartService;
         }
 
 
-        catch (Exception ex)
+        [HttpGet]
+        public async Task<IActionResult> GetCart()
         {
-            return StatusCode(500, new { message = ex.Message });
+            
+            var cart = await _cartService.GetCart();
+
+            return Ok(cart);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCart()
+        {
+            var cart = await _cartService.CreateCart();
+
+            return Ok(cart);
+        }
+
+
+
+        [HttpPost("items")]
+        public async Task<IActionResult> AddItem([FromBody] AddItemDto request)
+        {
+
+            var cart = await _cartService.AddItemToCart(request.ProductId, request.Quantity);
+
+            if (cart == null)
+                return NotFound();
+
+            return Ok(cart);
+        }
+
+
+
+
+        [HttpPut("items")]
+        public async Task<IActionResult> UpdateQuantity([FromBody] UpdateQuantityItemDto dto)
+        {
+
+            var cart = await _cartService.UpdateQuantity(dto.ProductId, dto.Quantity);
+
+            if (cart == null)
+                return NotFound();
+
+            return Ok(cart);
+        }
+
+
+
+
+        [HttpDelete("items/{productId}")]
+        public async Task<IActionResult> RemoveItem(int productId)
+        {
+
+            var cart = await _cartService.RemoveItem(productId);
+
+            if (cart == null)
+                return NotFound();
+
+            return Ok(cart);
+        }
+
+
+
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCart()
+        {
+
+            var result = await _cartService.DeleteCart();
+
+            if (!result)
+                return NotFound();
+
+            return NoContent();
+        }
+
+
+
+
+        [HttpPost("coupons/{couponId}")]
+        public async Task<IActionResult> ApplyCoupon(int couponId)
+        {
+
+            var cart = await _cartService.ApplyCoupon( couponId);
+
+            if (cart == null)
+                return NotFound();
+
+            return Ok(cart);
+        }
+
+
+
+
+
+        [HttpDelete("coupons")]
+        public async Task<IActionResult> RemoveCoupon()
+        {
+
+            var cart = await _cartService.RemoveCoupon();
+
+            if (cart == null)
+                return NotFound();
+
+            return Ok(cart);
         }
     }
 }

@@ -108,7 +108,7 @@ namespace MoustafaApp.Server.Controllers
                     return NotFound();
                 }
                 _unitOfWork.Departments.Delete(department);
-                _unitOfWork.CommitChanges();
+                await _unitOfWork.SaveChangesAsync();
                 return NoContent();
             }
             catch (Exception ex)

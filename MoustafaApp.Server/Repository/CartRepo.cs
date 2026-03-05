@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MoustafaApp.Server.Attributes;
 using MoustafaApp.Server.IRepository;
 using Nest;
 
@@ -16,6 +17,7 @@ namespace MoustafaApp.Server.Repository
             var Carts = await _context.Carts
                 .Include(c => c.CartItems)
                   .ThenInclude(p => p.Product)
+                  .Include(c => c.Coupon)
             .ToListAsync();
 
            
@@ -27,6 +29,7 @@ namespace MoustafaApp.Server.Repository
         {
             var Cart = await _context.Carts
                 .Where(x => x.CartId == id)
+                .Include(c => c.Coupon)
                 .Include(c => c.CartItems)
                   .ThenInclude(p => p.Product)
             .FirstOrDefaultAsync();
@@ -34,5 +37,24 @@ namespace MoustafaApp.Server.Repository
             
             return (Cart);
         }
+
+
+
+        public async Task<Cart> GetActiveCartByUser(string userId)
+        {
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                    .ThenInclude(ci => ci.Product)
+                .Include(c => c.Coupon)
+                .FirstOrDefaultAsync(c =>
+                    c.UserId == userId &&
+                    c.Status == CartStatusEnum.Active);
+
+            return cart;
+        }
+
+
+
     }
+
 }

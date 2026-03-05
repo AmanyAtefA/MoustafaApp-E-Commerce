@@ -113,7 +113,7 @@ namespace moustafapp.Server.Controllers
                 var Category = _mapper.Map<Category>(dto);
 
                 await _unitOfWork.Categories.AddAsync(Category);
-                _unitOfWork.CommitChanges();
+               await _unitOfWork.SaveChangesAsync();
 
                 return Ok(new
                 {
@@ -141,7 +141,7 @@ namespace moustafapp.Server.Controllers
 
                 _mapper.Map(dto, OldCategory);
                 _unitOfWork.Categories.Update(OldCategory);
-                _unitOfWork.CommitChanges();
+                await _unitOfWork.SaveChangesAsync();
 
                 return Ok(new
                 {
@@ -168,7 +168,7 @@ namespace moustafapp.Server.Controllers
                     return NotFound(new { message = "Category Not Found" });
 
                 _unitOfWork.Categories.Delete(Category);
-                _unitOfWork.CommitChanges();
+                await _unitOfWork.SaveChangesAsync();
 
                 return Ok(new { message = "Category Deleted Successfully" });
             }

@@ -252,17 +252,21 @@ namespace MoustafaApp.Server.Controllers
 
             var claims = new List<Claim>
             {
-              new Claim("userName", User.UserName),
-              new Claim("fullName", User.FullName),
-              new Claim("userId", User.Id),
-              new Claim("email", User.Email),
-              new Claim("phone", User.PhoneNumber),
+              new Claim(ClaimTypes.NameIdentifier, User.Id),
+
+              new Claim(ClaimTypes.Name, User.UserName),
+              new Claim(ClaimTypes.Email, User.Email),
+              
+              new Claim("fullName", User.FullName ?? ""),
+              new Claim("phone", User.PhoneNumber ?? ""),
+
+
               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
             foreach (var role in roles)
             {
-                claims.Add(new Claim("role", role));
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));

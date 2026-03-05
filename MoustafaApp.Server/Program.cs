@@ -2,7 +2,14 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+
+using MoustafaApp.Server.DomainBusiness.CartBusiness;
+using MoustafaApp.Server.Service.CartService.CartService;
+using MoustafaApp.Server.Service.OrderService;
 using MoustafaApp.Server.Service.ProductService;
+using MoustafaApp.Server.Service.UserService;
+using MoustafaApp.Server.Services.Common;
+using MoustafaApp.Server.Validators;
 using System.Text;
 
 namespace moustafapp.Server
@@ -68,18 +75,28 @@ namespace moustafapp.Server
            });
 
 
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddAutoMapper(typeof(MappingModel));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddTransient<ProductIRepo, ProductRepo>();
             builder.Services.AddTransient<CategoryIRepo, CategoryRepo>();
             builder.Services.AddTransient<CartIRepo, CartRepo>();
             builder.Services.AddTransient<IProductService, ProductService>();
             builder.Services.AddTransient<DepartmentIRepo, DepartmentRepo>();
+            builder.Services.AddTransient<CouponIRepo, CouponRepo>();
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped<ReviewIRepo, ReviewRepo>();
+            builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<CartCalculator>();
+            builder.Services.AddScoped<CartValidator>();
 
+           
+            builder.Services.AddSingleton<RedisConnection>();
+            builder.Services.AddScoped<ICacheService, RedisCacheService>();
+            builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

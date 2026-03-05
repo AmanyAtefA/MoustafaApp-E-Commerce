@@ -37,7 +37,7 @@
             }
 
             await _unitOfWork.Products.AddAsync(product);
-            _unitOfWork.CommitChanges();
+            await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<ProductDto>(product);
         }
@@ -63,8 +63,7 @@
             }
 
             _unitOfWork.Products.Update(oldProduct);
-            _unitOfWork.CommitChanges();
-
+            await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<ProductDto>(oldProduct);
         }
 
@@ -85,7 +84,7 @@
                 _imgService.Delete(img.ImageUrl);
 
             _unitOfWork.Products.Delete(product);
-            _unitOfWork.CommitChanges();
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 

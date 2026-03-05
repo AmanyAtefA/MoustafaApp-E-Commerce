@@ -68,25 +68,7 @@ namespace moustafapp.Server.Mapping
 
 
 
-            CreateMap<Cart, CartDto>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FullName))
-                .ForMember(dest => dest.CartItems, opt => opt.MapFrom(src => src.CartItems));
-
            
-            CreateMap<CreateCartDto, Cart>()
-                .ForMember(dest => dest.CartItems, opt => opt.MapFrom(src => src.Items));
-
-            
-            CreateMap<CartItem, CartItemDto>()
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
-                .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.Product.Photo));
-
-            
-            CreateMap<CreateCartItemDto, CartItem>()
-                .ForMember(dest => dest.CartItemId, opt => opt.Ignore())
-                .ForMember(dest => dest.PriceOfUnit, opt => opt.Ignore()) 
-                .ForMember(dest => dest.Cart, opt => opt.Ignore());
-
 
 
         }

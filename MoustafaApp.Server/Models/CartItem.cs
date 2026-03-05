@@ -5,8 +5,9 @@
         [Key]
         public int CartItemId { get; set; }
         public int Quantity { get; set; }
-        public int PriceOfUnit { get; set; }
+        public decimal PriceOfUnit { get; set; }
 
+        public decimal TotalPrice => Quantity * PriceOfUnit;
 
 
         [ForeignKey("Cart")]
