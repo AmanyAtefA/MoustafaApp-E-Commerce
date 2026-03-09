@@ -2,9 +2,9 @@
 
 namespace MoustafaApp.Server.Mapping
 {
-    public class CartProfile:Profile
+    public class CartProfile : Profile
     {
-        protected CartProfile()
+        public  CartProfile()
         {
             CreateMap<Cart, CartDto>()
                      .ForMember(dest => dest.Subtotal, opt => opt.Ignore())

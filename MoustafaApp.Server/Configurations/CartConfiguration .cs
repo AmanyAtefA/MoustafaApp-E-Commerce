@@ -28,7 +28,7 @@ namespace MoustafaApp.Server.Configurations
             new Cart
             {
                 CartId = 3,
-                Status = CartStatusEnum.Completed,
+                Status = CartStatusEnum.Active,
                 CreatedAt = new DateTime(2025, 11, 30)
             });
         }

@@ -1,5 +1,5 @@
 ﻿
-namespace moustafapp.Server.GenericOfWork
+namespace moustafaapp.Server.GenericOfWork
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
 

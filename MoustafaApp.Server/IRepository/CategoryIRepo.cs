@@ -1,6 +1,6 @@
 ﻿
 
-namespace moustafapp.Server.IRepository
+namespace moustafaapp.Server.IRepository
 {
     public interface CategoryIRepo: IBaseRepository<Category>
     {

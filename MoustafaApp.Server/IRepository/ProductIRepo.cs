@@ -1,7 +1,7 @@
 ﻿
 using MoustafaApp.Server.Dtos.ProductDtos;
 
-namespace moustafapp.Server.IRepository
+namespace moustafaapp.Server.IRepository
 {
     public interface ProductIRepo : IBaseRepository<Product>
     {

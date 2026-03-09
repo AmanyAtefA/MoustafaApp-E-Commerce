@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/moustafapp.client",
+            "outputPath": "dist/moustafaapp.client",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [ "zone.js" ],
@@ -30,14 +30,15 @@
               "src/styles.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css"
-              
+
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-            ],
+            ]
           },
           "configurations": {
             "production": {
+              "sourceMap": false,
               "budgets": [
                 {
                   "type": "initial",
@@ -55,11 +56,11 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": false
             },
             "hmr": {
               "optimization": false,
-              "sourceMap": true,
+              "sourceMap": false,
               "extractLicenses": false,
               "buildOptimizer": false
             }
@@ -90,7 +91,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "moustafapp.client:build"
+            "outputPath": "dist/moustafaapp.client"
           }
         },
 

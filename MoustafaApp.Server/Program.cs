@@ -1,7 +1,10 @@
-﻿
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.IO.Compression;
+using System.Text;
 
 using MoustafaApp.Server.DomainBusiness.CartBusiness;
 using MoustafaApp.Server.Service.CartService.CartService;
@@ -10,9 +13,8 @@ using MoustafaApp.Server.Service.ProductService;
 using MoustafaApp.Server.Service.UserService;
 using MoustafaApp.Server.Services.Common;
 using MoustafaApp.Server.Validators;
-using System.Text;
 
-namespace moustafapp.Server
+namespace moustafaapp.Server
 {
     public class Program
     {
@@ -20,24 +22,56 @@ namespace moustafapp.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngular",
                     policy =>
                     {
                         policy
-                            .WithOrigins("http://localhost:4200")
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin();
                     });
             });
 
-
-            // Add services to the container.
-
+            // Database
             builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+     options.UseSqlServer(
+         builder.Configuration.GetConnectionString("Default"),
+         sqlOptions =>
+         {
+             sqlOptions.EnableRetryOnFailure(
+                 maxRetryCount: 10,
+                 maxRetryDelay: TimeSpan.FromSeconds(10),
+                 errorNumbersToAdd: null);
+         }));
 
+            //redis
+            var redisConnection = builder.Configuration.GetConnectionString("Redis");
+
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(redisConnection))
+                {
+                    builder.Services.AddSingleton(new RedisConnection(redisConnection));
+                    builder.Services.AddSingleton<ICacheService, RedisCacheService>();
+
+                    Console.WriteLine("Redis Connected");
+                }
+                else
+                {
+                    throw new Exception("Redis connection empty");
+                }
+            }
+            catch
+            {
+                builder.Services.AddMemoryCache();
+                builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
+
+                Console.WriteLine("Using MemoryCache");
+            }
+            // Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -46,36 +80,56 @@ namespace moustafapp.Server
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             })
-               .AddEntityFrameworkStores<AppDbContext>() 
-               .AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
 
+            // JWT
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = true;
 
-           .AddJwtBearer(options =>
-           {
-               options.SaveToken = true;
-               options.RequireHttpsMetadata = true;
-               options.TokenValidationParameters = new TokenValidationParameters
-               {
-                   ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-                   ValidateIssuer = true,
-                   ValidAudience = builder.Configuration["JWT:ValidAudience"],
-                   ValidateAudience = true,
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+                    ValidateIssuer = true,
 
-                   ValidateLifetime = true,
+                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                    ValidateAudience = true,
 
-                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
-                   ValidateIssuerSigningKey = true
-               };
-           });
+                    ValidateLifetime = true,
 
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+
+                    ValidateIssuerSigningKey = true
+                };
+            });
+
+            // Compression
+            builder.Services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+            });
+
+            builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Fastest;
+            });
+
+            builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Fastest;
+            });
 
             builder.Services.AddHttpContextAccessor();
+
             builder.Services.AddAutoMapper(typeof(MappingModel));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -93,26 +147,22 @@ namespace moustafapp.Server
             builder.Services.AddScoped<CartCalculator>();
             builder.Services.AddScoped<CartValidator>();
 
-           
-            builder.Services.AddSingleton<RedisConnection>();
-            builder.Services.AddScoped<ICacheService, RedisCacheService>();
-            builder.Services.AddScoped<ICheckoutService, CheckoutService>();
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-
             var app = builder.Build();
 
-
-            // اضافة رول تلقائي
-
+            // Create roles automatically
             using (var scope = app.Services.CreateScope())
             {
-                var roleManager = scope.ServiceProvider
-                    .GetRequiredService<RoleManager<IdentityRole>>();
+                var services = scope.ServiceProvider;
+
+                var context = services.GetRequiredService<AppDbContext>();
+                context.Database.Migrate();   // 👈 هذا السطر المهم
+
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
                 string[] roles = { "User", "Admin", "Manager" };
 
@@ -125,6 +175,8 @@ namespace moustafapp.Server
                 }
             }
 
+            app.UseResponseCompression();
+
             app.UseCors("AllowAngular");
 
             if (app.Environment.IsDevelopment())
@@ -135,10 +187,14 @@ namespace moustafapp.Server
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.MapFallbackToFile("index.html");
 
             app.Run();
 

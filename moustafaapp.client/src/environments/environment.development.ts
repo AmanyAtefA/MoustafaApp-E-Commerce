@@ -1,6 +1,6 @@
+
+
 export const environment = {
-
-  //baseUrl: "https://e-commerceshop.runasp.net/api/"
+  production: false,
   baseUrl: "http://localhost:5225/api/"
-
 };

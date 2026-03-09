@@ -3,7 +3,7 @@
 using MoustafaApp.Server.Dtos.CategoryDtos;
 using MoustafaApp.Server.Models;
 
-namespace moustafapp.Server.Controllers
+namespace moustafaapp.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,4 +1,4 @@
-﻿namespace moustafapp.Server.Settings
+﻿namespace moustafaapp.Server.Settings
 {
     public static class FileSettings
     {

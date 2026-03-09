@@ -2,7 +2,7 @@
 
 using MoustafaApp.Server.Models;
 
-namespace moustafapp.Server.GenericOfWork
+namespace moustafaapp.Server.GenericOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

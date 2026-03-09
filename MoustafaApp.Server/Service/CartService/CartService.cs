@@ -5,7 +5,7 @@ using MoustafaApp.Server.DomainBusiness.CartBusiness;
 using MoustafaApp.Server.Models;
 using MoustafaApp.Server.Service.UserService;
 using MoustafaApp.Server.Validators;
-using moustafapp.Server.GenericOfWork;
+using moustafaapp.Server.GenericOfWork;
 
 namespace MoustafaApp.Server.Service.CartService.CartService
 {

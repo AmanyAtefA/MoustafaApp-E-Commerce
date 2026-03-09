@@ -1,0 +1,36 @@
+
+
+services:
+
+  api:
+    build: .
+    container_name: moustafa_api
+    ports:
+      - "5000:8080"
+    depends_on:
+      - sqlserver
+      - redis
+    restart: always
+    environment:
+      - ConnectionStrings__Default=Server=sqlserver;Database=ShopCoDB;User Id=sa;Password=YourStrong!Pass123;TrustServerCertificate=True
+      - ConnectionStrings__Redis=redis:6379
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: moustafa_sql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Pass123
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  redis:
+    image: redis:latest
+    container_name: moustafa_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  sql_data:

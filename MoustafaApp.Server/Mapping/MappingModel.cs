@@ -6,7 +6,7 @@ using MoustafaApp.Server.Dtos.Review;
 using MoustafaApp.Server.Dtos.ReviewDtos;
 using MoustafaApp.Server.Dtos.UserDtos;
 
-namespace moustafapp.Server.Mapping
+namespace moustafaapp.Server.Mapping
 {
     public class MappingModel : AutoMapper.Profile
     {

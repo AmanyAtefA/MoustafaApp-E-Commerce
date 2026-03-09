@@ -1,6 +1,6 @@
 ﻿
 
-using moustafapp.Server.GenericOfWork;
+using moustafaapp.Server.GenericOfWork;
 using Nest;
 
 namespace MoustafaApp.Server.Controllers

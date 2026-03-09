@@ -3,7 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MoustafaApp.Server.Dtos.ProductDtos;
 
-namespace moustafapp.Server.Repository
+namespace moustafaapp.Server.Repository
 {
     public class ProductRepo : BaseRepository<Product>, ProductIRepo
     {

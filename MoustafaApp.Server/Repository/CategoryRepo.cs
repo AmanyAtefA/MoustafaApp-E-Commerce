@@ -2,7 +2,7 @@
 
 
 
-namespace moustafapp.Server.Repository
+namespace moustafaapp.Server.Repository
 {
     public class CategoryRepo : BaseRepository<Category>, CategoryIRepo
     {

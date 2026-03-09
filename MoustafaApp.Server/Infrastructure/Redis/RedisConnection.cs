@@ -2,15 +2,12 @@
 
 public class RedisConnection
 {
-    private readonly Lazy<ConnectionMultiplexer> _connection;
+    private readonly ConnectionMultiplexer _connection;
 
-    public RedisConnection(IConfiguration configuration)
+    public RedisConnection(string connectionString)
     {
-        var connectionString = configuration.GetConnectionString("Redis");
-
-        _connection = new Lazy<ConnectionMultiplexer>(() =>
-            ConnectionMultiplexer.Connect(connectionString));
+        _connection = ConnectionMultiplexer.Connect(connectionString);
     }
 
-    public IDatabase Database => _connection.Value.GetDatabase();
+    public IDatabase Database => _connection.GetDatabase();
 }

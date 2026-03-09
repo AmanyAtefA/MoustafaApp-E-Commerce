@@ -23,20 +23,20 @@ RUN npm install -g @angular/cli
 FROM with-node AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["moustafapp.Server/moustafapp.Server.csproj", "moustafapp.Server/"]
-COPY ["moustafapp.client/moustafapp.client.esproj", "moustafapp.client/"]
-RUN dotnet restore "./moustafapp.Server/moustafapp.Server.csproj"
+COPY ["moustafaapp.Server/moustafaapp.Server.csproj", "moustafaapp.Server/"]
+COPY ["moustafaapp.client/moustafaapp.client.esproj", "moustafaapp.client/"]
+RUN dotnet restore "./moustafaapp.Server/moustafaapp.Server.csproj"
 COPY . .
-WORKDIR "/src/moustafapp.Server"
-RUN dotnet build "./moustafapp.Server.csproj" -c %BUILD_CONFIGURATION% -o /app/build
+WORKDIR "/src/moustafaapp.Server"
+RUN dotnet build "./moustafaapp.Server.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./moustafapp.Server.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./moustafaapp.Server.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "moustafapp.Server.dll"]
+ENTRYPOINT ["dotnet", "moustafaapp.Server.dll"]

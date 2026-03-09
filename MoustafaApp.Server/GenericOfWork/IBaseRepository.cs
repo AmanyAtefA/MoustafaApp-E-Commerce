@@ -1,7 +1,7 @@
 ﻿
 
 
-namespace moustafapp.Server.GenericOfWork
+namespace moustafaapp.Server.GenericOfWork
 {
     public interface IBaseRepository <T> where T : class
     {      
