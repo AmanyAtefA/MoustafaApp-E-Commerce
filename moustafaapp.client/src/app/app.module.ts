@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +23,7 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { CartComponent } from './cart/cart.component';
 import { ReviewComponent } from './review/review.component';
 import { ShortFullNamePipe } from './Pips/short-full-name.pipe';
+import { GeneralInterceptor } from '../Interceptors/GeneralInterceptor.Service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,17 +43,21 @@ import { ShortFullNamePipe } from './Pips/short-full-name.pipe';
     ProductsComponent,
     PaginationComponent,
     CartComponent,
-    ReviewComponent,
     ShortFullNamePipe
   ],
   imports: [
-    BrowserModule, HttpClientModule,
+    BrowserModule,
     AppRoutingModule, RouterModule, FormsModule, ReactiveFormsModule
   ],
   providers: [
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    JwtHelperService
+    JwtHelperService,
+
+    provideHttpClient(
+      withInterceptors([GeneralInterceptor])
+    )
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

@@ -1,21 +1,21 @@
-﻿namespace MoustafaApp.Server.Service.CartService.CartService
+﻿using MoustafaApp.Server.Dtos.CartDtos;
+
+namespace MoustafaApp.Server.Service.CartService.CartService
 {
     public interface ICartService
     {
-        Task<CartDto> GetCart();
+        Task<CartDto> GetCartByUserId();
 
         Task<CartDto?> GetCartById(int id);
 
-        Task<CartDto> CreateCart();
+        Task<CartDto?> AddItemToCart(AddItemDto request);
 
-        Task<CartDto?> AddItemToCart(int productId, int quantity);
+        Task<CartDto?> RemoveItem(int cartItemId);
 
-        Task<CartDto?> RemoveItem(int productId);
-
-        Task<CartDto?> ApplyCoupon(int couponId);
+        Task<CartDto?> ApplyCoupon(string code);
 
         Task<CartDto?> ClearCart();
-        Task<CartDto?> UpdateQuantity(int productId, int quantity);
+        Task<CartDto?> UpdateQuantity(UpdateQuantityItemDto dto);
 
         Task<CartDto?> RemoveCoupon();
         Task<bool> DeleteCart();

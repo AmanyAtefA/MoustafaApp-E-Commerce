@@ -3,8 +3,10 @@ import { Observable, filter, map, switchMap } from 'rxjs';
 import { IProduct } from '../../IModels/Iproduct';
 import { ProductsService } from '../../Service/products.service';
 import { SizeService } from '../../Service/size.service';
+import { CartsService } from '../../Service/carts.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ISizes } from '../../IModels/ISizes';
+import { IAddItem } from '../../IModels/IAddItem';
 
 
 
@@ -26,22 +28,16 @@ export class ProductDetailComponent implements OnInit {
   quantity: number = 1;
   constructor(private _ProductsService: ProductsService,
     private route: ActivatedRoute,
-    private _SizeService: SizeService) { }
+    private _SizeService: SizeService,
+    private _CartService: CartsService,
+    private router: Router) { }
 
 
   ngOnInit(): void {
-    //this.route.paramMap.subscribe(params => {
-    //  const id = params.get('id');
-    //  if (id != null) {
-    //    this.productId = +id;
-    //    this.Product$ = this._ProductsService.getProductyByIdWithDetails(this.productId);
-    //    console.log('Product ID from URL:', this.productId);
-    //  } else {
-    //    console.error('Product ID is null');
-    //  }
-    //});
+  
     this.route.params.subscribe(p => {
       console.log('Route Params:', p);
+
     });
 
     this.Product$ = this.route.paramMap.pipe(
@@ -81,11 +77,47 @@ export class ProductDetailComponent implements OnInit {
 
 
   decrease() {
-    if (this.quantity > 1) {
+    if (this.quantity < 1) {
       this.quantity--;
     }
   }
 
 
+
+  addToCart() {
+
+
+    const item: IAddItem = {
+      productId: this.productId,
+      quantity: this.quantity,
+      sizeId: this.selectedSizeId!,
+      colorId: this.selectedColorId!
+    }
+
+
+    if (!this.selectedSizeId) {
+      alert("Please select size")
+      return
+    }
+
+    if (!this.selectedColorId) {
+      alert("Please select color")
+      return
+    }
+
+    console.log(item)
+
+    this._CartService.addItemToCart(item).subscribe({
+      next: (res) => {
+        console.log("Added to cart", res)
+        alert("Product added to cart")
+        this.router.navigate(['/Cart'])
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+
+  }
 
 }

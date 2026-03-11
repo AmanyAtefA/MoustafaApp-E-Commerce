@@ -90,28 +90,50 @@ namespace moustafaapp.Server
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = true;
 
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-                    ValidateIssuer = true,
+             .AddJwtBearer(options =>
+                         {
+                 options.SaveToken = true;
+                 options.RequireHttpsMetadata = false;
 
-                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
-                    ValidateAudience = true,
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+                     ValidateIssuer = true,
 
-                    ValidateLifetime = true,
+                     ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                     ValidateAudience = true,
 
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+                     ValidateLifetime = true,
 
-                    ValidateIssuerSigningKey = true
-                };
-            });
+                     IssuerSigningKey = new SymmetricSecurityKey(
+                         Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
 
+                     ValidateIssuerSigningKey = true
+                 };
+
+                 options.Events = new JwtBearerEvents
+                 {
+                     OnAuthenticationFailed = context =>
+                     {
+                         Console.WriteLine(" JWT Authentication Failed");
+                         Console.WriteLine(context.Exception.ToString());
+                         return Task.CompletedTask;
+                     },
+
+                     OnTokenValidated = context =>
+                     {
+                         Console.WriteLine(" JWT Token Validated");
+                         return Task.CompletedTask;
+                     },
+
+                     OnChallenge = context =>
+                     {
+                         Console.WriteLine("⚠️ JWT Challenge Triggered");
+                         return Task.CompletedTask;
+                     }
+                 };
+             });
             // Compression
             builder.Services.AddResponseCompression(options =>
             {
@@ -150,7 +172,33 @@ namespace moustafaapp.Server
             builder.Services.AddControllers();
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme",
+                    Name = "Authorization",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+
+                options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+            });
 
             var app = builder.Build();
 

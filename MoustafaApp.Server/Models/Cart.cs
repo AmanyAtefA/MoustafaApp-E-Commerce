@@ -14,4 +14,7 @@ public class Cart
     public CartStatusEnum Status { get; set; } = CartStatusEnum.Active;
 
     public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+
+    [Timestamp]
+    public byte[] RowVersion { get; set; } = null!;
 }

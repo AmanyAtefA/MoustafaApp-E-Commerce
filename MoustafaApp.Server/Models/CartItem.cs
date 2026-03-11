@@ -18,7 +18,13 @@
         [ForeignKey("Product")]
         public int ProductId { get; set; }
         public Product Product { get; set; } = null!;
-       
+
+        public int? SizeId { get; set; }
+        public Size? Size { get; set; }
+
+
+        public int? ColorId { get; set; }
+        public ProductColor? Color { get; set; }
     }
 
 }

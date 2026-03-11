@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MoustafaApp.Server.DomainBusiness.OrderBusiness;
 using MoustafaApp.Server.Dtos.CartDtos;
 using MoustafaApp.Server.Service.CartService.CartService;
+using MoustafaApp.Server.Service.OrderService;
 using System.Security.Claims;
 
 namespace MoustafaApp.Server.Controllers
@@ -12,39 +14,32 @@ namespace MoustafaApp.Server.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
+        private readonly ICheckoutService _checkoutService;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, ICheckoutService checkoutService)
         {
             _cartService = cartService;
+            _checkoutService = checkoutService;
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetCart()
+        [HttpGet("GetCartByUserId")]
+        public async Task<IActionResult> GetCartsByUserId()
         {
             
-            var cart = await _cartService.GetCart();
+            var cart = await _cartService.GetCartByUserId();
 
             return Ok(cart);
         }
 
 
 
-        [HttpPost]
-        public async Task<IActionResult> CreateCart()
-        {
-            var cart = await _cartService.CreateCart();
-
-            return Ok(cart);
-        }
-
-
-
-        [HttpPost("items")]
-        public async Task<IActionResult> AddItem([FromBody] AddItemDto request)
+       
+        [HttpPost("AddItem")]
+        public async Task<IActionResult> AddItem([FromBody] AddItemDto dto)
         {
 
-            var cart = await _cartService.AddItemToCart(request.ProductId, request.Quantity);
+            var cart = await _cartService.AddItemToCart(dto);
 
             if (cart == null)
                 return NotFound();
@@ -54,12 +49,11 @@ namespace MoustafaApp.Server.Controllers
 
 
 
-
-        [HttpPut("items")]
+        [HttpPut("UpdateQuantity")]
         public async Task<IActionResult> UpdateQuantity([FromBody] UpdateQuantityItemDto dto)
         {
 
-            var cart = await _cartService.UpdateQuantity(dto.ProductId, dto.Quantity);
+            var cart = await _cartService.UpdateQuantity(dto);
 
             if (cart == null)
                 return NotFound();
@@ -69,12 +63,11 @@ namespace MoustafaApp.Server.Controllers
 
 
 
-
-        [HttpDelete("items/{productId}")]
-        public async Task<IActionResult> RemoveItem(int productId)
+        [HttpDelete("RemoveItem/{cartItemId}")]
+        public async Task<IActionResult> RemoveItem(int cartItemId)
         {
-
-            var cart = await _cartService.RemoveItem(productId);
+            
+            var cart = await _cartService.RemoveItem(cartItemId);
 
             if (cart == null)
                 return NotFound();
@@ -83,9 +76,7 @@ namespace MoustafaApp.Server.Controllers
         }
 
 
-
-
-        [HttpDelete]
+        [HttpDelete("DeleteCart")]
         public async Task<IActionResult> DeleteCart()
         {
 
@@ -100,11 +91,11 @@ namespace MoustafaApp.Server.Controllers
 
 
 
-        [HttpPost("coupons/{couponId}")]
-        public async Task<IActionResult> ApplyCoupon(int couponId)
+        [HttpPost("ApplyCoupon/{code}")]
+        public async Task<IActionResult> ApplyCoupon()
         {
 
-            var cart = await _cartService.ApplyCoupon( couponId);
+            var cart = await _cartService.ApplyCoupon(Code);
 
             if (cart == null)
                 return NotFound();
@@ -114,9 +105,7 @@ namespace MoustafaApp.Server.Controllers
 
 
 
-
-
-        [HttpDelete("coupons")]
+        [HttpDelete("RemoveCoupon")]
         public async Task<IActionResult> RemoveCoupon()
         {
 
@@ -126,6 +115,36 @@ namespace MoustafaApp.Server.Controllers
                 return NotFound();
 
             return Ok(cart);
+        }
+
+
+        [HttpPost("checkout")]
+        public async Task<IActionResult> Checkout(CheckoutRequest request)
+        {
+            var orderId = await _checkoutService.CheckoutAsync(request);
+
+            return Ok(new { orderId });
+        }
+
+
+
+        [Authorize]
+        [HttpGet("test-auth")]
+        public IActionResult Test()
+        {
+            var claims = User.Claims.Select(c => new
+            {
+                c.Type,
+                c.Value
+            });
+
+            return Ok(claims);
+        }
+
+        [HttpGet("test-open")]
+        public IActionResult TestOpen()
+        {
+            return Ok("API works");
         }
     }
 }

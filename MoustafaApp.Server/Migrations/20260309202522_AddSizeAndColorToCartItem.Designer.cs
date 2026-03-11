@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoustafaApp.Server.Data;
 
@@ -11,9 +12,11 @@ using MoustafaApp.Server.Data;
 namespace MoustafaApp.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260309202522_AddSizeAndColorToCartItem")]
+    partial class AddSizeAndColorToCartItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,12 +38,6 @@ namespace MoustafaApp.Server.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -575,7 +572,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 1,
                             BrandId = 1,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2026, 3, 9, 21, 21, 24, 344, DateTimeKind.Utc).AddTicks(2571),
+                            CreatedAt = new DateTime(2026, 3, 9, 20, 25, 19, 126, DateTimeKind.Utc).AddTicks(5611),
                             DepartmentId = 1,
                             Description = "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style.",
                             Discount = 13,
@@ -591,7 +588,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 2,
                             BrandId = 2,
                             CategoryId = 2,
-                            CreatedAt = new DateTime(2026, 3, 9, 21, 21, 24, 344, DateTimeKind.Utc).AddTicks(2588),
+                            CreatedAt = new DateTime(2026, 3, 9, 20, 25, 19, 126, DateTimeKind.Utc).AddTicks(5627),
                             DepartmentId = 1,
                             Description = "Comfortable skinny fit jeans",
                             Discount = 8,
@@ -607,7 +604,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 3,
                             BrandId = 5,
                             CategoryId = 3,
-                            CreatedAt = new DateTime(2026, 3, 9, 21, 21, 24, 344, DateTimeKind.Utc).AddTicks(2601),
+                            CreatedAt = new DateTime(2026, 3, 9, 20, 25, 19, 126, DateTimeKind.Utc).AddTicks(5643),
                             DepartmentId = 1,
                             Description = "Classic checkered shirt",
                             Discount = 0,
@@ -623,7 +620,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 4,
                             BrandId = 4,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2026, 3, 9, 21, 21, 24, 344, DateTimeKind.Utc).AddTicks(2614),
+                            CreatedAt = new DateTime(2026, 3, 9, 20, 25, 19, 126, DateTimeKind.Utc).AddTicks(5654),
                             DepartmentId = 1,
                             Description = "Striped raglan tee",
                             Discount = 18,

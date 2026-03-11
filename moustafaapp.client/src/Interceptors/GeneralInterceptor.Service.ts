@@ -5,12 +5,15 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 
-const router = inject(Router);
 
 export function GeneralInterceptor(request: HttpRequest<any>, next: HttpHandlerFn) {
   const token = localStorage.getItem('token');
 
+
+  const router = inject(Router);
   let headers = request.headers;
+
+  console.log("Interceptor Token:", token);
 
   if (token) {
     headers = headers.set('Authorization', 'Bearer ' + token);

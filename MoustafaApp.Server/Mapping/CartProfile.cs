@@ -14,10 +14,14 @@ namespace MoustafaApp.Server.Mapping
                      .ForMember(dest => dest.Total, opt => opt.Ignore());
 
 
-            CreateMap<CartItem, CartItemDto>()
-                     .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
-                     .ForMember(dest => dest.Photo,opt => opt.MapFrom(src => src.Product.Photo));
+             CreateMap<CartItem, CartItemDto>()
+                     .ForMember(dest => dest.ProductName,opt => opt.MapFrom(src => src.Product.Name))
+                     .ForMember(dest => dest.Photo,opt => opt.MapFrom(src => src.Product.Photo))
+                     .ForMember(dest => dest.SizeName,
+                               opt => opt.MapFrom(src => src.Size != null ? src.Size.SizeName : null))
 
+                     .ForMember(dest => dest.ColorName,
+                               opt => opt.MapFrom(src => src.Color != null ? src.Color.ColorName : null));
 
             CreateMap<CreateCartDto, Cart>()
                 .ForMember(dest => dest.CartItems, opt => opt.MapFrom(src => src.Items));

@@ -9,5 +9,8 @@ export interface ICartItem {
   quantity: number,
   priceOfUnit: number,
   photo: string,
+  sizeName: string,
+  colorName: string,
+
 
 }

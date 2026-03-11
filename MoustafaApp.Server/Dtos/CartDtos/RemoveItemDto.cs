@@ -1,9 +1,8 @@
 ﻿namespace MoustafaApp.Server.Dtos.CartDtos
 {
-    public class UpdateQuantityItemDto
+    public class RemoveItemDto
     {
         public int CartItemId { get; set; }
-        public int Quantity { get; set; }
+   
     }
 }
-

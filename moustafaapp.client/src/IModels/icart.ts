@@ -1,16 +1,19 @@
 import { ICartItem } from "./ICartItem";
-import { IUser } from "./iuser";
-
 
 export interface ICart {
 
   id: number;
   date: Date;
   orderId?: number;
+  couponId?: number;
   userId?: string;
+  userName?: string;
   total: number;
   cash: number;
-  discount: number;
-  User?: IUser;
-  CartDetails: ICartItem[];
+  discountRate: number;
+  subtotal: number,
+  discount: number,
+  deliveryFee: number,
+  cartItems: ICartItem[];
+
 }

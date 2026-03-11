@@ -43,14 +43,17 @@ namespace MoustafaApp.Server.Repository
         public async Task<Cart> GetActiveCartByUser(string userId)
         {
             var cart = await _context.Carts
-                .Include(c => c.CartItems)
-                    .ThenInclude(ci => ci.Product)
-                .Include(c => c.Coupon)
-                .FirstOrDefaultAsync(c =>
-                    c.UserId == userId &&
-                    c.Status == CartStatusEnum.Active);
-
-            return cart;
+                                 .Include(c => c.Coupon)
+                                 .Include(c => c.CartItems)
+                                     .ThenInclude(ci => ci.Product)
+                                 .Include(c => c.CartItems)
+                                     .ThenInclude(ci => ci.Size)
+                                 .Include(c => c.CartItems)
+                                     .ThenInclude(ci => ci.Color)
+                                 .FirstOrDefaultAsync(
+                                     c => c.UserId == userId && 
+                                     c.Status == CartStatusEnum.Active);
+             return cart;
         }
 
 

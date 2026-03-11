@@ -1,11 +1,12 @@
 ﻿
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using moustafaapp.Server.GenericOfWork;
 using MoustafaApp.Server.Attributes;
 using MoustafaApp.Server.DomainBusiness.CartBusiness;
+using MoustafaApp.Server.Dtos.CartDtos;
 using MoustafaApp.Server.Models;
 using MoustafaApp.Server.Service.UserService;
 using MoustafaApp.Server.Validators;
-using moustafaapp.Server.GenericOfWork;
 
 namespace MoustafaApp.Server.Service.CartService.CartService
 {
@@ -59,14 +60,16 @@ namespace MoustafaApp.Server.Service.CartService.CartService
 
 
 
-        public async Task<CartDto?> GetCart()
+        public async Task<CartDto?> GetCartByUserId()
         {
             var cacheKey = $"cart:{UserId}";
             var cached = await _cache.GetAsync<CartDto>(cacheKey);
             if (cached != null) return cached;
 
             var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId);
-            if (cart == null) return null;
+
+            if (cart == null)
+                return null;
 
             return await BuildAndCacheCart(cart);
         }
@@ -76,109 +79,107 @@ namespace MoustafaApp.Server.Service.CartService.CartService
         public async Task<CartDto?> GetCartById(int id)
         {
             var cart = await _unitOfWork.Carts.GetCartById(id);
-            if (cart == null) return null;
+
+            if (cart == null)
+                throw new InvalidOperationException("Cart not found.");
 
             return await BuildAndCacheCart(cart);
         }
 
-        public async Task<CartDto> CreateCart()
+        private async Task<Cart> GetOrCreateCartEntity()
         {
-            var existingCart = await _unitOfWork.Carts.GetActiveCartByUser(UserId );
+            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId);
 
-            if (existingCart != null)
-                return await GetCart();
+            if (cart != null)
+                return cart;
 
-            var cart = new Cart
+            cart = new Cart
             {
-                UserId  = UserId ,
-                Status = CartStatusEnum.Active
+                UserId = UserId,
+                Status = CartStatusEnum.Active,
+                CartItems = new List<CartItem>()
             };
 
             await _unitOfWork.Carts.AddAsync(cart);
-            await  _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
-            return await GetCart();
+            return cart;
         }
 
-
-
-        public async Task<CartDto?> AddItemToCart(int productId, int quantity)
+        public async Task<CartDto?> AddItemToCart(AddItemDto request)
         {
-            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId );
+            
+            var cart = await GetOrCreateCartEntity();
 
-            if (cart == null)
-                return null;
-
-            var product = await _unitOfWork.Products.GetTById(productId);
+            var product = await _unitOfWork.Products.GetTById(request.ProductId);
 
             if (product == null)
                 throw new InvalidOperationException("Product not found.");
 
             var existingItem = cart.CartItems
-                .FirstOrDefault(i => i.ProductId == productId);
+
+                   .FirstOrDefault(i =>
+                       i.ProductId == request.ProductId &&
+                       i.SizeId == request.SizeId &&
+                       i.ColorId == request.ColorId
+                   );
+
 
             if (existingItem != null)
-                existingItem.Quantity += quantity;
+                existingItem.Quantity += request.Quantity;
             else
-                cart.CartItems.Add(new CartItem
-                {
-                    ProductId = productId,
-                    Quantity = quantity,
-                    PriceOfUnit = product.Price
-                });
+            { 
+                var cartItem = _mapper.Map<CartItem>(request);
 
-            await _unitOfWork.SaveChangesAsync();
+                 cartItem.CartId = cart.CartId;
+                 cartItem.PriceOfUnit = product.Price;
 
+                await _unitOfWork.CartItems.AddAsync(cartItem);
+            }
+
+        
+             await _unitOfWork.SaveChangesAsync();
+
+    
             return await BuildAndCacheCart(cart);
-
-            
-            // 
-            //var dto = BuildAndCacheCart(cart);
-
-            //try
-            //{
-            //    await _cache.SetAsync(key, dto, TimeSpan.FromMinutes(10));
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.LogError(ex, "Redis failed");
-            //}
-
-            //return dto;
+          
         }
 
 
-        public async Task<CartDto?> UpdateQuantity(int productId, int quantity)
-        {
-            
-            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId );
-            if (cart == null) return null;
-
-            var item = cart.CartItems.FirstOrDefault(i => i.ProductId == productId);
-            if (item == null) return null;
-
-            if (quantity <= 0)
-                cart.CartItems.Remove(item);
-            else
-                item.Quantity = quantity;
-
-
-            await _unitOfWork.SaveChangesAsync();
-
-            return await BuildAndCacheCart(cart);
-        }
-
-
-        public async Task<CartDto?> RemoveItem( int productId)
+        public async Task<CartDto?> UpdateQuantity(UpdateQuantityItemDto dto)
         {
 
-            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId );
+            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId);
 
             if (cart == null)
-                return null;
+                throw new InvalidOperationException("Cart not found.");
 
-            var item = cart.CartItems
-                .FirstOrDefault(i => i.ProductId == productId);
+
+            var item = cart.CartItems.FirstOrDefault(i => i.CartItemId == dto.CartItemId);
+
+            if (item == null) return null;
+
+            if (dto.Quantity <= 0)
+                cart.CartItems.Remove(item);
+            else
+                item.Quantity = dto.Quantity;
+
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return await BuildAndCacheCart(cart);
+        }
+
+
+        public async Task<CartDto?> RemoveItem(int cartItemId)
+        {
+
+            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId);
+
+            if (cart == null)
+                throw new InvalidOperationException("Cart not found.");
+
+            var item = cart.CartItems.FirstOrDefault(i => i.CartItemId == cartItemId);
 
             if (item != null)
                 cart.CartItems.Remove(item);
@@ -200,39 +201,32 @@ namespace MoustafaApp.Server.Service.CartService.CartService
         }
 
 
-        public async Task<CartDto?> ApplyCoupon( int couponId)
+        public async Task<CartDto?> ApplyCoupon(string code)
         {
+            var cart = await GetOrCreateCartEntity();
 
-            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId );
-
-            if (cart == null)
-                return null;
-
-            var coupon = await _unitOfWork.Coupons.GetTById(couponId);
+            var coupon = await _unitOfWork.Coupons
+                .GetFirstOrDefaultAsync(c => c.Code == code);
 
             if (coupon == null)
-                throw new InvalidOperationException("Coupon not found.");
-
-            if (cart.CouponId == couponId)
-                throw new InvalidOperationException("This coupon is already applied.");
+                throw new InvalidOperationException("Invalid coupon.");
 
             ValidateCoupon(coupon, DateTime.UtcNow);
 
-            cart.CouponId = couponId;
+            cart.CouponId = coupon.CouponId;
 
             await _unitOfWork.SaveChangesAsync();
 
             return await BuildAndCacheCart(cart);
         }
 
-
         public async Task<CartDto?> ClearCart()
         {
-           
-            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId );
+
+            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId);
 
             if (cart == null)
-                return null;
+                throw new InvalidOperationException("Cart not found.");
 
             cart.CartItems.Clear();
 
@@ -245,9 +239,11 @@ namespace MoustafaApp.Server.Service.CartService.CartService
 
         public async Task<CartDto?> RemoveCoupon()
         {
-           
-            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId );
-            if (cart == null) return null;
+
+            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId);
+
+            if (cart == null)
+                throw new InvalidOperationException("Cart not found.");
 
             cart.CouponId = null;
 

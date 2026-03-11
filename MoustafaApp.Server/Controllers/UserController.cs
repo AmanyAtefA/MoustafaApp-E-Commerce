@@ -280,7 +280,7 @@ namespace MoustafaApp.Server.Controllers
                 expires: DateTime.UtcNow.AddMinutes(expiresInMinutes),
                 signingCredentials: signingCredentials
             );
-
+            Console.WriteLine("JWT SECRET = " + _configuration["JWT:Secret"]);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
