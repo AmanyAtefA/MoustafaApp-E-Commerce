@@ -1,9 +1,10 @@
-﻿using MoustafaApp.Server.DomainBusiness.OrderBusiness;
+﻿
+using MoustafaApp.Server.Dtos.OrderDtos;
 
 namespace MoustafaApp.Server.Service.OrderService
 {
     public interface ICheckoutService
     {
-        Task<int> CheckoutAsync(CheckoutRequest request);
+        Task<int> CheckoutAsync(AddressDto dto);
     }
 }

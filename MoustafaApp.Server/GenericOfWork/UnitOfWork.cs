@@ -28,6 +28,7 @@ namespace moustafaapp.Server.GenericOfWork
             Departments = new DepartmentRepo(_context);
             Carts     = new CartRepo(_context);
             Coupons = new CouponRepo(_context);
+            Orders = new OrderRepo(_context);
             Reviews = new ReviewRepo(_context,_mapper);
             CartItems = new BaseRepository<CartItem>(_context);
             ProductImage = new BaseRepository<ProductImage>(_context);
@@ -36,8 +37,8 @@ namespace moustafaapp.Server.GenericOfWork
             ProductColors = new BaseRepository<ProductColor>(_context);
             ProductSizes = new BaseRepository<ProductSize>(_context);
             Sizes = new BaseRepository<Size>(_context);
-            Orders = new BaseRepository<Order>(_context);
             OrderItems = new BaseRepository<OrderItem>(_context);
+            Addresses = new BaseRepository<Address>(_context);
            
     
             
@@ -52,6 +53,7 @@ namespace moustafaapp.Server.GenericOfWork
         public CartIRepo Carts { get; private set; }
         public ReviewIRepo Reviews { get; private set; }
         public CouponIRepo Coupons { get; private set; }
+        public OrderIRepo Orders { get; private set; }
 
         public IBaseRepository<ProductImage> ProductImage { get; private set; }  
 
@@ -61,8 +63,8 @@ namespace moustafaapp.Server.GenericOfWork
         public IBaseRepository <ProductColor> ProductColors { get; private set; }
         public IBaseRepository <ProductSize> ProductSizes { get; private set; }
         public IBaseRepository <Size> Sizes { get; private set; }
-        public IBaseRepository <Order> Orders { get; private set; }
         public IBaseRepository <OrderItem> OrderItems { get; private set; }
+        public IBaseRepository <Address> Addresses { get; private set; }
 
         public async Task<int> SaveChangesAsync()
         {

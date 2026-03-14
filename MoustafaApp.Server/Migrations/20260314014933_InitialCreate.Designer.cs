@@ -12,18 +12,122 @@ using MoustafaApp.Server.Data;
 namespace MoustafaApp.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251204171007_Creation")]
-    partial class Creation
+    [Migration("20260314014933_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Address", b =>
+                {
+                    b.Property<int>("AddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("AddressId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("Cart", b =>
+                {
+                    b.Property<int>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
+
+                    b.Property<int?>("CouponId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CartId");
+
+                    b.HasIndex("CouponId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Carts");
+
+                    b.HasData(
+                        new
+                        {
+                            CartId = 1,
+                            CreatedAt = new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            CartId = 2,
+                            CreatedAt = new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "Active"
+                        },
+                        new
+                        {
+                            CartId = 3,
+                            CreatedAt = new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "Active"
+                        });
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -146,7 +250,7 @@ namespace MoustafaApp.Server.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+                    b.HasDiscriminator().HasValue("IdentityUser");
 
                     b.UseTphMappingStrategy();
                 });
@@ -285,50 +389,6 @@ namespace MoustafaApp.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MoustafaApp.Server.Models.Cart", b =>
-                {
-                    b.Property<int>("CartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CartId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Carts");
-
-                    b.HasData(
-                        new
-                        {
-                            CartId = 1,
-                            CreatedAt = new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 1500m
-                        },
-                        new
-                        {
-                            CartId = 2,
-                            CreatedAt = new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 1000m
-                        },
-                        new
-                        {
-                            CartId = 3,
-                            CreatedAt = new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 400m
-                        });
-                });
-
             modelBuilder.Entity("MoustafaApp.Server.Models.CartItem", b =>
                 {
                     b.Property<int>("CartItemId")
@@ -340,8 +400,11 @@ namespace MoustafaApp.Server.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PriceOfUnit")
+                    b.Property<int?>("ColorId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("PriceOfUnit")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -349,11 +412,18 @@ namespace MoustafaApp.Server.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SizeId")
+                        .HasColumnType("int");
+
                     b.HasKey("CartItemId");
 
                     b.HasIndex("CartId");
 
+                    b.HasIndex("ColorId");
+
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
 
                     b.ToTable("CartItems");
 
@@ -362,7 +432,7 @@ namespace MoustafaApp.Server.Migrations
                         {
                             CartItemId = 1,
                             CartId = 1,
-                            PriceOfUnit = 0,
+                            PriceOfUnit = 0m,
                             ProductId = 1,
                             Quantity = 1
                         },
@@ -370,7 +440,7 @@ namespace MoustafaApp.Server.Migrations
                         {
                             CartItemId = 2,
                             CartId = 2,
-                            PriceOfUnit = 0,
+                            PriceOfUnit = 0m,
                             ProductId = 1,
                             Quantity = 1
                         },
@@ -378,7 +448,7 @@ namespace MoustafaApp.Server.Migrations
                         {
                             CartItemId = 3,
                             CartId = 3,
-                            PriceOfUnit = 0,
+                            PriceOfUnit = 0m,
                             ProductId = 1,
                             Quantity = 1
                         });
@@ -426,6 +496,46 @@ namespace MoustafaApp.Server.Migrations
                         {
                             CategoryId = 5,
                             CategoryName = "Shoes"
+                        });
+                });
+
+            modelBuilder.Entity("MoustafaApp.Server.Models.Coupon", b =>
+                {
+                    b.Property<int>("CouponId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CouponId"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CouponType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("CouponId");
+
+                    b.ToTable("Coupons");
+
+                    b.HasData(
+                        new
+                        {
+                            CouponId = 1,
+                            Code = "SALE20",
+                            CouponType = 0,
+                            ExpiryDate = new DateTime(2026, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActive = true,
+                            Value = 20m
                         });
                 });
 
@@ -478,6 +588,9 @@ namespace MoustafaApp.Server.Migrations
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
@@ -524,6 +637,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 1,
                             BrandId = 1,
                             CategoryId = 1,
+                            CreatedAt = new DateTime(2026, 3, 14, 1, 49, 30, 111, DateTimeKind.Utc).AddTicks(2544),
                             DepartmentId = 1,
                             Description = "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style.",
                             Discount = 13,
@@ -539,6 +653,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 2,
                             BrandId = 2,
                             CategoryId = 2,
+                            CreatedAt = new DateTime(2026, 3, 14, 1, 49, 30, 111, DateTimeKind.Utc).AddTicks(2561),
                             DepartmentId = 1,
                             Description = "Comfortable skinny fit jeans",
                             Discount = 8,
@@ -554,6 +669,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 3,
                             BrandId = 5,
                             CategoryId = 3,
+                            CreatedAt = new DateTime(2026, 3, 14, 1, 49, 30, 111, DateTimeKind.Utc).AddTicks(2745),
                             DepartmentId = 1,
                             Description = "Classic checkered shirt",
                             Discount = 0,
@@ -569,6 +685,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 4,
                             BrandId = 4,
                             CategoryId = 1,
+                            CreatedAt = new DateTime(2026, 3, 14, 1, 49, 30, 111, DateTimeKind.Utc).AddTicks(2756),
                             DepartmentId = 1,
                             Description = "Striped raglan tee",
                             Discount = 18,
@@ -836,6 +953,9 @@ namespace MoustafaApp.Server.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -919,23 +1039,115 @@ namespace MoustafaApp.Server.Migrations
                         new
                         {
                             SizeId = 1,
-                            SizeName = "S"
+                            SizeName = "Small"
                         },
                         new
                         {
                             SizeId = 2,
-                            SizeName = "M"
+                            SizeName = "Medium"
                         },
                         new
                         {
                             SizeId = 3,
-                            SizeName = "L"
+                            SizeName = "Large"
                         },
                         new
                         {
                             SizeId = 4,
-                            SizeName = "XL"
+                            SizeName = "X-Large"
                         });
+                });
+
+            modelBuilder.Entity("Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("DeliveryFee")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Discount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("PaidAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShippingStatus")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("OrderItem", b =>
+                {
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("MoustafaApp.Server.Models.ApplicationUser", b =>
@@ -951,6 +1163,36 @@ namespace MoustafaApp.Server.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("Address", b =>
+                {
+                    b.HasOne("MoustafaApp.Server.Models.ApplicationUser", null)
+                        .WithMany("Addresses")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("MoustafaApp.Server.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Cart", b =>
+                {
+                    b.HasOne("MoustafaApp.Server.Models.Coupon", "Coupon")
+                        .WithMany()
+                        .HasForeignKey("CouponId");
+
+                    b.HasOne("MoustafaApp.Server.Models.ApplicationUser", "User")
+                        .WithMany("Carts")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Coupon");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1004,22 +1246,17 @@ namespace MoustafaApp.Server.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MoustafaApp.Server.Models.Cart", b =>
-                {
-                    b.HasOne("MoustafaApp.Server.Models.ApplicationUser", "User")
-                        .WithMany("Carts")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("MoustafaApp.Server.Models.CartItem", b =>
                 {
-                    b.HasOne("MoustafaApp.Server.Models.Cart", "Cart")
+                    b.HasOne("Cart", "Cart")
                         .WithMany("CartItems")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("MoustafaApp.Server.Models.ProductColor", "Color")
+                        .WithMany()
+                        .HasForeignKey("ColorId");
 
                     b.HasOne("MoustafaApp.Server.Models.Product", "Product")
                         .WithMany("CartItem")
@@ -1027,9 +1264,17 @@ namespace MoustafaApp.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MoustafaApp.Server.Models.Size", "Size")
+                        .WithMany()
+                        .HasForeignKey("SizeId");
+
                     b.Navigation("Cart");
 
+                    b.Navigation("Color");
+
                     b.Navigation("Product");
+
+                    b.Navigation("Size");
                 });
 
             modelBuilder.Entity("MoustafaApp.Server.Models.Product", b =>
@@ -1113,14 +1358,53 @@ namespace MoustafaApp.Server.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Order", b =>
+                {
+                    b.HasOne("Address", "Address")
+                        .WithMany("Orders")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("MoustafaApp.Server.Models.ApplicationUser", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("MoustafaApp.Server.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OrderItem", b =>
+                {
+                    b.HasOne("Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Address", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Cart", b =>
+                {
+                    b.Navigation("CartItems");
+                });
+
             modelBuilder.Entity("MoustafaApp.Server.Models.Brand", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("MoustafaApp.Server.Models.Cart", b =>
-                {
-                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("MoustafaApp.Server.Models.Category", b =>
@@ -1151,9 +1435,18 @@ namespace MoustafaApp.Server.Migrations
                     b.Navigation("ProductSizes");
                 });
 
+            modelBuilder.Entity("Order", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
             modelBuilder.Entity("MoustafaApp.Server.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("Carts");
+
+                    b.Navigation("Orders");
 
                     b.Navigation("Reviews");
                 });

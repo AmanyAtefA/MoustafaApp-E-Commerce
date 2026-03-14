@@ -24,6 +24,9 @@ import { CartComponent } from './cart/cart.component';
 import { ReviewComponent } from './review/review.component';
 import { ShortFullNamePipe } from './Pips/short-full-name.pipe';
 import { GeneralInterceptor } from '../Interceptors/GeneralInterceptor.Service';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { SuccessComponent } from './success/success.component';
+import { OrderComponent } from './order/order.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +46,10 @@ import { GeneralInterceptor } from '../Interceptors/GeneralInterceptor.Service';
     ProductsComponent,
     PaginationComponent,
     CartComponent,
-    ShortFullNamePipe
+    ShortFullNamePipe,
+    CheckoutComponent,
+    SuccessComponent,
+    OrderComponent
   ],
   imports: [
     BrowserModule,

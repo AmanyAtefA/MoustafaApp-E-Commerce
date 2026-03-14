@@ -13,7 +13,10 @@ export interface ICart {
   discountRate: number;
   subtotal: number,
   discount: number,
+  userDiscount :number,
+  couponDiscount: number,
   deliveryFee: number,
+  couponCode?: string;
   cartItems: ICartItem[];
 
 }

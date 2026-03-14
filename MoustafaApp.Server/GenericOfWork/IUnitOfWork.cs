@@ -12,6 +12,7 @@ namespace moustafaapp.Server.GenericOfWork
         CartIRepo Carts { get; }
         ReviewIRepo Reviews { get; }
         CouponIRepo Coupons { get; }
+        OrderIRepo Orders { get; }
         IBaseRepository<CartItem> CartItems { get;}
         IBaseRepository<ProductImage> ProductImage { get; }
         IBaseRepository<ApplicationUser> Users { get; }
@@ -19,9 +20,8 @@ namespace moustafaapp.Server.GenericOfWork
         IBaseRepository<ProductColor> ProductColors { get; }
         IBaseRepository<ProductSize> ProductSizes { get; }
         IBaseRepository<Size> Sizes { get; }
-
-        IBaseRepository<Order> Orders { get; }
         IBaseRepository<OrderItem> OrderItems { get; }
+        IBaseRepository<Address> Addresses { get; }
 
         Task<int> SaveChangesAsync();
     }

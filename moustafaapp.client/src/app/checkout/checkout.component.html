@@ -1,0 +1,221 @@
+
+
+<form [formGroup]="form" (ngSubmit)="checkout()">
+
+  <div class="container-fluid">
+    <div class="container">
+      <hr class="lineStyle conDetails ">
+      <p class="StyleP fs-3"> Home > Payment </p>
+
+      <h1 class="pTitle">Your Payment</h1>
+    </div>
+    <div class="row h-100 align-items-center justify-content-center"
+         style="min-height: 100vh;">
+
+      <div class="col-12 col-xl-10">
+
+        <div class="row g-4">
+
+          <!-- Shipping Address -->
+          <div class="col-lg-7">
+
+            <div class="bg-secondary rounded p-4 p-sm-5">
+
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                <h3 class="text-primary">
+                  <i class="fa fa-map-marker-alt me-2"></i>Shipping Address
+                </h3>
+              </div>
+
+              <!-- Full Name -->
+              <div class="form-floating mb-3">
+                <input formControlName="fullName"
+                       type="text"
+                       class="form-control"
+                       id="fullName"
+                       placeholder="Full Name">
+
+                <label for="fullName">Full Name</label>
+              </div>
+
+              <!-- Phone -->
+              <div class="form-floating mb-3">
+                <input formControlName="phoneNumber"
+                       type="text"
+                       class="form-control"
+                       id="phoneNumber"
+                       placeholder="Phone">
+
+                <label for="phoneNumber">Phone Number</label>
+              </div>
+
+              <!-- City -->
+              <div class="form-floating mb-3">
+                <input formControlName="city"
+                       type="text"
+                       class="form-control"
+                       id="city"
+                       placeholder="City">
+
+                <label for="city">City</label>
+              </div>
+
+              <!-- Street -->
+              <div class="form-floating mb-3">
+                <input formControlName="street"
+                       type="text"
+                       class="form-control"
+                       id="street"
+                       placeholder="Street">
+
+                <label for="street">Street</label>
+              </div>
+
+              <!-- Notes -->
+              <div class="form-floating mb-4">
+                <textarea formControlName="notes"
+                          class="form-control"
+                          id="notes"
+                          style="height:100px"
+                          placeholder="Notes"></textarea>
+
+                <label for="notes">Notes (optional)</label>
+              </div>
+
+              <button [disabled]="form.invalid"
+                      type="submit"
+                      class="btn btn-primary py-3 w-100">
+
+                Place Order
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- Order Summary -->
+          <div class="col-lg-5">
+
+            <div *ngIf="cart$ | async as cart"
+                 class="bg-secondary rounded p-4 p-sm-5">
+
+              <h3 class="text-primary mb-4">
+                <i class="fa fa-shopping-cart me-2"></i>
+                Order Summary
+              </h3>
+
+              <!-- Cart Items -->
+              <div *ngFor="let item of cart.cartItems"
+                   class="cart-item d-flex align-items-center justify-content-between mb-3">
+
+                <div class="d-flex align-items-center gap-3">
+
+                  <!-- Product Image -->
+                  <img [src]="item.photo"
+                       width="60"
+                       height="60"
+                       class="rounded">
+
+                  <!-- Product Name -->
+                  <div>
+                    <div class="fw-semibold">
+                      {{item.productName}}
+                    </div>
+
+                    <!-- Quantity Controls -->
+                    <div class="d-flex align-items-center gap-2 mt-1">
+
+                      <div>
+                        <div class="fw-semibold">
+                          $ {{item.priceOfUnit}}
+                        </div>
+                      </div>
+
+                      <button type="button"
+                              class="btn btn-sm btn-outline-danger border-0"
+                              (click)="decrease(item)">
+                        -
+                      </button>
+
+                      <span>{{item.quantity}}</span>
+
+                      <button type="button"
+                              class="btn btn-sm btn-outline-danger border-0 "
+                              (click)="increase(item)">
+                        +
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <!-- Price + Remove -->
+                <div class="text-end">
+
+                  <div class="fw-bold">
+                    ${{item.priceOfUnit * item.quantity}}
+                  </div>
+
+                  <button type="button"
+                          class="btn btn-sm text-danger"
+                          (click)="removeItem(item.cartItemId)">
+                    Remove
+                  </button>
+
+                </div>
+
+              </div>
+              <hr>
+
+              <!-- Subtotal -->
+              <div class="d-flex justify-content-between mb-2 text-light">
+                <span>Subtotal</span>
+                <span>${{cart.subtotal}}</span>
+              </div>
+
+              <!-- User Discount -->
+              <div class="d-flex justify-content-between mb-2 text-light">
+                <span>User Discount</span>
+                <span>- ${{cart.userDiscount}}</span>
+              </div>
+
+              <!-- Coupon -->
+              <div *ngIf="cart.couponCode"
+                   class="d-flex justify-content-between mb-2 text-light">
+
+                <span>Coupon {{cart.couponCode}}</span>
+                <span>- ${{cart.couponDiscount}}</span>
+
+              </div>
+
+              <!-- Delivery -->
+              <div class="d-flex justify-content-between mb-2 text-light">
+                <span>Delivery Fee</span>
+                <span>${{cart.deliveryFee}}</span>
+              </div>
+
+              <hr>
+
+              <!-- Total -->
+              <div class="d-flex justify-content-between fs-5 fw-bold ">
+                <span>Total</span>
+                <span>${{cart.total}}</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

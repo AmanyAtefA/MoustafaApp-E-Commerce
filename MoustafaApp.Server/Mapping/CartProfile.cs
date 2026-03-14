@@ -11,8 +11,8 @@ namespace MoustafaApp.Server.Mapping
                      .ForMember(dest => dest.DiscountRate, opt => opt.Ignore())
                      .ForMember(dest => dest.Discount, opt => opt.Ignore())
                      .ForMember(dest => dest.DeliveryFee, opt => opt.Ignore())
-                     .ForMember(dest => dest.Total, opt => opt.Ignore());
-
+                     .ForMember(dest => dest.Total, opt => opt.Ignore())
+                    .ForMember(dest => dest.CouponCode, opt => opt.MapFrom(src => src.Coupon!.Code));
 
              CreateMap<CartItem, CartItemDto>()
                      .ForMember(dest => dest.ProductName,opt => opt.MapFrom(src => src.Product.Name))
@@ -32,6 +32,9 @@ namespace MoustafaApp.Server.Mapping
                 .ForMember(dest => dest.CartItemId, opt => opt.Ignore())
                 .ForMember(dest => dest.PriceOfUnit, opt => opt.Ignore())
                 .ForMember(dest => dest.Cart, opt => opt.Ignore());
+
+
+
 
         }
 

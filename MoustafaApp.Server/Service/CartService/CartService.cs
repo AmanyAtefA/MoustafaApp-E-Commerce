@@ -4,7 +4,9 @@ using moustafaapp.Server.GenericOfWork;
 using MoustafaApp.Server.Attributes;
 using MoustafaApp.Server.DomainBusiness.CartBusiness;
 using MoustafaApp.Server.Dtos.CartDtos;
+using MoustafaApp.Server.Dtos.OrderDtos;
 using MoustafaApp.Server.Models;
+using MoustafaApp.Server.Repository;
 using MoustafaApp.Server.Service.UserService;
 using MoustafaApp.Server.Validators;
 
@@ -51,13 +53,14 @@ namespace MoustafaApp.Server.Service.CartService.CartService
             dto.DiscountRate = summary.DiscountRate;
             dto.Discount = summary.Discount;
             dto.DeliveryFee = summary.DeliveryFee;
+            dto.UserDiscount = summary.UserDiscount;
+            dto.CouponDiscount = summary.CouponDiscount;
             dto.Total = summary.Total;
-
+            dto.CouponCode = cart.Coupon?.Code;
             await _cache.SetAsync($"cart:{UserId}", dto, TimeSpan.FromMinutes(10));
 
             return dto;
         }
-
 
 
         public async Task<CartDto?> GetCartByUserId()
@@ -128,17 +131,17 @@ namespace MoustafaApp.Server.Service.CartService.CartService
             if (existingItem != null)
                 existingItem.Quantity += request.Quantity;
             else
-            { 
+            {
                 var cartItem = _mapper.Map<CartItem>(request);
 
-                 cartItem.CartId = cart.CartId;
-                 cartItem.PriceOfUnit = product.Price;
+                cartItem.CartId = cart.CartId;
+                cartItem.PriceOfUnit = product.Price;
 
-                await _unitOfWork.CartItems.AddAsync(cartItem);
+                cart.CartItems.Add(cartItem);
             }
 
-        
-             await _unitOfWork.SaveChangesAsync();
+
+            await _unitOfWork.SaveChangesAsync();
 
     
             return await BuildAndCacheCart(cart);
@@ -196,22 +199,27 @@ namespace MoustafaApp.Server.Service.CartService.CartService
             if (!coupon.IsActive)
                 throw new InvalidOperationException("Coupon is not active.");
 
-            if (coupon.ExpiryDate <= now)
+            if (coupon.ExpiryDate < now)
                 throw new InvalidOperationException("Coupon has expired.");
         }
 
 
-        public async Task<CartDto?> ApplyCoupon(string code)
+        public async Task<CartDto?> ApplyCoupon(string? code)
         {
             var cart = await GetOrCreateCartEntity();
 
+            if (string.IsNullOrWhiteSpace(code))
+                return await BuildAndCacheCart(cart);
+
             var coupon = await _unitOfWork.Coupons
-                .GetFirstOrDefaultAsync(c => c.Code == code);
+                .GetFirstOrDefaultAsync(c =>
+                    c.Code.ToLower() == code.ToLower() &&
+                    c.IsActive &&
+                    c.ExpiryDate > DateTime.UtcNow
+                );
 
             if (coupon == null)
-                throw new InvalidOperationException("Invalid coupon.");
-
-            ValidateCoupon(coupon, DateTime.UtcNow);
+                throw new InvalidOperationException("Invalid or expired coupon.");
 
             cart.CouponId = coupon.CouponId;
 
@@ -236,14 +244,10 @@ namespace MoustafaApp.Server.Service.CartService.CartService
         }
 
 
-
         public async Task<CartDto?> RemoveCoupon()
         {
 
-            var cart = await _unitOfWork.Carts.GetActiveCartByUser(UserId);
-
-            if (cart == null)
-                throw new InvalidOperationException("Cart not found.");
+            var cart = await GetOrCreateCartEntity();
 
             cart.CouponId = null;
 
@@ -269,5 +273,8 @@ namespace MoustafaApp.Server.Service.CartService.CartService
             await RemoveCartCache(UserId);
             return true;
         }
+
+
+
     }
 }

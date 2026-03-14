@@ -10,8 +10,10 @@
         public decimal DeliveryFee { get; set; }
         public decimal TotalAmount { get; set; }
 
-        public string Status { get; set; } = null!;
+        public string PaymentStatus { get; set; } = null!;
+        public string ShippingStatus { get; set; } = null!;
 
-        public List<OrderItemDto> Items { get; set; } = new();
+        public AddressDto Address { get; set; } = null!;
+        public List<OrderItemDto> OrderItems { get; set; } = new();
     }
 }

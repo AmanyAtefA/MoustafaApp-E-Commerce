@@ -6,6 +6,7 @@ import { BehaviorSubject, catchError, of, tap, throwError } from 'rxjs';
 import { IAddItem } from '../IModels/IAddItem';
 import { ICart } from '../IModels/iCart';
 import { IUpdateQuantityItem } from '../IModels/IUpdateQuantityItem';
+import { IApplyCoupon } from '../IModels/IApplyCoupon';
 
 @Injectable({
   providedIn: 'root'
@@ -131,8 +132,22 @@ export class CartsService {
   }
 
 
-  checkout(data: any) {
-    return this.http.post('/api/checkout', data);
+  applyCoupon(code: IApplyCoupon) {
+    return this.http.post(environment.baseUrl + "Cart/ApplyCoupon" ,code)
+      .pipe(
+        tap((cart: any) => {
+          this.userCartSubject.next(cart);
+        })
+      );
   }
 
+
+  removeCoupon() {
+    return this.http.delete(environment.baseUrl + "Cart/RemoveCoupon")
+      .pipe(
+        tap((cart: any) => {
+          this.userCartSubject.next(cart);
+        })
+      );
+  }
 }

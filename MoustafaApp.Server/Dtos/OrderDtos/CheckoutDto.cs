@@ -1,6 +1,6 @@
-﻿namespace MoustafaApp.Server.DomainBusiness.OrderBusiness
+﻿namespace MoustafaApp.Server.Dtos.OrderDtos
 {
-    public class CheckoutRequest
+    public class CheckoutDto
     {
         public string FullName { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;

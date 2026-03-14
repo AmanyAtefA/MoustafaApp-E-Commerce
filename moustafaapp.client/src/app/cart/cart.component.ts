@@ -11,6 +11,7 @@ import { ICartItem } from '../../IModels/ICartItem';
 export class CartComponent {
 
 
+  couponCode = '';
   cart$ = this._CartService.userCart$;
 
   constructor(private _CartService: CartsService) { }
@@ -46,5 +47,26 @@ export class CartComponent {
     this.updateQuantity(item);
   }
 
-  
+
+  applyCoupon() {
+
+    if (!this.couponCode) return;
+
+    this._CartService.applyCoupon({ code: this.couponCode })
+      .subscribe({
+        next: () => {
+          this.couponCode = "";
+        },
+        error: () => alert("Invalid Coupon")
+      });
+
+  }
+
+
+  removeCoupon() {
+    this._CartService.removeCoupon().subscribe();
+  }
+
+
+
 }

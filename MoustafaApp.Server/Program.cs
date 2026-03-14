@@ -1,18 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using MoustafaApp.Server.Extensions;
 using System.IO.Compression;
 using System.Text;
-
-using MoustafaApp.Server.DomainBusiness.CartBusiness;
-using MoustafaApp.Server.Service.CartService.CartService;
-using MoustafaApp.Server.Service.OrderService;
-using MoustafaApp.Server.Service.ProductService;
-using MoustafaApp.Server.Service.UserService;
-using MoustafaApp.Server.Services.Common;
-using MoustafaApp.Server.Validators;
 
 namespace moustafaapp.Server
 {
@@ -22,32 +13,38 @@ namespace moustafaapp.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // ===============================
             // CORS
+            // ===============================
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAngular",
-                    policy =>
-                    {
-                        policy
+                options.AddPolicy("AllowAngular", policy =>
+                {
+                    policy
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowAnyOrigin();
-                    });
+                });
             });
 
+            // ===============================
             // Database
+            // ===============================
             builder.Services.AddDbContext<AppDbContext>(options =>
-     options.UseSqlServer(
-         builder.Configuration.GetConnectionString("Default"),
-         sqlOptions =>
-         {
-             sqlOptions.EnableRetryOnFailure(
-                 maxRetryCount: 10,
-                 maxRetryDelay: TimeSpan.FromSeconds(10),
-                 errorNumbersToAdd: null);
-         }));
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("Default"),
+                    sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 10,
+                            maxRetryDelay: TimeSpan.FromSeconds(10),
+                            errorNumbersToAdd: null);
+                    }));
 
-            //redis
+
+            // ===============================
+            // Redis / Memory Cache
+            // ===============================
             var redisConnection = builder.Configuration.GetConnectionString("Redis");
 
             try
@@ -71,7 +68,11 @@ namespace moustafaapp.Server
 
                 Console.WriteLine("Using MemoryCache");
             }
+
+
+            // ===============================
             // Identity
+            // ===============================
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -83,58 +84,64 @@ namespace moustafaapp.Server
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-            // JWT
+
+            // ===============================
+            // JWT Authentication
+            // ===============================
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
 
-             .AddJwtBearer(options =>
-                         {
-                 options.SaveToken = true;
-                 options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+                    ValidateIssuer = true,
 
-                 options.TokenValidationParameters = new TokenValidationParameters
-                 {
-                     ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-                     ValidateIssuer = true,
+                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                    ValidateAudience = true,
 
-                     ValidAudience = builder.Configuration["JWT:ValidAudience"],
-                     ValidateAudience = true,
+                    ValidateLifetime = true,
 
-                     ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
 
-                     IssuerSigningKey = new SymmetricSecurityKey(
-                         Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+                    ValidateIssuerSigningKey = true
+                };
 
-                     ValidateIssuerSigningKey = true
-                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine("JWT Authentication Failed");
+                        Console.WriteLine(context.Exception.ToString());
+                        return Task.CompletedTask;
+                    },
 
-                 options.Events = new JwtBearerEvents
-                 {
-                     OnAuthenticationFailed = context =>
-                     {
-                         Console.WriteLine(" JWT Authentication Failed");
-                         Console.WriteLine(context.Exception.ToString());
-                         return Task.CompletedTask;
-                     },
+                    OnTokenValidated = context =>
+                    {
+                        Console.WriteLine("JWT Token Validated");
+                        return Task.CompletedTask;
+                    },
 
-                     OnTokenValidated = context =>
-                     {
-                         Console.WriteLine(" JWT Token Validated");
-                         return Task.CompletedTask;
-                     },
+                    OnChallenge = context =>
+                    {
+                        Console.WriteLine("JWT Challenge Triggered");
+                        return Task.CompletedTask;
+                    }
+                };
+            });
 
-                     OnChallenge = context =>
-                     {
-                         Console.WriteLine("⚠️ JWT Challenge Triggered");
-                         return Task.CompletedTask;
-                     }
-                 };
-             });
-            // Compression
+
+            // ===============================
+            // Response Compression
+            // ===============================
             builder.Services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
@@ -150,65 +157,72 @@ namespace moustafaapp.Server
                 options.Level = CompressionLevel.Fastest;
             });
 
+
             builder.Services.AddHttpContextAccessor();
 
-            builder.Services.AddAutoMapper(typeof(MappingModel));
-
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-            builder.Services.AddTransient<ProductIRepo, ProductRepo>();
-            builder.Services.AddTransient<CategoryIRepo, CategoryRepo>();
-            builder.Services.AddTransient<CartIRepo, CartRepo>();
-            builder.Services.AddTransient<IProductService, ProductService>();
-            builder.Services.AddTransient<DepartmentIRepo, DepartmentRepo>();
-            builder.Services.AddTransient<CouponIRepo, CouponRepo>();
-            builder.Services.AddScoped<IImageService, ImageService>();
-            builder.Services.AddScoped<ReviewIRepo, ReviewRepo>();
-            builder.Services.AddScoped<ICartService, CartService>();
-            builder.Services.AddScoped<CartCalculator>();
-            builder.Services.AddScoped<CartValidator>();
 
             builder.Services.AddControllers();
+            // AutoMapper
+            builder.Services.AddAutoMapper(typeof(MappingModel));
+
+ 
+            // ===============================
+            // IServices & IRepo
+            // ===============================
+            builder.Services.AddApplicationServices();
+
+
+           
 
             builder.Services.AddEndpointsApiExplorer();
+
+
+            // ===============================
+            // Swagger
+            // ===============================
             builder.Services.AddSwaggerGen(options =>
             {
-                options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme",
-                    Name = "Authorization",
-                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    BearerFormat = "JWT"
-                });
+                options.AddSecurityDefinition("Bearer",
+                    new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                    {
+                        Description = "JWT Authorization header using Bearer scheme",
+                        Name = "Authorization",
+                        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT"
+                    });
 
-                options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
+                options.AddSecurityRequirement(
+                    new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                    {
+                        {
+                            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                            {
+                                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                                {
+                                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
+                        }
+                    });
             });
+
 
             var app = builder.Build();
 
-            // Create roles automatically
+
+            // ===============================
+            // Database Migration + Roles
+            // ===============================
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
 
                 var context = services.GetRequiredService<AppDbContext>();
-                context.Database.Migrate();   // 👈 هذا السطر المهم
+                context.Database.Migrate();
 
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
@@ -223,29 +237,36 @@ namespace moustafaapp.Server
                 }
             }
 
-            app.UseResponseCompression();
 
-            app.UseCors("AllowAngular");
+            // ===============================
+            // Middleware Pipeline
+            // ===============================
 
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage(); // 👈 يظهر الأخطاء بالتفصيل
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseResponseCompression();
+
+            app.UseCors("AllowAngular");
 
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.MapControllers();
 
+            // Angular Routing
             app.MapFallbackToFile("index.html");
 
             app.Run();
-
         }
     }
 }

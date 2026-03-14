@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MoustafaApp.Server.DomainBusiness.OrderBusiness;
 using MoustafaApp.Server.Dtos.CartDtos;
+using MoustafaApp.Server.Dtos.OrderDtos;
 using MoustafaApp.Server.Service.CartService.CartService;
 using MoustafaApp.Server.Service.OrderService;
 using System.Security.Claims;
@@ -15,11 +16,14 @@ namespace MoustafaApp.Server.Controllers
     {
         private readonly ICartService _cartService;
         private readonly ICheckoutService _checkoutService;
+        private readonly IMapper _mapper;
 
-        public CartController(ICartService cartService, ICheckoutService checkoutService)
+        public CartController(ICartService cartService, ICheckoutService checkoutService,
+                                IMapper mapper)
         {
             _cartService = cartService;
             _checkoutService = checkoutService;
+            _mapper = mapper;
         }
 
 
@@ -91,18 +95,16 @@ namespace MoustafaApp.Server.Controllers
 
 
 
-        [HttpPost("ApplyCoupon/{code}")]
-        public async Task<IActionResult> ApplyCoupon()
+        [HttpPost("ApplyCoupon")]
+        public async Task<IActionResult> ApplyCoupon([FromBody] ApplyCouponDto dto)
         {
-
-            var cart = await _cartService.ApplyCoupon(Code);
+            var cart = await _cartService.ApplyCoupon(dto.Code);
 
             if (cart == null)
                 return NotFound();
 
             return Ok(cart);
         }
-
 
 
         [HttpDelete("RemoveCoupon")]
@@ -119,12 +121,15 @@ namespace MoustafaApp.Server.Controllers
 
 
         [HttpPost("checkout")]
-        public async Task<IActionResult> Checkout(CheckoutRequest request)
+        public async Task<IActionResult> Checkout([FromBody] AddressDto dto)
         {
+            var request = _mapper.Map<AddressDto>(dto);
+
             var orderId = await _checkoutService.CheckoutAsync(request);
 
             return Ok(new { orderId });
         }
+
 
 
 

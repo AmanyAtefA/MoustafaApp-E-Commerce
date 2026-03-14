@@ -10,6 +10,9 @@ import { ProductsComponent } from './products/products.component';
 import { NewArrivalsComponent } from './new-arrivals/new-arrivals.component';
 import { TopSellingComponent } from './top-selling/top-selling.component';
 import { CartComponent } from './cart/cart.component';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { SuccessComponent } from './success/success.component';
+import { OrderComponent } from './order/order.component';
 
 const routes: Routes = [
   {
@@ -22,6 +25,9 @@ const routes: Routes = [
       { path: 'NewArrivals', component: NewArrivalsComponent },
       { path: 'TopSelling', component: TopSellingComponent },
       { path: 'Cart', component: CartComponent },
+      { path: 'Checkout', component: CheckoutComponent },
+      { path: 'Success', component: SuccessComponent },
+      { path: 'Order/:id', component: OrderComponent },
     ]
 
   },

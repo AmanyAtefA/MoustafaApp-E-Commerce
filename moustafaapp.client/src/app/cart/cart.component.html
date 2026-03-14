@@ -8,8 +8,6 @@
   <div *ngIf="cart$ | async as cart">
 
     <div>
-
-      <div *ngIf="cart$ | async as cart">
         <div class="row">
 
           <!-- Items -->
@@ -64,13 +62,24 @@
                 </div>
 
                 <div class="summaryRow">
-                  <span>Discount (-20%)</span>
-                  <span class="numSubtotal colorSubtotal">-${{ cart.discount }}</span>
+                  <span>
+                    Discount User (- {{ (cart.userDiscount / cart.subtotal) * 100 | number:'1.0-0' }} %)
+                  </span>
+                  <span class="numSubtotal colorSubtotal">-${{ cart.userDiscount }}</span>
+                </div>
+
+                <div *ngIf="cart.couponCode" class="summaryRow text-success">
+                  <span>
+                    Coupon {{cart.couponCode}}
+                    (- {{ (cart.couponDiscount / cart.subtotal) * 100 | number:'1.0-0' }} %)
+                    <span class="remove-coupon" (click)="removeCoupon()">Remove</span>
+                  </span>
+                  <span>- ${{cart.couponDiscount}}</span>
                 </div>
 
                 <div class="summaryRow">
                   <span>Delivery Fee</span>
-                  <span class="numSubtotal">${{ cart.discount }}</span>
+                  <span class="numSubtotal">${{ cart.deliveryFee }}</span>
                 </div>
 
                 <hr class="lineStyle">
@@ -86,20 +95,22 @@
               <div class="checkout">
                 <div class="inputWrapper">
                   <i class="bi bi-tag inputIcon"></i>
-                  <input type="text" class=" inputCheckout" placeholder="Add promo code" />
+                  <input type="text"class="inputCheckout" placeholder="Add promo code SALE20"
+                         [(ngModel)]="couponCode" />
                 </div>
 
-                <button class="butCheckout">Apply</button>
+                <button class="butCheckout" (click)="applyCoupon()">Apply</button>
+
               </div>
 
               <div>
-                <button class="butAddCart">Go to Checkout</button>
+                <button class="butAddCart" routerLink="/Checkout">Go to Checkout</button>
               </div>
             </div>
           </div>
 
         </div>
-      </div>
+      
 
     </div>
   </div>

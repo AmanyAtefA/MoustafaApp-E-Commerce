@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MoustafaApp.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class Creation : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -83,6 +83,23 @@ namespace MoustafaApp.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Coupons",
+                columns: table => new
+                {
+                    CouponId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CouponType = table.Column<int>(type: "int", nullable: false),
+                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Coupons", x => x.CouponId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Departments",
                 columns: table => new
                 {
@@ -125,6 +142,36 @@ namespace MoustafaApp.Server.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    AddressId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
+                    table.ForeignKey(
+                        name: "FK_Addresses_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Addresses_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -220,9 +267,11 @@ namespace MoustafaApp.Server.Migrations
                 {
                     CartId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CouponId = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -232,6 +281,11 @@ namespace MoustafaApp.Server.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Carts_Coupons_CouponId",
+                        column: x => x.CouponId,
+                        principalTable: "Coupons",
+                        principalColumn: "CouponId");
                 });
 
             migrationBuilder.CreateTable(
@@ -248,6 +302,7 @@ namespace MoustafaApp.Server.Migrations
                     Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Stock = table.Column<int>(type: "int", nullable: false),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: true),
                     DepartmentId = table.Column<int>(type: "int", nullable: false)
@@ -274,30 +329,42 @@ namespace MoustafaApp.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CartItems",
+                name: "Orders",
                 columns: table => new
                 {
-                    CartItemId = table.Column<int>(type: "int", nullable: false)
+                    OrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    PriceOfUnit = table.Column<int>(type: "int", nullable: false),
-                    CartId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Subtotal = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Discount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    DeliveryFee = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    AddressId = table.Column<int>(type: "int", nullable: false),
+                    PaymentStatus = table.Column<int>(type: "int", nullable: false),
+                    PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaidAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ShippingStatus = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartItems", x => x.CartItemId);
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
                     table.ForeignKey(
-                        name: "FK_CartItems_Carts_CartId",
-                        column: x => x.CartId,
-                        principalTable: "Carts",
-                        principalColumn: "CartId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Orders_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "AddressId");
                     table.ForeignKey(
-                        name: "FK_CartItems_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
+                        name: "FK_Orders_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -374,6 +441,7 @@ namespace MoustafaApp.Server.Migrations
                     Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ReviewText = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     DatePosted = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -393,6 +461,69 @@ namespace MoustafaApp.Server.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    OrderItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.OrderItemId);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartItems",
+                columns: table => new
+                {
+                    CartItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    PriceOfUnit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    SizeId = table.Column<int>(type: "int", nullable: true),
+                    ColorId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItems", x => x.CartItemId);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Carts_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Carts",
+                        principalColumn: "CartId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItems_ProductColors_ColorId",
+                        column: x => x.ColorId,
+                        principalTable: "ProductColors",
+                        principalColumn: "ColorId");
+                    table.ForeignKey(
+                        name: "FK_CartItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Size_SizeId",
+                        column: x => x.SizeId,
+                        principalTable: "Size",
+                        principalColumn: "SizeId");
+                });
+
             migrationBuilder.InsertData(
                 table: "Brands",
                 columns: new[] { "BrandId", "BrandName", "PhotoBrand" },
@@ -407,12 +538,12 @@ namespace MoustafaApp.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "Carts",
-                columns: new[] { "CartId", "CreatedAt", "Total", "UserId" },
+                columns: new[] { "CartId", "CouponId", "CreatedAt", "Status", "UserId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1500m, null },
-                    { 2, new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1000m, null },
-                    { 3, new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 400m, null }
+                    { 1, null, new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Active", null },
+                    { 2, null, new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Active", null },
+                    { 3, null, new DateTime(2025, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Active", null }
                 });
 
             migrationBuilder.InsertData(
@@ -426,6 +557,11 @@ namespace MoustafaApp.Server.Migrations
                     { 4, "Dresses" },
                     { 5, "Shoes" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Coupons",
+                columns: new[] { "CouponId", "Code", "CouponType", "ExpiryDate", "IsActive", "Value" },
+                values: new object[] { 1, "SALE20", 0, new DateTime(2026, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), true, 20m });
 
             migrationBuilder.InsertData(
                 table: "Departments",
@@ -442,31 +578,31 @@ namespace MoustafaApp.Server.Migrations
                 columns: new[] { "SizeId", "SizeName" },
                 values: new object[,]
                 {
-                    { 1, "S" },
-                    { 2, "M" },
-                    { 3, "L" },
-                    { 4, "XL" }
+                    { 1, "Small" },
+                    { 2, "Medium" },
+                    { 3, "Large" },
+                    { 4, "X-Large" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "ProductId", "BrandId", "CategoryId", "DepartmentId", "Description", "Discount", "Name", "OldPrice", "Photo", "Price", "Rating", "Stock" },
+                columns: new[] { "ProductId", "BrandId", "CategoryId", "CreatedAt", "DepartmentId", "Description", "Discount", "Name", "OldPrice", "Photo", "Price", "Rating", "Stock" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, 1, "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style.", 13, "One Life Graphic T-Shirt", 300m, "assets/images/arr1.png", 260m, 4.5m, 100 },
-                    { 2, 2, 2, 1, "Comfortable skinny fit jeans", 8, "Skinny Fit Jeans", 260m, "assets/images/image 2", 240m, 3.5m, 50 },
-                    { 3, 5, 3, 1, "Classic checkered shirt", 0, "Checkered Shirt", 0m, "assets/images/image3.png", 180m, 4.5m, 80 },
-                    { 4, 4, 1, 1, "Striped raglan tee", 18, "Sleeve Striped T-Shirt", 160m, "assets/images/arr4.png", 130m, 4.5m, 70 }
+                    { 1, 1, 1, new DateTime(2026, 3, 14, 1, 49, 30, 111, DateTimeKind.Utc).AddTicks(2544), 1, "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style.", 13, "One Life Graphic T-Shirt", 300m, "assets/images/arr1.png", 260m, 4.5m, 100 },
+                    { 2, 2, 2, new DateTime(2026, 3, 14, 1, 49, 30, 111, DateTimeKind.Utc).AddTicks(2561), 1, "Comfortable skinny fit jeans", 8, "Skinny Fit Jeans", 260m, "assets/images/image 2", 240m, 3.5m, 50 },
+                    { 3, 5, 3, new DateTime(2026, 3, 14, 1, 49, 30, 111, DateTimeKind.Utc).AddTicks(2745), 1, "Classic checkered shirt", 0, "Checkered Shirt", 0m, "assets/images/image3.png", 180m, 4.5m, 80 },
+                    { 4, 4, 1, new DateTime(2026, 3, 14, 1, 49, 30, 111, DateTimeKind.Utc).AddTicks(2756), 1, "Striped raglan tee", 18, "Sleeve Striped T-Shirt", 160m, "assets/images/arr4.png", 130m, 4.5m, 70 }
                 });
 
             migrationBuilder.InsertData(
                 table: "CartItems",
-                columns: new[] { "CartItemId", "CartId", "PriceOfUnit", "ProductId", "Quantity" },
+                columns: new[] { "CartItemId", "CartId", "ColorId", "PriceOfUnit", "ProductId", "Quantity", "SizeId" },
                 values: new object[,]
                 {
-                    { 1, 1, 0, 1, 1 },
-                    { 2, 2, 0, 1, 1 },
-                    { 3, 3, 0, 1, 1 }
+                    { 1, 1, null, 0m, 1, 1, null },
+                    { 2, 2, null, 0m, 1, 1, null },
+                    { 3, 3, null, 0m, 1, 1, null }
                 });
 
             migrationBuilder.InsertData(
@@ -522,16 +658,26 @@ namespace MoustafaApp.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "Reviews",
-                columns: new[] { "ReviewId", "DatePosted", "ProductId", "Rating", "ReviewText", "UserId" },
+                columns: new[] { "ReviewId", "DatePosted", "ProductId", "Rating", "ReviewText", "UpdatedAt", "UserId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "I absolutely love this t-shirt! The design is unique and the fabric feels so comfortable. As a fellow designer, I appreciate the attention to detail. It's become my favorite go-to shirt.", null },
-                    { 2, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "The t-shirt exceeded my expectations! The colors are vibrant and the print quality is top-notch. Being a UI/UX designer myself, I'm quite picky about aesthetics, and this t-shirt definitely gets a thumbs up from me.", null },
-                    { 3, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "This t-shirt is a must-have for anyone who appreciates good design. The minimalistic yet stylish pattern caught my eye, and the fit is perfect. I can see the designer's touch in every aspect of this shirt.", null },
-                    { 4, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "As a UI/UX enthusiast, I value simplicity and functionality. This t-shirt not only represents those principlesto wear. It's evident that the designer poured their creativity into making this t-shirt stand out.", null },
-                    { 5, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "This t-shirt is a fusion of comfort and creativity. The fabric is soft, and the design speaks volumes about the designer's skill. It's like wearing a piece of art that reflects my passion for both design and fashion.", null },
-                    { 6, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "I'm not just wearing a t-shirt; I'm wearing a piece of design philosophy. The intricate details and thoughtful layout of the design make this shirt a conversation starter.", null }
+                    { 1, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "I absolutely love this t-shirt! The design is unique and the fabric feels so comfortable. As a fellow designer, I appreciate the attention to detail. It's become my favorite go-to shirt.", null, null },
+                    { 2, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "The t-shirt exceeded my expectations! The colors are vibrant and the print quality is top-notch. Being a UI/UX designer myself, I'm quite picky about aesthetics, and this t-shirt definitely gets a thumbs up from me.", null, null },
+                    { 3, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "This t-shirt is a must-have for anyone who appreciates good design. The minimalistic yet stylish pattern caught my eye, and the fit is perfect. I can see the designer's touch in every aspect of this shirt.", null, null },
+                    { 4, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "As a UI/UX enthusiast, I value simplicity and functionality. This t-shirt not only represents those principlesto wear. It's evident that the designer poured their creativity into making this t-shirt stand out.", null, null },
+                    { 5, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "This t-shirt is a fusion of comfort and creativity. The fabric is soft, and the design speaks volumes about the designer's skill. It's like wearing a piece of art that reflects my passion for both design and fashion.", null, null },
+                    { 6, new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 4.5m, "I'm not just wearing a t-shirt; I'm wearing a piece of design philosophy. The intricate details and thoughtful layout of the design make this shirt a conversation starter.", null, null }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_ApplicationUserId",
+                table: "Addresses",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_UserId",
+                table: "Addresses",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -578,13 +724,48 @@ namespace MoustafaApp.Server.Migrations
                 column: "CartId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartItems_ColorId",
+                table: "CartItems",
+                column: "ColorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CartItems_ProductId",
                 table: "CartItems",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartItems_SizeId",
+                table: "CartItems",
+                column: "SizeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_CouponId",
+                table: "Carts",
+                column: "CouponId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Carts_UserId",
                 table: "Carts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_AddressId",
+                table: "Orders",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_ApplicationUserId",
+                table: "Orders",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_UserId",
+                table: "Orders",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -650,7 +831,7 @@ namespace MoustafaApp.Server.Migrations
                 name: "CartItems");
 
             migrationBuilder.DropTable(
-                name: "ProductColors");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "ProductImages");
@@ -668,13 +849,22 @@ namespace MoustafaApp.Server.Migrations
                 name: "Carts");
 
             migrationBuilder.DropTable(
+                name: "ProductColors");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
                 name: "Size");
+
+            migrationBuilder.DropTable(
+                name: "Coupons");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Addresses");
 
             migrationBuilder.DropTable(
                 name: "Brands");
@@ -684,6 +874,9 @@ namespace MoustafaApp.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Departments");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

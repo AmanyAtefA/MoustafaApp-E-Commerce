@@ -1,10 +1,9 @@
 ﻿using MoustafaApp.Server.Attributes;
 using MoustafaApp.Server.DomainBusiness.CartBusiness;
-using MoustafaApp.Server.DomainBusiness.OrderBusiness;
 using MoustafaApp.Server.Dtos.OrderDtos;
 using MoustafaApp.Server.Service.UserService;
 using MoustafaApp.Server.Validators;
-using StackExchange.Redis;
+
 
 namespace MoustafaApp.Server.Service.OrderService
 {
@@ -15,71 +14,77 @@ namespace MoustafaApp.Server.Service.OrderService
         private readonly CartCalculator _cartCalculator;
         private readonly CartValidator _cartValidator;
         private readonly ICacheService _cache;
+        private readonly IMapper _mapper;
 
         public CheckoutService(
-            IUnitOfWork unitOfWork,
-            ICurrentUserService currentUser,
-            CartCalculator cartCalculator,
-            CartValidator cartValidator,
-            ICacheService cache)
+            IUnitOfWork unitOfWork,ICurrentUserService currentUser,
+            CartCalculator cartCalculator,CartValidator cartValidator,
+            ICacheService cache, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _currentUser = currentUser;
             _cartCalculator = cartCalculator;
             _cartValidator = cartValidator;
             _cache = cache;
+            _mapper = mapper;
         }
 
-        public async Task<int> CheckoutAsync(CheckoutRequest request)
+        public async Task<int> CheckoutAsync(AddressDto dto)
         {
             var userId = _currentUser.UserId;
 
             var cart = await _unitOfWork.Carts.GetActiveCartByUser(userId);
+
             if (cart == null || !cart.CartItems.Any())
                 throw new InvalidOperationException("Cart is empty.");
 
-            // Final Validation
+            // Validate cart
             _cartValidator.Validate(cart);
 
+            // Calculate totals
             var summary = _cartCalculator.Calculate(cart);
 
-            // Create Order
-            var order = new Order(
-                userId,
-                summary.Subtotal,
-                summary.Discount,
-                summary.DeliveryFee,
-                summary.Total,
-                new OrderAddress(
-                    request.FullName,
-                    request.PhoneNumber,
-                    request.City,
-                    request.Street,
-                    request.Notes
-                )
-            );
+            // Create Address
+            var address = _mapper.Map<Address>(dto);
+            address.UserId = userId;
 
-            // Add Order Items Snapshot
+            await _unitOfWork.Addresses.AddAsync(address);
+            await _unitOfWork.SaveChangesAsync();
+
+            // Create Order
+            var order = new Order
+            {
+                UserId = userId,
+                Subtotal = summary.Subtotal,
+                Discount = summary.Discount,
+                DeliveryFee = summary.DeliveryFee,
+                TotalAmount = summary.Total,
+                AddressId = address.AddressId
+            };
+
+            // Create Order Items
             foreach (var item in cart.CartItems)
             {
-                order.AddItem(
-                    item.ProductId,
-                    item.Product.Name,
-                    item.PriceOfUnit,
-                    item.Quantity
-                );
+                order.OrderItems.Add(new OrderItem
+                {
+                    ProductId = item.ProductId,
+                    ProductName = item.Product.Name,
+                    Price = item.PriceOfUnit,
+                    Quantity = item.Quantity
+                });
             }
 
             await _unitOfWork.Orders.AddAsync(order);
 
-            // Close Cart
+            // Close cart
             cart.Status = CartStatusEnum.CheckedOut;
 
             await _unitOfWork.SaveChangesAsync();
 
+            // Clear cache
             await _cache.RemoveAsync($"cart:{userId}");
 
-            return order.Id;
+            return order.OrderId;
         }
     }
 }

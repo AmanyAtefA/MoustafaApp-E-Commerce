@@ -7,45 +7,48 @@ namespace MoustafaApp.Server.DomainBusiness.CartBusiness
     {
         public CartSummary Calculate(Cart cart)
         {
-            
             var subtotal = cart.CartItems
                 .Sum(i => i.Quantity * i.PriceOfUnit);
 
-            decimal discount = 0;
+            decimal userDiscount = 0;
+            decimal couponDiscount = 0;
 
-            // 2️⃣ حساب الخصم
+            // خصم المستخدم
+            if (cart.UserId != null)
+            {
+                userDiscount = subtotal * 0.20m;
+            }
+
+            // خصم الكوبون
             if (cart.Coupon != null &&
                 cart.Coupon.IsActive &&
                 cart.Coupon.ExpiryDate > DateTime.UtcNow)
             {
                 if (cart.Coupon.CouponType == CouponTypeEnum.Percentage)
                 {
-                    discount = subtotal * cart.Coupon.Value;
+                    couponDiscount = subtotal * cart.Coupon.Value / 100m;
                 }
                 else if (cart.Coupon.CouponType == CouponTypeEnum.FixedAmount)
                 {
-                    discount = cart.Coupon.Value;
+                    couponDiscount = cart.Coupon.Value;
                 }
 
-                // 🛑 منع الخصم إنه يكون أكبر من السلة
-                discount = Math.Min(discount, subtotal);
-            }
-            else if (cart.UserId != null)
-            {
-                // خصم 20% للمستخدم المسجل لو مفيش كوبون
-                discount = subtotal * 0.20m;
+                couponDiscount = Math.Min(couponDiscount, subtotal);
             }
 
-            // 3️⃣ حساب نسبة الخصم (لو محتاجة ترجعيها)
+
+            var discount = userDiscount + couponDiscount;
+
+            // منع الخصم أن يتجاوز subtotal
+            discount = Math.Min(discount, subtotal);
+
             decimal discountRate = subtotal == 0
                 ? 0
                 : discount / subtotal;
 
-            // 4️⃣ حساب مصاريف الشحن
             var deliveryFee = subtotal >= 500 ? 0 :
                               cart.UserId != null ? 10 : 15;
 
-            // 5️⃣ حساب الإجمالي
             var total = subtotal - discount + deliveryFee;
 
             return new CartSummary
@@ -53,6 +56,8 @@ namespace MoustafaApp.Server.DomainBusiness.CartBusiness
                 Subtotal = subtotal,
                 DiscountRate = discountRate,
                 Discount = discount,
+                UserDiscount = userDiscount,
+                CouponDiscount = couponDiscount,
                 DeliveryFee = deliveryFee,
                 Total = total
             };
