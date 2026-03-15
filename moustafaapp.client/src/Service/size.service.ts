@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ISizes } from '../IModels/ISizes';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, catchError, of } from 'rxjs';
-import { environment } from '../environments/environment.development';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'

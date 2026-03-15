@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { environment } from '../environments/environment.development';
+import { environment } from '../environments/environment';
 import { IProduct } from '../IModels/Iproduct';
 import { tap, catchError, of, throwError, map } from 'rxjs';
 import { PagedResult } from '../IModels/paged-result';

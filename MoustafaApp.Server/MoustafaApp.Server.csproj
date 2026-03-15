@@ -12,9 +12,6 @@
   <!-- Build Angular قبل Publish -->
 <Target Name="BuildAngular" BeforeTargets="Publish">
 
-  <RemoveDir Directories="$(ProjectDir)wwwroot" Condition="Exists('$(ProjectDir)wwwroot')" />
-  <MakeDir Directories="$(ProjectDir)wwwroot" />
-
   <Exec WorkingDirectory="$(ClientAppDir)" Command="cmd /c npm install" />
 
   <Exec WorkingDirectory="$(ClientAppDir)" Command="cmd /c npm run build -- --configuration production" />
@@ -23,10 +20,12 @@
     <AngularFiles Include="$(ClientAppDir)dist\moustafaapp.client\browser\**\*" />
   </ItemGroup>
 
-  <Copy SourceFiles="@(AngularFiles)" DestinationFiles="@(AngularFiles->'$(ProjectDir)wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+  <Copy SourceFiles="@(AngularFiles)"
+        DestinationFiles="@(AngularFiles->'$(PublishDir)wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
 
 </Target>
-  <ItemGroup>
+
+	<ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />

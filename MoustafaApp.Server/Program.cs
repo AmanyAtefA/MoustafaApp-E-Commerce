@@ -222,7 +222,15 @@ namespace moustafaapp.Server
                 var services = scope.ServiceProvider;
 
                 var context = services.GetRequiredService<AppDbContext>();
-                context.Database.Migrate();
+                try
+                {
+                    context.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Migration Error:");
+                    Console.WriteLine(ex.ToString());
+                }
 
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
@@ -266,6 +274,7 @@ namespace moustafaapp.Server
             // Angular Routing
             app.MapFallbackToFile("index.html");
 
+          
             app.Run();
         }
     }
