@@ -30,10 +30,10 @@ namespace moustafaapp.Server.GenericOfWork
             Coupons = new CouponRepo(_context);
             Orders = new OrderRepo(_context);
             Reviews = new ReviewRepo(_context,_mapper);
+            Brands = new BrandRepo(_context, _mapper);
             CartItems = new BaseRepository<CartItem>(_context);
             ProductImage = new BaseRepository<ProductImage>(_context);
             Users = new BaseRepository<ApplicationUser>(_context);
-            Brands = new BaseRepository<Brand>(_context);
             ProductColors = new BaseRepository<ProductColor>(_context);
             ProductSizes = new BaseRepository<ProductSize>(_context);
             Sizes = new BaseRepository<Size>(_context);
@@ -54,12 +54,12 @@ namespace moustafaapp.Server.GenericOfWork
         public ReviewIRepo Reviews { get; private set; }
         public CouponIRepo Coupons { get; private set; }
         public OrderIRepo Orders { get; private set; }
+        public BrandIRepo Brands { get; private set; }
 
         public IBaseRepository<ProductImage> ProductImage { get; private set; }  
 
         public IBaseRepository <CartItem> CartItems { get; private set; }
         public IBaseRepository <ApplicationUser> Users { get; private set; }
-        public IBaseRepository <Brand> Brands { get; private set; }
         public IBaseRepository <ProductColor> ProductColors { get; private set; }
         public IBaseRepository <ProductSize> ProductSizes { get; private set; }
         public IBaseRepository <Size> Sizes { get; private set; }

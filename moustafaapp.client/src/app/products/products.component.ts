@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProductsService } from '../../Service/products.service';
+import { IProductFilter } from '../../IModels/IProductFilter';
 import { IProduct } from '../../IModels/Iproduct';
-import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -11,24 +12,49 @@ import { Observable } from 'rxjs';
 export class ProductsComponent implements OnInit{
 
 
-  @Input() title: string = 'Products';
-
   @Input() Products: IProduct[] = [];
+  @Input() title: string = '';
 
-    constructor(private _ProductsService: ProductsService) { }
+  Products$ = this._ProductsService.Products$;
+
+  totalPages = 0;
+  totalCount = 0;
+
+  ProductFilter: IProductFilter = {
+    pageNumber: 1,
+    pageSize: 8
+  };
+
+  constructor(private _ProductsService: ProductsService,
+    private route: ActivatedRoute,) { }
 
   ngOnInit(): void {
-   
-    this._ProductsService.loadProducts();
-    console.log(this.Products);
+
+    this.route.queryParams.subscribe(params => {
+
+      this.ProductFilter = {
+        pageNumber: 1,
+        pageSize: 8,
+        departmentId: params['departmentId'],
+        brandId: params['brandId'],
+        search: params['search'],
+        onSale: params['onSale'] === 'true',
+        preset: params['preset']
+      };
+
+      this._ProductsService.loadProducts(this.ProductFilter);
+
+    });
+
   }
 
+  calculatePriceAfterDiscount(price?: number, discount?: number): number {
 
-  calcolatePriceAfterDiscount(price?: number, discount?: number): number {
     if (!price)
       return 0;
 
     return price - (price * (discount ?? 0) / 100);
+
   }
 
-}
+} 

@@ -5,7 +5,7 @@ import { ReviewService } from '../../Service/review.service';
 import { ProductsService } from '../../Service/products.service';
 import { Observable } from 'rxjs';
 import { IProduct } from '../../IModels/Iproduct';
-import { PagedResult } from '../../IModels/paged-result';
+import { PagedResult } from '../../IModels/pagedResult';
 
 @Component({
   selector: 'app-review',

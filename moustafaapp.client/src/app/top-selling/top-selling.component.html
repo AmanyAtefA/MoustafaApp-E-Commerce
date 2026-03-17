@@ -1,6 +1,44 @@
 
 
-<div class=" container ">
+
+<div class=" container">
+  <h1 class="h1Style">
+  </h1>
+</div>
+<ng-container *ngIf="Products$ | async as data">
+
+  <app-products title="TOP SELLNG" [Products]="data.items"></app-products>
+
+
+  <div class="pt-3">
+    <app-pagination *ngIf="showPagination"
+                    [page]="data.pageNumber"
+                    [totalPages]="data.totalPages"
+                    (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </div>
+
+
+  <div class="butDiv">
+    <button class="butstyle"
+            [routerLink]="['/TopSelling']">
+      View All
+    </button>
+  </div>
+
+</ng-container>
+
+<hr class="lineStyle">
+
+
+
+
+
+
+
+
+
+<!--<div class=" container ">
   <p class="h1Style">
     TOP SELLING
   </p>
@@ -38,64 +76,57 @@
       </div>
 
       <div class="price">
-        <p>$145</p>
-        <!--<p class="afterDis">$260</p>
-        <p class="dis">-20%</p>-->
-      </div>
-    </div>
+        <p>$145</p>-->
+<!--<p class="afterDis">$260</p>
+<p class="dis">-20%</p>-->
+<!--</div>
   </div>
+</div>
 
-  <div>
-    <a [routerLink]="['/ProductDetail']">
-      <img class="img-fluid rounded imgArrivals" src="assets/images/imageTop 3.png" />
-    </a>
+<div>
+  <a [routerLink]="['/ProductDetail']">
+    <img class="img-fluid rounded imgArrivals" src="assets/images/imageTop 3.png" />
+  </a>
 
-    <div class="textImg">
-      <p>CHECKERED SHIRT</p>
-      <div class="stars">
-        <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
-      </div>
-
-      <div class="price">
-        <p>$80</p>
-        <!--<p class="afterDis"></p>
-        <p class="dis"></p>-->
-      </div>
+  <div class="textImg">
+    <p>CHECKERED SHIRT</p>
+    <div class="stars">
+      <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
     </div>
+
+    <div class="price">
+      <p>$80</p>-->
+<!--<p class="afterDis"></p>
+<p class="dis"></p>-->
+<!--</div>
   </div>
+</div>
 
-  <div>
-    <a [routerLink]="['/ProductDetail']">
-      <img class="img-fluid rounded imgArrivals" src="assets/images/imageTop 4.png" />
-    </a>
+<div>
+  <a [routerLink]="['/ProductDetail']">
+    <img class="img-fluid rounded imgArrivals" src="assets/images/imageTop 4.png" />
+  </a>
 
-    <div class="textImg">
-      <p>SLEEVE STRIPED T-SHIRT</p>
-      <div class="stars">
-        <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
-      </div>
-
-      <div class="price">
-        <p>$210</p>
-        <!--<p class="afterDis">$160</p>
-        <p class="dis">-30%</p>-->
-      </div>
+  <div class="textImg">
+    <p>SLEEVE STRIPED T-SHIRT</p>
+    <div class="stars">
+      <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
     </div>
+
+    <div class="price">
+      <p>$210</p>-->
+<!--<p class="afterDis">$160</p>
+<p class="dis">-30%</p>-->
+<!--</div>
   </div>
-
-
-
-  <!--<div class="pt-3">
-    <app-pagination *ngIf="showPagination"
-                    [page]="data.page" [totalPages]="data.totalPages"
-                    (pageChange)="onPageChange($event)"></app-pagination>
-  </div>-->
-
-
-
-  <div class="butDiv">
+</div>-->
+<!--<div class="pt-3">
+  <app-pagination *ngIf="showPagination"
+                  [page]="data.page" [totalPages]="data.totalPages"
+                  (pageChange)="onPageChange($event)"></app-pagination>
+</div>-->
+<!--<div class="butDiv">
     <button class="butstyle" [routerLink]="['/TopSelling']">View All</button>
   </div>
 
-</div>
-
+</div>-->

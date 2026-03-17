@@ -2,7 +2,8 @@ import { Component  ,OnInit, Input } from '@angular/core';
 import { ProductsService } from '../../Service/products.service';
 import { Observable } from 'rxjs';
 import { IProduct } from '../../IModels/Iproduct';
-import { PagedResult } from '../../IModels/paged-result';
+import { PagedResult } from '../../IModels/pagedResult';
+import { ProductPreset } from '../../IModels/Enum/ProductPreset';
 
 
 @Component({
@@ -16,26 +17,29 @@ export class TopSellingComponent implements OnInit {
 
   @Input() showPagination = true;
   @Input() pageSize = 8;
-  page = 1;
 
 
-  newArrivals$!: Observable<PagedResult<IProduct>>;
-
+  Products$ = this._ProductsService.TopSelling$;
   constructor(private _ProductsService: ProductsService) { }
 
   ngOnInit(): void {
-    this.load();
+    this.loadProducts();
   }
 
-  load() {
-    this.newArrivals$ =
-      this._ProductsService.loadProductNewArrivals(this.page, this.pageSize);
+  loadProducts() {
+    this._ProductsService.GetProductsWithFilter({
+      pageNumber: 1,
+      pageSize: this.pageSize,
+      preset: ProductPreset.BestSeller
+    }).subscribe();
   }
-
 
   onPageChange(page: number) {
-    this.page = page;
-    this.load();
+    this._ProductsService.GetProductsWithFilter({
+      pageNumber: page,
+      pageSize: this.pageSize,
+      preset: ProductPreset.BestSeller
+    }).subscribe();
   }
 
 

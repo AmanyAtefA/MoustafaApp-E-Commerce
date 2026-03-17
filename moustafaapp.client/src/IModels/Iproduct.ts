@@ -12,7 +12,7 @@ export interface IProduct {
   qty: number;
   photo: string;
   categoryId?: number;
-  categoryName?: ICategory | null;
+  categoryName?: string 
   images: IProductImage[];
   discount?: number;
 
@@ -30,3 +30,19 @@ export interface IProduct {
 }
 
 
+//export interface Product {
+//  productId: number;
+//  name: string;
+//  description?: string;
+
+//  price: number;
+//  oldPrice?: number;
+//  discount?: number;
+//  rating?: number;
+
+//  photo?: string;
+
+//  brandName?: string;
+//  categoryName?: string;
+//  departmentName?: string;
+//}

@@ -6,27 +6,107 @@
     {{title}}
   </h1>
 </div>
-  <div class="imgDiv">
-    <div *ngFor="let Prod of Products">
-      <a [routerLink]="['/ProductDetail', Prod.productId]">
-        <img class="img-fluid rounded imgArrivals" src={{Prod.photo}} />
-      </a>
+<div class="imgDiv">
+  <div *ngFor="let Prod of Products">
+    <a [routerLink]="['/ProductDetail', Prod.productId]">
+      <img class="img-fluid rounded imgArrivals" src={{Prod.photo}} />
+    </a>
 
-      <div class="textImg">
-        <p>{{Prod.name}}</p>
-        <div class="stars">
-          <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
-        </div>
+    <div class="textImg">
+      <p>{{Prod.name}}</p>
+      <div class="stars">
+        <img class="star" src="assets/images/Star.png" *ngFor="let star of [1,2,3,4,5]" />
+      </div>
 
-        <div class="price">
-          <span>${{ calcolatePriceAfterDiscount(Prod.price, Prod.discount) }}</span>
-          <div *ngIf="Prod.discount" class="d-flex gap-2 align-items-center">
-            <span class="afterDis">${{Prod.price}}</span>
-            <span class="dis"> - {{Prod.discount}}%</span>
-          </div>
+      <div class="price">
+        <span>${{ calculatePriceAfterDiscount(Prod.price, Prod.discount) }}</span>
+        <div *ngIf="Prod.discount" class="d-flex gap-2 align-items-center">
+          <span class="afterDis">${{Prod.price}}</span>
+          <span class="dis"> - {{Prod.discount}}%</span>
         </div>
       </div>
     </div>
+  </div>
+
+</div>
+
+
+
+
+
+<!--<h2>{{title}}</h2>
+
+<input type="text"
+       placeholder="Search..."
+       (input)="search($any($event.target).value)" />
+
+<div>
+
+  <button (click)="loadProductPreset(1)">
+    New Arrivals
+  </button>
+
+  <button (click)="loadProductPreset(2)">
+    Top Rated
+  </button>
+
+  <button (click)="loadProductPreset(3)">
+    Best Seller
+  </button>
+
+</div>
+
+<div>
+
+  <button (click)="sortByPrice()">
+    Sort By Price
+  </button>
+
+</div>
+
+<hr>
+
+<div *ngIf="Products.length === 0">
+  No products found
+</div>
+
+<div *ngFor="let product of Products">
+
+  <div>
+
+    <img [src]="product.photo"
+         width="150"
+         height="150" />
+
+    <h3>{{product.name}}</h3>
+
+    <p *ngIf="product.discount">
+      <span style="text-decoration: line-through">
+        {{product.price}}
+      </span>
+
+      {{calculatePriceAfterDiscount(product.price, product.discount)}}
+    </p>
+
+    <p *ngIf="!product.discount">
+      {{product.price}}
+    </p>
+
+    <p>
+      Rating: {{product.rating}}
+    </p>
 
   </div>
 
+  <hr>
+
+</div>
+
+<div *ngIf="totalPages > 1">
+
+  <button *ngFor="let page of [].constructor(totalPages); let i = index"
+          (click)="changePage(i + 1)">
+    {{i + 1}}
+  </button>
+
+</div>-->

@@ -7,7 +7,7 @@ namespace moustafaapp.Server.IRepository
     {
         Task<IEnumerable<ProductDto>> GetAllProductsWithDetails();
         Task<ProductDto?> GetProductByIdWithDetails(int id);
-        Task<PagedResult<ProductDto>> GetProductsAsync(ProductQueryDto query);
+        Task<PagedResult<ProductDto>> GetProductWithFiltersAsync(ProductFilterQueryDto query);
         Task<PagedResult<ProductDto>> GetAllProductsNewArrivalsAsync(int page, int pageSize);
     }
 }

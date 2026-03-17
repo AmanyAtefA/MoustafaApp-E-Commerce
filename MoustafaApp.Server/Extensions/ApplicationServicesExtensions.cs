@@ -32,6 +32,7 @@ namespace MoustafaApp.Server.Extensions
             services.AddScoped<CouponIRepo, CouponRepo>();
             services.AddScoped<ReviewIRepo, ReviewRepo>();
             services.AddScoped<OrderIRepo, OrderRepo>();
+            services.AddScoped<BrandIRepo, BrandRepo>();
 
 
             services.AddScoped<CartCalculator>();

@@ -3,9 +3,9 @@
   <h1 class="h1Style">
   </h1>
 </div>
-<ng-container *ngIf="newArrivals$ | async as data">
+<ng-container *ngIf="Products$ | async as data">
 
-  <app-products title="NEW ARRIVALS" [Products]="data.items" ></app-products>
+  <app-products title="NEW ARRIVALS" [Products]="data.items"></app-products>
 
 
   <div class="pt-3">
@@ -27,3 +27,4 @@
 </ng-container>
 
 <hr class="lineStyle">
+

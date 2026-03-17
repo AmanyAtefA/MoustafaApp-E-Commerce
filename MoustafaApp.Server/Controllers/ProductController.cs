@@ -62,6 +62,23 @@ public class ProductController : ControllerBase
 
 
 
+    [HttpGet("GetProductsWithFilter")]
+    public async Task<IActionResult> GetProductsWithFilter([FromQuery] ProductFilterQueryDto FilterQuery)
+    {
+        var result = await _unitOfWork.Products.GetProductWithFiltersAsync(FilterQuery);
+        return Ok(result);
+    }
+
+    [HttpGet("GetAllProductsNewArrivalsAsync")]
+    public async Task<IActionResult> GetAllProductsNewArrivalsAsync(int page, int pageSize)
+    {
+        var result = await _unitOfWork.Products.GetAllProductsNewArrivalsAsync(page, pageSize);
+        return Ok(result);
+    }
+
+
+
+
     [HttpPost("CreateProduct")]
     public async Task<IActionResult> CreateProduct([FromForm] CreateProductDto dto)
     {
@@ -214,22 +231,6 @@ public class ProductController : ControllerBase
     //    }
 
 
-
-
-    [HttpGet("GetProducts")]
-    public async Task<IActionResult> GetProducts([FromQuery] ProductQueryDto query)
-    {
-        var result = await _unitOfWork.Products.GetProductsAsync(query);
-        return Ok(result);
-    }
-
-    [HttpGet("GetAllProductsNewArrivalsAsync")]
-    public async Task<IActionResult> GetAllProductsNewArrivalsAsync(int page, int pageSize)
-    {
-        var result = await _unitOfWork.Products.GetAllProductsNewArrivalsAsync( page, pageSize);
-        return Ok(result);
-    }
-
-
+  
 
 }

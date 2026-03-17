@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../Service/products.service';
+import { BrandService } from '../../Service/brand.service';
 
 
 @Component({
@@ -11,9 +12,12 @@ import { ProductsService } from '../../Service/products.service';
 export class Home implements OnInit{
 
   
+  Brands$ = this._BrandService.Brands$;
+  constructor(private _ProductsService: ProductsService,
+    private _BrandService: BrandService,) { }
 
-  constructor(private _ProductsService: ProductsService) { }
+
   ngOnInit(): void {
-   
+    this._BrandService.loadBrands();
   }
 }

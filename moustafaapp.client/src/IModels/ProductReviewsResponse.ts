@@ -1,6 +1,6 @@
 import { IReview } from "./IReview";
 import { ReviewStats } from "./ReviewStats";
-import { PagedResult } from "./paged-result";
+import { PagedResult } from "./pagedResult";
 
 
 export interface ProductReviewsResponse {

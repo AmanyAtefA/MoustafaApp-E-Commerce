@@ -27,26 +27,36 @@ export function GeneralInterceptor(request: HttpRequest<any>, next: HttpHandlerF
 
   return next(clonedRequest).pipe(
     catchError((error: HttpErrorResponse) => {
+
+      console.error("SERVER ERROR FULL:", error);
+      console.log("STATUS:", error.status);
+      console.log("ERROR BODY:", error.error);
+      console.log("FULL ERROR:", error);
       let errorMsg = '';
 
       if (error.status === 0) {
         errorMsg = '❌ فشل الاتصال بالسيرفر.';
       }
+
       else if (error.status === 401) {
         errorMsg = '🚫 غير مصرح. من فضلك سجل الدخول.';
         localStorage.removeItem('token');
         router.navigate(['/login']);
       }
+
       else if (error.status === 500) {
-        errorMsg = '⚠️ خطأ داخلي في الخادم. حاول لاحقًا.';
-      }
-      else {
-        errorMsg = error.error?.message || 'حدث خطأ غير متوقع.';
+
+        // 👇 هنا نعرض رسالة السيرفر
+        errorMsg = error.error || 'Internal Server Error';
+
+        console.error("SERVER MESSAGE:", error.error);
       }
 
-      console.error(errorMsg);
+      else {
+        errorMsg = error.error?.message || 'Unexpected Error';
+      }
+
       return throwError(() => new Error(errorMsg));
     })
   );
-
 }

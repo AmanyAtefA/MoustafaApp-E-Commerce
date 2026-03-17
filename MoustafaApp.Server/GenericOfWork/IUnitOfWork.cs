@@ -13,10 +13,10 @@ namespace moustafaapp.Server.GenericOfWork
         ReviewIRepo Reviews { get; }
         CouponIRepo Coupons { get; }
         OrderIRepo Orders { get; }
+        BrandIRepo Brands { get; }
         IBaseRepository<CartItem> CartItems { get;}
         IBaseRepository<ProductImage> ProductImage { get; }
         IBaseRepository<ApplicationUser> Users { get; }
-        IBaseRepository<Brand> Brands { get; }
         IBaseRepository<ProductColor> ProductColors { get; }
         IBaseRepository<ProductSize> ProductSizes { get; }
         IBaseRepository<Size> Sizes { get; }

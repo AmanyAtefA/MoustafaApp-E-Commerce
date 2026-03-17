@@ -4,7 +4,10 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '../environments/environment';
 import { IProduct } from '../IModels/Iproduct';
 import { tap, catchError, of, throwError, map } from 'rxjs';
-import { PagedResult } from '../IModels/paged-result';
+import { IProductFilter } from '../IModels/IProductFilter';
+import { emptyPagedResult } from '../Helper/PaginationEmptyHelper';
+import { PagedResult } from '../IModels/pagedResult';
+import { ProductPreset } from '../IModels/Enum/ProductPreset';
 
 @Injectable({
   providedIn: 'root'
@@ -14,22 +17,31 @@ export class ProductsService {
   constructor(private http: HttpClient) { }
 
 
-  private ProductsSubject = new BehaviorSubject<IProduct[]>([]);
+  private ProductsSubject = new BehaviorSubject<PagedResult<IProduct>>(emptyPagedResult<IProduct>());
   Products$ = this.ProductsSubject.asObservable();
 
+  private NewArrivalsSubject = new BehaviorSubject<PagedResult<IProduct>>(emptyPagedResult<IProduct>());
+  NewArrivals$ = this.NewArrivalsSubject.asObservable();
+
+  private TopSellingSubject = new BehaviorSubject<PagedResult<IProduct>>(emptyPagedResult<IProduct>());
+  TopSelling$ = this.TopSellingSubject.asObservable();
 
   private Page = 1;
   private PageSize = 4;
 
 
-  loadProducts(): void {
-    if (this.ProductsSubject.value.length === 0) {
-      this.refreshProducts().subscribe();
+  loadProducts(filter: IProductFilter): void {
+
+    if (this.ProductsSubject.value.totalCount === 0) {
+
+      this.GetProductsWithFilter(filter).subscribe();
+
     }
   }
 
-  refreshProducts(): Observable<IProduct[]> {
-    return this.http.get<IProduct[]>(environment.baseUrl + "Product/GetAllProductsWithDetails").pipe(
+
+  refreshProducts(): Observable<PagedResult<IProduct>> {
+    return this.http.get<PagedResult<IProduct>>(environment.baseUrl + "Product/GetAllProductsWithDetails").pipe(
       tap(Products => {
         console.log('Loaded Products:', Products);
         this.ProductsSubject.next(Products)
@@ -39,11 +51,50 @@ export class ProductsService {
       catchError((error: HttpErrorResponse) => {
         console.error('Error loading Products:', error);
         alert('Error loading Products');
-        this.ProductsSubject.next([]);
-        return of([]);
+        return of(emptyPagedResult<IProduct>());
       })
     );
   }
+
+
+  GetProductsWithFilter(filter: IProductFilter) {
+
+    let params = new HttpParams();
+
+    Object.entries(filter).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== '') {
+        params = params.append(key, value.toString());
+      }
+    });
+
+    return this.http.get<PagedResult<IProduct>>(environment.baseUrl + 'Product/GetProductsWithFilter', { params }).pipe(
+      tap(products => {
+
+        if (filter.preset === ProductPreset.NewArrivals) {
+          this.NewArrivalsSubject.next(products);
+        }
+
+        else if (filter.preset === ProductPreset.BestSeller) {
+          this.TopSellingSubject.next(products);
+        }
+
+        if (filter.onSale) {
+          params = params.set('onSale', filter.onSale);
+        }
+
+        else {
+          this.ProductsSubject.next(products);
+        }
+      }),
+
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error loading Products:', error);
+        alert('Error loading Products');
+        return of(emptyPagedResult<IProduct>());
+      }
+      ));
+  }
+
 
 
   getAllProductsWithDetails(): Observable<IProduct[]> {
@@ -59,6 +110,8 @@ export class ProductsService {
       ));
   }
 
+
+
   getProductyByIdWithDetails(id: number): Observable<IProduct> {
     return this.http.get<IProduct>(environment.baseUrl + "Product/GetProductyByIdWithDetails/" + id).pipe(
       tap(Product => {
@@ -71,6 +124,8 @@ export class ProductsService {
       }
       ));
   }
+
+
 
 
 
@@ -151,57 +206,6 @@ export class ProductsService {
     )
   }
 
-  
-  
-
-
-
-
-  //// لفلترة البرودكت  ب createdAt Desو Take  8
-
-  //getProductByFilterCreatedAt(limitTake = 8) {
-  //  return this.Products$.pipe(
-  //    map(products =>
-  //      [...products]
-  //        .filter(p => p.createdAt)
-  //        .sort(
-  //          (a, b) =>
-  //            new Date(b.createdAt).getTime() -
-  //            new Date(a.createdAt).getTime()
-  //        )
-  //        .slice(0, limitTake)
-  //    )
-  //  );
-  //}
-
-
-  //// لفلترة البرودكت  ب اوبجيكت {filter?,sort?,limit?}
-
-  //getProductsByGeniricFilterAndSortAndTake(options?: {
-  //  filter?: (p: IProduct) => boolean;
-  //  sort?: (a: IProduct, b: IProduct) => number;
-  //  limit?: number;
-  //}) {
-  //  return this.Products$.pipe(
-  //    map(products => {
-  //      let result = [...products];
-
-  //      if (options?.filter) {
-  //        result = result.filter(options.filter);
-  //      }
-
-  //      if (options?.sort) {
-  //        result = result.sort(options.sort);
-  //      }
-
-  //      if (options?.limit) {
-  //        result = result.slice(0, options.limit);
-  //      }
-
-  //      return result;
-  //    })
-  //  );
-  //}
 
 
 }

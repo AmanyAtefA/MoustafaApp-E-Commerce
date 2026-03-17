@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MoustafaApp.Server.Dtos.ProductDtos;
+using Nest;
 
 namespace moustafaapp.Server.Repository
 {
@@ -33,8 +34,7 @@ namespace moustafaapp.Server.Repository
 
 
 
-
-        private void ValidateQuery(ProductQueryDto dto)
+        private void ValidateQuery(ProductFilterQueryDto dto)
         {
             if (dto.PageNumber <= 0)
                 dto.PageNumber = 1;
@@ -51,32 +51,76 @@ namespace moustafaapp.Server.Repository
 
 
 
-        private IQueryable<Product> ApplyPreset(
-             IQueryable<Product> query,ProductQueryDto dto)
+        private IQueryable<Product> ApplySearch(
+           IQueryable<Product> query, ProductFilterQueryDto dto)
+
         {
-            return dto.Preset switch
+            if (!string.IsNullOrWhiteSpace(dto.Search))
             {
-                ProductPreset.NewArrivals =>
-                    query.Where(p => p.CreatedAt >= DateTime.UtcNow.AddDays(-30))
-                         .OrderByDescending(p => p.CreatedAt),
+                var search = dto.Search.Trim().ToLower();
 
-                ProductPreset.TopRated =>
-                     query.Where(p => p.Reviews.Any())
-                    .OrderByDescending(p => p.Reviews.Any()
-                     ? p.Reviews.Average(r => r.Rating) : 0),
+                query = query.Where(p =>
+                    p.Name.ToLower().Contains(search) ||
+                     (p.Category != null &&
+                      p.Category.CategoryName.ToLower().Contains(search)) ||
 
-                ProductPreset.BestSeller =>
-                    query.OrderByDescending(p => p.Rating),
+                     (p.Department != null &&
+                      p.Department.DepartmentName.ToLower().Contains(search)) ||
 
-                _ => query
-            };
+                     (p.Brand != null &&
+                      p.Brand.BrandName.ToLower().Contains(search)) ||
+
+                    p.Colors.Any(c => c.ColorName.ToLower().Contains(search))||
+
+                    p.Sizes.Any(s => s.Size != null &&
+                    s.Size.SizeName.ToLower().Contains(search))
+                );                
+            }
+
+            return query;
+        }
+
+
+        private IQueryable<Product> ApplyPreset(
+                  IQueryable<Product> query,ProductFilterQueryDto dto)
+        {
+            switch (dto.Preset)
+            {
+                default:
+                case ProductPreset.NewArrivals:
+                    query = query.OrderByDescending(p => p.CreatedAt);
+                    break;
+
+                case ProductPreset.TopRated:
+                    query = query.OrderByDescending(p => p.Rating);
+                    break;
+
+                //case ProductPreset.BestSeller:
+                //    query = query.OrderByDescending(p => p.CartItem.Count);
+                //    break;
+
+                case ProductPreset.BestSeller:
+                    query = query.OrderBy(p => p.CreatedAt);
+                    break;
+            }
+
+            return query;
         }
 
 
 
-        private IQueryable<Product> ApplyFilters(
-            IQueryable<Product> query, ProductQueryDto dto)
+        private IQueryable<Product> ApplyFiltersById(
+            IQueryable<Product> query, ProductFilterQueryDto dto)
         {
+            if (dto.BrandId.HasValue)
+                query = query.Where(p => p.BrandId == dto.BrandId);
+
+            if (dto.CategoryId.HasValue)
+                query = query.Where(p => p.CategoryId == dto.CategoryId);
+
+            if (dto.DepartmentId.HasValue)
+                query = query.Where(p => p.DepartmentId == dto.DepartmentId);
+
             if (dto.SizeId.HasValue)
                 query = query.Where(p =>
                     p.Sizes.Any(s => s.SizeId == dto.SizeId));
@@ -91,13 +135,18 @@ namespace moustafaapp.Server.Repository
             if (dto.MaxPrice.HasValue)
                 query = query.Where(p => p.Price <= dto.MaxPrice.Value);
 
+            if (dto.OnSale == true)
+            {
+                query = query.Where(p => p.Discount > 0);
+            }
             return query;
         }
 
 
 
+
         private IQueryable<Product> ApplySorting(
-            IQueryable<Product> query, ProductQueryDto dto)
+            IQueryable<Product> query, ProductFilterQueryDto dto)
 
         {
             if (dto.Preset != ProductPreset.None)
@@ -111,12 +160,13 @@ namespace moustafaapp.Server.Repository
 
                 _ => query.OrderByDescending(p => p.CreatedAt)
             };
+
         }
 
 
 
         private async Task<PagedResult<ProductDto>> ApplyPagination(
-          IQueryable<Product> query, ProductQueryDto dto)
+          IQueryable<Product> query, ProductFilterQueryDto dto)
 
         {
             var totalCount = await query.CountAsync();
@@ -140,14 +190,15 @@ namespace moustafaapp.Server.Repository
 
 
 
-        public async Task<PagedResult<ProductDto>> GetProductsAsync(ProductQueryDto dto)
+        public async Task<PagedResult<ProductDto>> GetProductWithFiltersAsync(ProductFilterQueryDto dto)
         {
             ValidateQuery(dto);
 
-            IQueryable<Product> query = _context.Products.AsQueryable();
+            IQueryable<Product> query = _context.Products.AsNoTracking().AsQueryable();
 
+            query = ApplySearch(query, dto);
+            query = ApplyFiltersById(query, dto);
             query = ApplyPreset(query, dto);
-            query = ApplyFilters(query, dto);
             query = ApplySorting(query, dto);
 
             return await ApplyPagination(query, dto);

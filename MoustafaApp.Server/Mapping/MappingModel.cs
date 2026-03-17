@@ -42,32 +42,6 @@ namespace moustafaapp.Server.Mapping
             CreateMap<CreateCategoryDto, Category>()
              .ForMember(dest => dest.CategoryId, opt => opt.Ignore());
 
-
-            CreateMap<Product, ProductDto>()
-                .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.Brand.BrandName))
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
-                .ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department.DepartmentName))
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Images))
-                .ForMember(dest => dest.Colors, opt => opt.MapFrom(src => src.Colors))
-               .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.Sizes))
-               .ForMember(dest => dest.Reviews, opt => opt.MapFrom(src => src.Reviews));
-
-
-            CreateMap<UpdateProductDto, Product>()
-              .ForAllMembers(opt => opt.Condition((src, dest, value) => value != null));
-            
-
-            CreateMap<ProductImage, ProductImageDto>().ReverseMap();
-
-            CreateMap<ProductColor, ProductColorDto>().ReverseMap();
-
-
-            CreateMap<ProductSize, ProductSizeDto>()
-                 .ForMember(dest => dest.SizeId, opt => opt.MapFrom(src => src.Size.SizeId))
-                 .ForMember(dest => dest.SizeName, opt => opt.MapFrom(src => src.Size.SizeName));
-
-
-
            
 
 

@@ -3,5 +3,5 @@ export interface IDepartment {
   departmentId: number;
   departmentName: string;
 
-  Product: IProduct[];
+  product: IProduct[];
 }
