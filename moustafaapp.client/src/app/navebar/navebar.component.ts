@@ -56,6 +56,13 @@ export class NavebarComponent implements OnInit {
     this.menuOpen = !this.menuOpen;
   }
 
+  closeMobileMenu() {
+    if (window.innerWidth <= 768) {
+      this.menuOpen = false;
+      this.activeMenu = null; // يقفل shop / brand كمان
+    }
+  }
+
   logout() {
     this._RegisterService.Logout();
   }

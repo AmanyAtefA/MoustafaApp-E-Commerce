@@ -60,7 +60,7 @@
 
   </ul>
 
-  <div id="mobileMenu" class="mobileMenu" [class.active]="menuOpen">
+  <div id="mobileMenu" class="mobileMenu" [class.active]="menuOpen" (mouseleave)="closeMobileMenu()">
     <ul class="list-unstyled m-0">
 
       <!-- Shop dropdown -->
@@ -123,7 +123,7 @@
   </div>
 
   <!-- RIGHT: CART + USER -->
-  <div class="nav-right">
+  <div class="nav-right ">
 
     <a routerLink="/Cart"><i class="bi bi-cart"></i></a>
 
