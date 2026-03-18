@@ -75,7 +75,7 @@
 
 
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (max-width: 1024px) {
 
   .textInLogo {
     background-image: none;
@@ -84,20 +84,26 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-   
+    position: relative;
+    z-index: 2;
+    height: auto;
     padding: 40px 16px;
     min-height: auto;
+    width: 100%;
   }
 
   .mobileOnly {
     display: block;
     width: 100%;
-    margin:0;
+    margin: 0;
+    position: static;
+    height: auto;
+    width: 100%;
   }
 
 
   .h1Style {
-    padding: 20px 10px 0px 20px ;
+    padding: 20px 10px 0px 20px;
     font-size: 36px;
     font-weight: 950;
     line-height: 38px;
@@ -133,21 +139,21 @@
 
     .boxItems::after {
       content: "";
-      width: 2px; 
+      width: 2px;
       height: 50%;
-      background: #ccc; 
+      background: #ccc;
       position: absolute;
-      top: 0%; 
-      left: 50%; 
+      top: 0%;
+      left: 50%;
       transform: translateX(-50%);
     }
 
-    
+
     .boxItems .itemNumber:nth-child(5) {
       grid-column: 1 / -1;
     }
 
- 
+
   .line {
     display: none !important;
   }
@@ -158,7 +164,7 @@
 
   .textBox {
     font-size: 12px;
-    
   }
+
 
 }

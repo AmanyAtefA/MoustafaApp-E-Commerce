@@ -40,10 +40,12 @@ export class NavebarComponent implements OnInit {
 
   // ✅ Desktop
   openMenu(menu: 'shop' | 'brand') {
+    if (window.innerWidth <= 768) return;
     this.activeMenu = menu;
   }
 
   closeMenu() {
+    if (window.innerWidth <= 768) return;
     this.activeMenu = null;
   }
 
@@ -95,13 +97,17 @@ export class NavebarComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
+
+    
+    if (window.innerWidth > 768) return;
+
     const target = event.target as HTMLElement;
 
-    // لو الكليك جوه النافبار → متقفليش
     if (target.closest('.navStyle')) return;
 
     this.activeMenu = null;
   }
+
   @HostListener('window:resize')
   onResize() {
     if (window.innerWidth >= 768) {

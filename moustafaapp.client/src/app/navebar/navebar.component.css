@@ -13,7 +13,7 @@
 
 .navStyle {
   flex-wrap: nowrap;
-  overflow: hidden;
+  overflow: visible;
   max-width: auto;
   margin: 0;
   display: flex;
@@ -55,7 +55,7 @@
   margin: 0;
   padding: 0;
   flex: 1 1 auto;
-  overflow: hidden;
+  overflow: visible;
   white-space: nowrap;
   flex-wrap: nowrap;
   min-width: 0;
@@ -460,4 +460,9 @@ flex-shrink: 1;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  .dropdown:hover .submenu {
+    display: block;
+  }
+
 }
