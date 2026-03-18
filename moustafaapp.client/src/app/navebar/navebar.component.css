@@ -12,6 +12,8 @@
 ========================= */
 
 .navStyle {
+  flex-wrap: nowrap;
+  overflow: hidden;
   max-width: auto;
   margin: 0;
   display: flex;
@@ -52,7 +54,8 @@
   gap: 22px;
   margin: 0;
   padding: 0;
-  flex: 1;
+  flex: 1 1 auto;
+  overflow: hidden;
   white-space: nowrap;
   flex-wrap: nowrap;
   min-width: 0;
@@ -83,7 +86,9 @@ flex-shrink: 1;
 ========================= */
 
 .nav-search {
-  flex: 0 0 380px;
+  flex: 1 1 300px;
+  max-width: 400px;
+  min-width: 120px;
   display: flex;
   align-items: center;
   background: #f0f0f0;
@@ -113,6 +118,7 @@ flex-shrink: 1;
   align-items: center;
   gap: 25px;
   margin-left: auto;
+  flex: 0 0 auto;
 }
 
   .nav-right i {
