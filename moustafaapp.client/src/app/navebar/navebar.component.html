@@ -11,16 +11,20 @@
 
   <!-- CENTER: MENU -->
   <ul class="nav-menu d-none d-md-flex">
+
+    <!-- Shop -->
     <li class="dropdown"
-        (mouseenter)="showMenu()"
-        (mouseleave)="hideMenu()"
-        [class.open]="shopOpenDesktop">
+        (mouseenter)="openMenu('shop')"
+        (mouseleave)="closeMenu()"
+        (click)="$event.stopPropagation()"
+        [class.open]="activeMenu === 'shop'">
 
       <a class="nav-link">Shop</a>
 
-      <ul class="submenu" [class.open]="shopOpenDesktop">
+      <ul class="submenu" [class.open]="activeMenu === 'shop'">
         <li *ngFor="let dept of Departments$ | async">
-          <a (click)="updateFilter({ departmentId: dept.departmentId })" [routerLink]="['/products']">
+          <a (click)="updateFilter({ departmentId: dept.departmentId })"
+             [routerLink]="['/Products']">
             {{dept.departmentName}}
           </a>
         </li>
@@ -31,44 +35,52 @@
       <a class="nav-link" (click)="updateFilter({ onSale: true })">On Sale</a>
     </li>
 
-    <li><a class="nav-link" (click)="updateFilter({ preset: 1 })">New Arrivals</a></li>
+    <li>
+      <a class="nav-link" (click)="updateFilter({ preset: 1 })">New Arrivals</a>
+    </li>
 
+    <!-- Brand -->
     <li class="dropdown"
-        (mouseenter)="showBrandMenu()"
-        (mouseleave)="hideBrandMenu()"
-        [class.open]="brandOpenDesktop">
+        (mouseenter)="openMenu('brand')"
+        (mouseleave)="closeMenu()"
+        (click)="$event.stopPropagation()"
+        [class.open]="activeMenu === 'brand'">
 
       <a class="nav-link">Brand</a>
 
-      <ul class="submenu" [class.open]="brandOpenDesktop">
+      <ul class="submenu" [class.open]="activeMenu === 'brand'">
         <li *ngFor="let brand of Brands$ | async">
-          <a (click)="updateFilter({ brandId: brand.brandId })" [routerLink]="['/products']">
-
+          <a (click)="updateFilter({ brandId: brand.brandId })"
+             [routerLink]="['/Products']">
             {{brand.brandName}}
           </a>
         </li>
       </ul>
     </li>
-</ul>
 
+  </ul>
 
   <div id="mobileMenu" class="mobileMenu" [class.active]="menuOpen">
     <ul class="list-unstyled m-0">
 
       <!-- Shop dropdown -->
+      <!-- Shop -->
       <li class="mobile-dropdown">
 
         <div class="mobile-dropdown-header"
-             (click)="toggleShopMobile()">
+             (click)="toggleMenuMobile('shop')">
           <span>Shop</span>
           <i class="bi bi-chevron-down dropdown-arrow"
-             [class.rotate]="shopOpenMobile"></i>
+             [class.rotate]="activeMenu === 'shop'"></i>
         </div>
 
         <ul class="submenu"
-            [class.open]="shopOpenMobile">
+            [class.open]="activeMenu === 'shop'">
           <li *ngFor="let dept of Departments$ | async">
-            <a (click)="updateFilter({ departmentId: dept.departmentId })" [routerLink]="['/products']">{{dept.departmentName}}</a>
+            <a (click)="updateFilter({ departmentId: dept.departmentId })"
+               [routerLink]="['/products']">
+              {{dept.departmentName}}
+            </a>
           </li>
         </ul>
 
@@ -76,24 +88,29 @@
 
       <li><a (click)="updateFilter({ onSale: true })">On Sale</a></li>
       <li><a (click)="updateFilter({ preset: 1 })">New Arrivals</a></li>
+
+
+      <!-- Brand -->
       <li class="mobile-dropdown">
 
         <div class="mobile-dropdown-header"
-             (click)="toggleBrandMobile()">
-
-          <i class="bi bi-chevron-down"
-             [class.rotate]="brandOpenMobile"></i>
+             (click)="toggleMenuMobile('brand')">
+          <span>Brand</span>
+          <i class="bi bi-chevron-down dropdown-arrow"
+             [class.rotate]="activeMenu === 'brand'"></i>
         </div>
 
         <ul class="submenu"
-            [class.open]="brandOpenMobile">
+            [class.open]="activeMenu === 'brand'">
           <li *ngFor="let brand of Brands$ | async">
-            <a (click)="updateFilter({ brandId: brand.brandId })" [routerLink]="['/products']">{{brand.brandName}}</a>
+            <a (click)="updateFilter({ brandId: brand.brandId })"
+               [routerLink]="['/products']">
+              {{brand.brandName}}
+            </a>
           </li>
         </ul>
 
       </li>
-
     </ul>
   </div>
 

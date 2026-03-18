@@ -218,6 +218,15 @@ flex-shrink: 1;
       background: #f3f3f3;
     }
 
+
+.dropdown::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 12px; /* دي المسافة اللي كانت بتقفل المنيو */
+}
 .rotate {
   transform: rotate(180deg);
   transition: .3s;

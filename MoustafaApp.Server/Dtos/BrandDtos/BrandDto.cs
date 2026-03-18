@@ -7,6 +7,6 @@ namespace MoustafaApp.Server.Dtos.BrandDtos
         public int BrandId { get; set; }
         public string BrandName { get; set; } = null!;
         public string? PhotoBrand { get; set; }
-        public List<ProductDto> Images { get; set; } = new List<ProductDto>();
+        public List<ProductDto> Products { get; set; } = new List<ProductDto>();
     }
 }

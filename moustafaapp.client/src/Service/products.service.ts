@@ -32,11 +32,9 @@ export class ProductsService {
 
   loadProducts(filter: IProductFilter): void {
 
-    if (this.ProductsSubject.value.totalCount === 0) {
-
       this.GetProductsWithFilter(filter).subscribe();
 
-    }
+    
   }
 
 
@@ -70,21 +68,17 @@ export class ProductsService {
     return this.http.get<PagedResult<IProduct>>(environment.baseUrl + 'Product/GetProductsWithFilter', { params }).pipe(
       tap(products => {
 
-        if (filter.preset === ProductPreset.NewArrivals) {
-          this.NewArrivalsSubject.next(products);
+        switch (filter.preset) {
+          case ProductPreset.NewArrivals:
+            this.NewArrivalsSubject.next(products);
+            break;
+
+          case ProductPreset.BestSeller:
+            this.TopSellingSubject.next(products);
+            break;
         }
 
-        else if (filter.preset === ProductPreset.BestSeller) {
-          this.TopSellingSubject.next(products);
-        }
-
-        if (filter.onSale) {
-          params = params.set('onSale', filter.onSale);
-        }
-
-        else {
-          this.ProductsSubject.next(products);
-        }
+        this.ProductsSubject.next(products);
       }),
 
       catchError((error: HttpErrorResponse) => {

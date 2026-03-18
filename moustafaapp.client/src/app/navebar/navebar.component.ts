@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { IDepartment } from '../../IModels/IDepartment';
 import { Observable } from 'rxjs';
 import { DepartmentsService } from '../../Service/departments.service';
@@ -16,13 +16,9 @@ export class NavebarComponent implements OnInit {
 
   menuOpen = false;
   isDropdownOpen = false;
-  shopOpenDesktop = false;
-  shopOpenMobile = false;
 
-  brandOpenDesktop = false;
-  brandOpenMobile = false;
-
-  timeout: any;
+  // ✅ state واحدة بدل كذا variable
+  activeMenu: 'shop' | 'brand' | null = null;
 
   Departments$!: Observable<IDepartment[]>;
   Brands$ = this._BrandService.Brands$;
@@ -35,56 +31,31 @@ export class NavebarComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute) { }
 
-
   ngOnInit(): void {
     this.Departments$ = this._DepartmentsService.Departments$;
     this.currentUser$ = this._RegisterService.currentUserObservable$;
     this._DepartmentsService.loadDepartments();
     this._BrandService.loadBrands();
-    console.log(this.currentUser$)
   }
 
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
+  // ✅ Desktop
+  openMenu(menu: 'shop' | 'brand') {
+    this.activeMenu = menu;
   }
 
-  showMenu() {
-    clearTimeout(this.timeout);
-    this.shopOpenDesktop = true;
+  closeMenu() {
+    this.activeMenu = null;
   }
 
-  hideMenu() {
-    this.timeout = setTimeout(() => {
-      this.shopOpenDesktop = false;
-    }, 150);
-  }
-
-  showBrandMenu() {
-    clearTimeout(this.timeout);
-    this.brandOpenDesktop = true;
-  }
-
-  hideBrandMenu() {
-    this.timeout = setTimeout(() => {
-      this.brandOpenDesktop = false;
-    }, 150);
+  // ✅ Mobile
+  toggleMenuMobile(menu: 'shop' | 'brand') {
+    this.activeMenu = this.activeMenu === menu ? null : menu;
   }
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
 
-  toggleShopMobile() {
-    this.shopOpenMobile = !this.shopOpenMobile;
-  }
-
-  toggleShopDesktop() {
-    this.shopOpenDesktop = !this.shopOpenDesktop;
-  }
-
-  toggleBrandMobile() {
-    this.brandOpenMobile = !this.brandOpenMobile;
-  }
   logout() {
     this._RegisterService.Logout();
   }
@@ -98,22 +69,39 @@ export class NavebarComponent implements OnInit {
 
   //}
 
-  searchProducts(text: string) {
 
+
+  searchProducts(text: string) {
     this.updateFilter({ search: text });
   }
 
   updateFilter(filter: any) {
-
     const currentParams = this.route.snapshot.queryParams;
 
     this.router.navigate(['/Products'], {
       queryParams: {
-        ...currentParams,
+     
         ...filter
       }
     });
-
   }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event) {
+    const target = event.target as HTMLElement;
+
+    // لو الكليك جوه النافبار → متقفليش
+    if (target.closest('.navStyle')) return;
+
+    this.activeMenu = null;
+  }
+  @HostListener('window:resize')
+  onResize() {
+    if (window.innerWidth >= 768) {
+      this.menuOpen = false;  
+      this.activeMenu = null;  
+    }
+  }
+
 
 }

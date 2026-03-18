@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProductsService } from '../../Service/products.service';
 import { IProductFilter } from '../../IModels/IProductFilter';
-import { IProduct } from '../../IModels/Iproduct';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -12,8 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ProductsComponent implements OnInit{
 
 
-  @Input() Products: IProduct[] = [];
-  @Input() title: string = '';
+  @Input() title: string = 'PRODUCTS';
 
   Products$ = this._ProductsService.Products$;
 
@@ -35,13 +33,13 @@ export class ProductsComponent implements OnInit{
       this.ProductFilter = {
         pageNumber: 1,
         pageSize: 8,
-        departmentId: params['departmentId'],
-        brandId: params['brandId'],
+        departmentId: params['departmentId'] ? +params['departmentId'] : undefined,
+        brandId: params['brandId'] ? +params['brandId'] : undefined,
         search: params['search'],
         onSale: params['onSale'] === 'true',
-        preset: params['preset']
+        preset: params['preset'] ? +params['preset'] : undefined
       };
-
+      console.log(this.ProductFilter);
       this._ProductsService.loadProducts(this.ProductFilter);
 
     });
