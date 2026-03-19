@@ -2,13 +2,12 @@
 {
     public class CartValidator
     {
-        // يتنادي في كل عمليات الكارت
+       
         public void Validate(Cart cart)
         {
             ValidateQuantity(cart);
         }
 
-        // خاص بمرحلة الـ Checkout فقط
         public void ValidateForCheckout(Cart cart)
         {
             if (!cart.CartItems.Any())

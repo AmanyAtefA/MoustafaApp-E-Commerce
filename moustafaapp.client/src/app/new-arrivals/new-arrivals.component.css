@@ -6,7 +6,7 @@
   display: flex;
   font-family: "Integral CF", sans-serif;
   font-weight: 800;
-  margin-top: 25px;
+  margin-top: 60px;
   margin-bottom: 50px;
   font-size: 48px;
   line-height: 100%;
@@ -39,4 +39,11 @@
   border: none; 
   border-top: 1px solid #999; 
   margin: 15px 0; 
+}
+.imgDiv {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 15px;
+  padding: 0 50px;
 }

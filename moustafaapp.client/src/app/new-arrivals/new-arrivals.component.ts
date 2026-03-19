@@ -1,9 +1,10 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { ProductsService } from '../../Service/products.service';
 import { Observable } from 'rxjs';
 import { IProduct } from '../../IModels/Iproduct';
 import { PagedResult } from '../../IModels/pagedResult';
 import { ProductPreset } from '../../IModels/Enum/ProductPreset';
+import { IProductFilter } from '../../IModels/IProductFilter';
 
 
 
@@ -12,13 +13,17 @@ import { ProductPreset } from '../../IModels/Enum/ProductPreset';
   templateUrl: './new-arrivals.component.html',
   styleUrl: './new-arrivals.component.css'
 })
-export class NewArrivalsComponent implements OnInit{
+export class NewArrivalsComponent implements OnInit, OnChanges {
 
 
+  title = "NEW ARRIVALS";
+  
+  @Input() showButtonInHome : boolean = false;
   @Input() showPagination = true;
   @Input()pageSize = 8;
 
-  
+  @Input() inputFilter?: IProductFilter;
+
   Products$ = this._ProductsService.NewArrivals$;
   constructor(private _ProductsService: ProductsService) { }
 
@@ -26,20 +31,32 @@ export class NewArrivalsComponent implements OnInit{
     this.loadProductNewArrivals();
   }
 
+  ngOnChanges() {
+    this.loadProductNewArrivals();
+  }
+
   loadProductNewArrivals() {
-    this._ProductsService.GetProductsWithFilter({
+
+    const filter: IProductFilter = {
       pageNumber: 1,
-      pageSize: this.pageSize,
-      preset: ProductPreset.NewArrivals
-    }).subscribe();
+      pageSize: 8,
+      preset: ProductPreset.NewArrivals,
+      ...this.inputFilter
+    };
+
+    this._ProductsService.GetProductsWithFilter(filter).subscribe();
   }
 
   onPageChange(page: number) {
-    this._ProductsService.GetProductsWithFilter({
+
+    const filter: IProductFilter = {
       pageNumber: page,
-      pageSize: this.pageSize,
-      preset: ProductPreset.NewArrivals
-    }).subscribe();
+      pageSize: 8,
+      preset: ProductPreset.NewArrivals,
+      ...this.inputFilter
+    };
+
+    this._ProductsService.GetProductsWithFilter(filter).subscribe();
   }
   
 }

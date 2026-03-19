@@ -11,13 +11,11 @@ namespace MoustafaApp.Server.Service.OrderService
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-
         public OrderService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUser)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _currentUser = currentUser;
-           
         }
 
 
@@ -34,10 +32,13 @@ namespace MoustafaApp.Server.Service.OrderService
             return _mapper.Map<OrderDto>(order);
         }
 
-        public async Task<OrderDto?> GetOrderByUserId(string UserId)
+
+        public async Task<OrderDto?> GetOrderByUserId()
         {
-            var userId = _currentUser.UserId;
-            var order = await _unitOfWork.Orders.GetOrderByUserId(userId);
+            if (string.IsNullOrEmpty(UserId))
+                throw new UnauthorizedAccessException("Login required");
+
+            var order = await _unitOfWork.Orders.GetOrderByUserId(UserId);
 
             if (order == null)
                 return null;

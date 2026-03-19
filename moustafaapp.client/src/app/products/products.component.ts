@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProductsService } from '../../Service/products.service';
 import { IProductFilter } from '../../IModels/IProductFilter';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -12,6 +12,7 @@ export class ProductsComponent implements OnInit{
 
 
   @Input() title: string = 'PRODUCTS';
+  @Input() showPagination = true;
 
   Products$ = this._ProductsService.Products$;
 
@@ -24,12 +25,13 @@ export class ProductsComponent implements OnInit{
   };
 
   constructor(private _ProductsService: ProductsService,
-    private route: ActivatedRoute,) { }
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
 
     this.route.queryParams.subscribe(params => {
-
+      console.log('QUERY CHANGED:', params); 
       this.ProductFilter = {
         pageNumber: 1,
         pageSize: 8,
@@ -37,7 +39,7 @@ export class ProductsComponent implements OnInit{
         brandId: params['brandId'] ? +params['brandId'] : undefined,
         search: params['search'],
         onSale: params['onSale'] === 'true',
-        preset: params['preset'] ? +params['preset'] : undefined
+        preset: params['preset'] !== undefined ? +params['preset'] : undefined
       };
       console.log(this.ProductFilter);
       this._ProductsService.loadProducts(this.ProductFilter);
@@ -55,4 +57,20 @@ export class ProductsComponent implements OnInit{
 
   }
 
+  onPageChange(page: number) {
+    this.ProductFilter.pageNumber = page;
+    this._ProductsService.loadProducts(this.ProductFilter);
+  }
+
+
+  //onPageChange(page: number) {
+  //  this.ProductFilter.pageNumber = page;
+
+  //  this.router.navigate([], {
+  //    queryParams: {
+  //      ...this.ProductFilter
+  //    },
+  //    queryParamsHandling: 'merge'
+  //  });
+  //}
 } 

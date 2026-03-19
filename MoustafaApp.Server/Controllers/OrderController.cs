@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using MoustafaApp.Server.Service.OrderService;
 
 namespace MoustafaApp.Server.Controllers
@@ -28,10 +29,10 @@ namespace MoustafaApp.Server.Controllers
         }
 
 
-        [HttpGet("GetOrderByUserId/{UserId}")]
-        public async Task<IActionResult> GetOrderByUserId(string UserId)
+        [HttpGet("GetOrderByUserId")]
+        public async Task<IActionResult> GetOrderByUserId()
         {
-            var order = await _OrderService.GetOrderByUserId(UserId);
+            var order = await _OrderService.GetOrderByUserId();
 
             if (order == null)
                 return NotFound();
@@ -41,3 +42,5 @@ namespace MoustafaApp.Server.Controllers
 
     }
 }
+
+     

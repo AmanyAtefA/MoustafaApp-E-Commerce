@@ -1,9 +1,10 @@
-import { Component  ,OnInit, Input } from '@angular/core';
+import { Component  ,OnInit, Input, OnChanges } from '@angular/core';
 import { ProductsService } from '../../Service/products.service';
 import { Observable } from 'rxjs';
 import { IProduct } from '../../IModels/Iproduct';
 import { PagedResult } from '../../IModels/pagedResult';
 import { ProductPreset } from '../../IModels/Enum/ProductPreset';
+import { IProductFilter } from '../../IModels/IProductFilter';
 
 
 @Component({
@@ -11,13 +12,15 @@ import { ProductPreset } from '../../IModels/Enum/ProductPreset';
   templateUrl: './top-selling.component.html',
   styleUrl: './top-selling.component.css'
 })
-export class TopSellingComponent implements OnInit {
+export class TopSellingComponent implements OnInit, OnChanges {
 
 
-
+  title :string = "TOP SELLNG";
   @Input() showPagination = true;
   @Input() pageSize = 8;
 
+  @Input() inputFilter?: IProductFilter;
+  @Input() showButtonInHome: boolean = false;
 
   Products$ = this._ProductsService.TopSelling$;
   constructor(private _ProductsService: ProductsService) { }
@@ -26,21 +29,33 @@ export class TopSellingComponent implements OnInit {
     this.loadProducts();
   }
 
+  ngOnChanges() {
+    this.loadProducts();
+  }
+
   loadProducts() {
-    this._ProductsService.GetProductsWithFilter({
+    const filter: IProductFilter = {
       pageNumber: 1,
-      pageSize: this.pageSize,
-      preset: ProductPreset.BestSeller
-    }).subscribe();
+      pageSize: 8,
+      preset: ProductPreset.BestSeller,
+      ...this.inputFilter
+    };
+
+    this._ProductsService.GetProductsWithFilter(filter).subscribe();
   }
 
   onPageChange(page: number) {
-    this._ProductsService.GetProductsWithFilter({
+
+    const filter: IProductFilter = {
       pageNumber: page,
-      pageSize: this.pageSize,
-      preset: ProductPreset.BestSeller
-    }).subscribe();
+      pageSize: 8,
+      preset: ProductPreset.BestSeller,
+      ...this.inputFilter
+    };
+
+    this._ProductsService.GetProductsWithFilter(filter).subscribe();
   }
+
 
 
 }

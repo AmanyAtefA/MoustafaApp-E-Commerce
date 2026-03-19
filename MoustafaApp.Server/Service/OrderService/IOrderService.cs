@@ -5,7 +5,8 @@ namespace MoustafaApp.Server.Service.OrderService
     public interface IOrderService
     {
        Task<OrderDto?> GetOrderById(int orderId);
-       Task<OrderDto?> GetOrderByUserId(string UserId);
+        Task<OrderDto?> GetOrderByUserId();
+
 
     }
 }

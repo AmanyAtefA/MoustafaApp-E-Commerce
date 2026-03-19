@@ -4,6 +4,6 @@
     {
 
         Task<Order?> GetOrderById(int orderId);
-        Task<Order?> GetOrderByUserId(string UserId);
+        Task<Order?> GetOrderByUserId(string userId);
     }
 }

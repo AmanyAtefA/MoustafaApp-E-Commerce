@@ -1,0 +1,25 @@
+<div class="product-card">
+  <a [routerLink]="['/ProductDetail', product.productId]">
+    <img class="imgArrivals" [src]="product.photo" />
+  </a>
+
+  <div class="textImg">
+    <p>{{product.name}}</p>
+
+    <div class="stars">
+      <img class="star" src="assets/images/Star.png"
+           *ngFor="let star of [1,2,3,4,5]" />
+    </div>
+
+    <div class="price">
+      <span>
+        ${{ product.price - (product.price * (product.discount ?? 0) / 100) }}
+      </span>
+
+      <div *ngIf="product.discount">
+        <span class="afterDis">${{product.price}}</span>
+        <span class="dis"> - {{product.discount}}%</span>
+      </div>
+    </div>
+  </div>
+</div>

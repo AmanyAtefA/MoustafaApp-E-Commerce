@@ -12,13 +12,14 @@ public class CurrentUserService : ICurrentUserService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    private ClaimsPrincipal User =>
-        _httpContextAccessor.HttpContext?.User
-        ?? throw new UnauthorizedAccessException("No HttpContext found");
+    private ClaimsPrincipal? User =>
+     _httpContextAccessor.HttpContext?.User;
 
-    public string UserId =>
-      User.FindFirstValue(ClaimTypes.NameIdentifier)
-      ?? throw new UnauthorizedAccessException("User ID not found");
+    public bool IsAuthenticated =>
+    User?.Identity?.IsAuthenticated ?? false;
+
+    public string? UserId =>
+    User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
     public string? UserName =>
         User.FindFirstValue(ClaimTypes.Name);

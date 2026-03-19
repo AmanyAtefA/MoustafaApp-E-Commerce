@@ -6,8 +6,10 @@
     {{title}}
   </h1>
 </div>
-<div class="imgDiv" *ngIf="Products$ | async as data">
-  
+
+<div *ngIf="Products$ | async as data">
+  <div class="imgDiv" >
+
     <div *ngFor="let Prod of data.items">
 
       <a [routerLink]="['/ProductDetail', Prod.productId]">
@@ -27,13 +29,21 @@
             <span class="dis"> - {{Prod.discount}}%</span>
           </div>
         </div>
-        </div>
-        </div>
-     
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="pt-3">
+    <app-pagination *ngIf="showPagination"
+                    [page]="data.pageNumber"
+                    [totalPages]="data.totalPages"
+                    (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </div>
+
 </div>
-
-
-
 
 
 

@@ -5,7 +5,7 @@ namespace MoustafaApp.Server.DomainBusiness.CartBusiness
 {
     public class CartCalculator
     {
-        public CartSummary Calculate(Cart cart)
+        public CartSummary Calculate(Cart cart,bool isAuthenticated)
         {
             var subtotal = cart.CartItems
                 .Sum(i => i.Quantity * i.PriceOfUnit);
@@ -13,8 +13,8 @@ namespace MoustafaApp.Server.DomainBusiness.CartBusiness
             decimal userDiscount = 0;
             decimal couponDiscount = 0;
 
-            // خصم المستخدم
-            if (cart.UserId != null)
+
+            if (isAuthenticated)
             {
                 userDiscount = subtotal * 0.20m;
             }

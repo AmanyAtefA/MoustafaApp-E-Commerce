@@ -7,13 +7,11 @@ import { Router } from '@angular/router';
 
 
 export function GeneralInterceptor(request: HttpRequest<any>, next: HttpHandlerFn) {
+
   const token = localStorage.getItem('token');
-
-
   const router = inject(Router);
-  let headers = request.headers;
 
-  console.log("Interceptor Token:", token);
+  let headers = request.headers;
 
   if (token) {
     headers = headers.set('Authorization', 'Bearer ' + token);
@@ -28,35 +26,18 @@ export function GeneralInterceptor(request: HttpRequest<any>, next: HttpHandlerF
   return next(clonedRequest).pipe(
     catchError((error: HttpErrorResponse) => {
 
-      console.error("SERVER ERROR FULL:", error);
-      console.log("STATUS:", error.status);
-      console.log("ERROR BODY:", error.error);
-      console.log("FULL ERROR:", error);
-      let errorMsg = '';
+      // ✅ أهم تعديل هنا
+      if (error.status === 401) {
 
-      if (error.status === 0) {
-        errorMsg = '❌ فشل الاتصال بالسيرفر.';
-      }
-
-      else if (error.status === 401) {
-        errorMsg = '🚫 غير مصرح. من فضلك سجل الدخول.';
         localStorage.removeItem('token');
-        router.navigate(['/login']);
+
+        // ❗ متعملش redirect لو هو بالفعل في login
+        if (!router.url.includes('/Login')) {
+          router.navigate(['/Login']);
+        }
       }
 
-      else if (error.status === 500) {
-
-        // 👇 هنا نعرض رسالة السيرفر
-        errorMsg = error.error || 'Internal Server Error';
-
-        console.error("SERVER MESSAGE:", error.error);
-      }
-
-      else {
-        errorMsg = error.error?.message || 'Unexpected Error';
-      }
-
-      return throwError(() => new Error(errorMsg));
+      return throwError(() => error);
     })
   );
 }

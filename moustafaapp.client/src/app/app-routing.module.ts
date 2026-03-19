@@ -16,9 +16,10 @@ import { OrderComponent } from './order/order.component';
 
 const routes: Routes = [
   {
-    path: '', component: LayoutComponent,
+    path: '',
+    component: LayoutComponent,
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'Home' },
+      { path: '', redirectTo: 'Home', pathMatch: 'full' },
       { path: 'Home', component: Home },
       { path: 'Products', component: ProductsComponent },
       { path: 'ProductDetail/:id', component: ProductDetailComponent },
@@ -28,18 +29,21 @@ const routes: Routes = [
       { path: 'Checkout', component: CheckoutComponent },
       { path: 'Success', component: SuccessComponent },
       { path: 'Order/:id', component: OrderComponent },
-    ]
 
+    ]
   },
+
   { path: 'Login', component: LoginComponent },
   { path: 'Register', component: RegisterComponent },
-  { path: 'NotFound', component: NotFoundComponent },
-  {path: '**', redirectTo: '/NotFound', pathMatch: 'full' },
+
+  { path: '**', redirectTo: '/Home' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes)
+  ],
+  exports: [RouterModule] 
 })
 export class AppRoutingModule {
 

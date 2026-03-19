@@ -45,7 +45,7 @@ namespace MoustafaApp.Server.Service.CartService.CartService
         {
             _cartValidator.Validate(cart);
 
-            var summary = _cartCalculator.Calculate(cart);
+            var summary = _cartCalculator.Calculate(cart, _currentUser.IsAuthenticated);
 
             var dto = _mapper.Map<CartDto>(cart);
 

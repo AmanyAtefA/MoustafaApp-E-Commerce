@@ -43,7 +43,7 @@ export class ProductsService {
       tap(Products => {
         console.log('Loaded Products:', Products);
         this.ProductsSubject.next(Products)
-        this.loadProductNewArrivals(1, this.PageSize);
+        //this.loadProductNewArrivals(1, this.PageSize);
 
       }),
       catchError((error: HttpErrorResponse) => {
@@ -52,6 +52,20 @@ export class ProductsService {
         return of(emptyPagedResult<IProduct>());
       })
     );
+  }
+
+
+  private updateSubject(filter: IProductFilter, products: PagedResult<IProduct>) {
+    this.ProductsSubject.next(products); 
+
+    switch (filter.preset) {
+      case ProductPreset.NewArrivals:
+        this.NewArrivalsSubject.next(products);
+        break;
+      case ProductPreset.BestSeller:
+        this.TopSellingSubject.next(products);
+        break;
+    }
   }
 
 
@@ -64,22 +78,10 @@ export class ProductsService {
         params = params.append(key, value.toString());
       }
     });
-
     return this.http.get<PagedResult<IProduct>>(environment.baseUrl + 'Product/GetProductsWithFilter', { params }).pipe(
-      tap(products => {
+      tap(products => 
 
-        switch (filter.preset) {
-          case ProductPreset.NewArrivals:
-            this.NewArrivalsSubject.next(products);
-            break;
-
-          case ProductPreset.BestSeller:
-            this.TopSellingSubject.next(products);
-            break;
-        }
-
-        this.ProductsSubject.next(products);
-      }),
+        this.updateSubject(filter, products)),
 
       catchError((error: HttpErrorResponse) => {
         console.error('Error loading Products:', error);
@@ -176,29 +178,29 @@ export class ProductsService {
 
 
 
-  loadProductNewArrivals(page?: number, pageSize?: number):Observable<PagedResult<IProduct>> {
+  //loadProductNewArrivals(page?: number, pageSize?: number):Observable<PagedResult<IProduct>> {
 
-    if (page)
-      this.Page = page;
-    if (pageSize)
-      this.PageSize = pageSize;
+  //  if (page)
+  //    this.Page = page;
+  //  if (pageSize)
+  //    this.PageSize = pageSize;
 
-    const params = { page: this.Page, pageSize: this.PageSize };
+  //  const params = { page: this.Page, pageSize: this.PageSize };
 
-    return this.http.get<PagedResult<IProduct>>(
-      environment.baseUrl + 'Product/GetAllProductsNewArrivalsAsync/',
-        { params } )
-      .pipe(
-        tap(res => {
-          console.log('Loaded NewArrivals:', res);
-        }),
-        catchError(err => {
-          console.error('New Arrivals Error', err);
-          alert('Error in Loading NewArrivals');
-          return throwError(() => err);
-        }),
-    )
-  }
+  //  return this.http.get<PagedResult<IProduct>>(
+  //    environment.baseUrl + 'Product/GetAllProductsNewArrivalsAsync/',
+  //      { params } )
+  //    .pipe(
+  //      tap(res => {
+  //        console.log('Loaded NewArrivals:', res);
+  //      }),
+  //      catchError(err => {
+  //        console.error('New Arrivals Error', err);
+  //        alert('Error in Loading NewArrivals');
+  //        return throwError(() => err);
+  //      }),
+  //  )
+  //}
 
 
 

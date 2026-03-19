@@ -16,12 +16,12 @@
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
 
-        public async Task<Order?> GetOrderByUserId(string UserId)
+        public async Task<Order?> GetOrderByUserId(string userId)
         {
             return await _context.Orders
                 .Include(o => o.OrderItems)
                  .Include(o => o.Address)
-                .FirstOrDefaultAsync(o => o.UserId == UserId);
+                .FirstOrDefaultAsync(o => o.UserId == userId);
         }
 
 

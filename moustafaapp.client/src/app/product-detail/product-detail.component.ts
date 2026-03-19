@@ -111,7 +111,7 @@ export class ProductDetailComponent implements OnInit {
       next: (res) => {
         console.log("Added to cart", res)
         alert("Product added to cart")
-        this.router.navigate(['/Cart'])
+        
       },
       error: (err) => {
         console.log(err)

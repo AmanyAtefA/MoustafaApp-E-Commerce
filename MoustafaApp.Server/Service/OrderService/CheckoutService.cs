@@ -38,11 +38,11 @@ namespace MoustafaApp.Server.Service.OrderService
             if (cart == null || !cart.CartItems.Any())
                 throw new InvalidOperationException("Cart is empty.");
 
-            // Validate cart
+          
             _cartValidator.Validate(cart);
 
-            // Calculate totals
-            var summary = _cartCalculator.Calculate(cart);
+            
+            var summary = _cartCalculator.Calculate(cart, _currentUser.IsAuthenticated);
 
             // Create Address
             var address = _mapper.Map<Address>(dto);

@@ -10,7 +10,7 @@
   </h4>
 
   
-    <button class="butstyle ">Shop Now</button>
+    <button class="butstyle " [routerLink]="['/Products']">Shop Now</button>
   
     <div class="">
       <div class="boxItems">
@@ -42,8 +42,19 @@
 
 <app-brands></app-brands>
 
-<app-new-arrivals  [pageSize]="4"  [showPagination]="false" ></app-new-arrivals>
+<app-new-arrivals  
+              [showPagination]="false"
+              [inputFilter]="{ pageSize: 4 }"
+              [showButtonInHome]="true">
 
-<app-top-selling [pageSize]="4"  [showPagination]="false"></app-top-selling>
+</app-new-arrivals>
+
+
+<app-top-selling  
+              [showPagination]="false"
+              [inputFilter]="{ pageSize: 4 }"
+              [showButtonInHome]="true">
+
+</app-top-selling>
 
 <app-dress-style></app-dress-style>

@@ -1,27 +1,24 @@
 
 
-
 <div class=" container">
-  <h1 class="h1Style">
-  </h1>
+  <h1 class="h1Style"> {{title}}</h1>
 </div>
+
 <ng-container *ngIf="Products$ | async as data">
 
-  <app-products title="TOP SELLNG" ></app-products>
-
-
-  <div class="pt-3">
-    <app-pagination *ngIf="showPagination"
-                    [page]="data.pageNumber"
-                    [totalPages]="data.totalPages"
-                    (pageChange)="onPageChange($event)">
-    </app-pagination>
+  <div class="imgDiv">
+    <app-product-card *ngFor="let Prod of data.items"
+                      [product]="Prod">
+    </app-product-card>
   </div>
+  <app-pagination *ngIf="showPagination"
+                  [page]="data.pageNumber"
+                  [totalPages]="data.totalPages"
+                  (pageChange)="onPageChange($event)">
+  </app-pagination>
 
-
-  <div class="butDiv">
-    <button class="butstyle"
-            [routerLink]="['/TopSelling']">
+  <div class="butDiv" *ngIf="showButtonInHome">
+    <button class="butstyle" [routerLink]="['/TopSelling']">
       View All
     </button>
   </div>
@@ -29,7 +26,6 @@
 </ng-container>
 
 <hr class="lineStyle">
-
 
 
 

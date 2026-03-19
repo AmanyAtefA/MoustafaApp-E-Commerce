@@ -1,25 +1,47 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { RegisterService } from '../Service/register.service';
 import { inject } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
+export const authGuard: CanActivateFn = (route, state) => {
 
-export const authGuard: CanActivateFn = (route, state,) => {
+  const router = inject(Router);
+  const registerService = inject(RegisterService);
+  const jwtHelper = inject(JwtHelperService);
 
-    const router = inject(Router);
-    const registerService = inject(RegisterService);
+  const token = localStorage.getItem('token');
 
-    const Roles: string[] = route.data['roles'];
-
-  const user = registerService.currentUser;
-  if (user && Array.isArray(user.role)) {
-    const isAuthorized = user.role.some((role: string) => Roles.includes(role));
-    if (isAuthorized) {
-      return true;
-    }
+  // ❌ مفيش توكن
+  if (!token) {
+    router.navigate(['/Login']);
+    return false;
   }
 
-  router.navigate(['/ManegerPage']); 
+  // ❌ التوكن expired
+  if (jwtHelper.isTokenExpired(token)) {
+    localStorage.removeItem('token');
+    router.navigate(['/Login']);
     return false;
-  
+  }
+
+  // ✅ لو فيه roles
+  const roles: string[] = route.data?.['roles'];
+
+  const user = registerService.currentUser;
+
+  if (roles && roles.length > 0) {
+
+    if (user && Array.isArray(user.role)) {
+      const isAuthorized = user.role.some((r: string) => roles.includes(r));
+
+      if (isAuthorized) return true;
+    }
+
+    // ❌ مش مصرح
+    router.navigate(['/NotFound']);
+    return false;
+  }
+
+  // ✅ user عادي
+  return true;
 };

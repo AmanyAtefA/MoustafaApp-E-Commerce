@@ -27,6 +27,7 @@ import { GeneralInterceptor } from '../Interceptors/GeneralInterceptor.Service';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { SuccessComponent } from './success/success.component';
 import { OrderComponent } from './order/order.component';
+import { ProductCardComponent } from './product-card/product-card.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +50,8 @@ import { OrderComponent } from './order/order.component';
     ShortFullNamePipe,
     CheckoutComponent,
     SuccessComponent,
-    OrderComponent
+    OrderComponent,
+    ProductCardComponent
   ],
   imports: [
     BrowserModule,
