@@ -35,13 +35,14 @@ const routes: Routes = [
 
   { path: 'Login', component: LoginComponent },
   { path: 'Register', component: RegisterComponent },
-
   { path: '**', redirectTo: '/Home' },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, {
+      scrollPositionRestoration: 'top'
+    })
   ],
   exports: [RouterModule] 
 })

@@ -16,6 +16,7 @@ export class NavebarComponent implements OnInit {
 
   menuOpen = false;
   isDropdownOpen = false;
+  isSearchOpen = false;
 
   // ✅ state واحدة بدل كذا variable
   activeMenu: 'shop' | 'brand' | null = null;
@@ -80,19 +81,24 @@ export class NavebarComponent implements OnInit {
 
 
 
+  toggleSearch() {
+    this.isSearchOpen = !this.isSearchOpen;
+  }
+
   searchProducts(text: string) {
     this.updateFilter({ search: text });
   }
 
   updateFilter(filter: any) {
     const currentParams = this.route.snapshot.queryParams;
-
+    
     this.router.navigate(['/Products'], {
       queryParams: {
      
         ...filter
       }
     });
+    console.log(filter);
   }
 
   @HostListener('document:click', ['$event'])

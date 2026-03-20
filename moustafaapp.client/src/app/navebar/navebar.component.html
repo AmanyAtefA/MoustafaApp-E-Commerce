@@ -116,12 +116,18 @@
   </div>
 
   <!-- SEARCH -->
-  <div class="nav-search">
-    <i class="bi bi-search"></i>
-    <input type="text" placeholder="Search products..."
-            (keyup.enter)="updateFilter({ search: searchText.value })"
-           #searchText/>
+  <div class="nav-search" [class.open]="isSearchOpen">
+    <i class="bi bi-search" (click)="toggleSearch()"></i>
+
+    <input type="text"
+           placeholder="Search products..."
+           (input)="updateFilter({ search: searchText.value })"
+           #searchText />
+    <!--(keyup.enter)="updateFilter({ search: searchText.value })" search By Enter-->
+
   </div>
+
+ 
 
   <!-- RIGHT: CART + USER -->
   <div class="nav-right ">

@@ -1,117 +1,134 @@
-
-
 <div class="container ">
   <hr class="lineStyle conDetails ">
   <p class="StyleP fs-3"> Home > Cart </p>
 
   <h1 class="pTitle">YOUR CART</h1>
+
   <div *ngIf="cart$ | async as cart">
 
-    <div>
-        <div class="row">
+    <div class="row">
 
-          <!-- Items -->
-          <div class="col-lg-7 col-md-12">
+     
+      <div class="col-lg-7 col-md-12">
 
-            <div *ngFor="let item of cart.cartItems" class="cart-item">
-              <div class="item">
-                <div>
-                  <img [src]="item.photo" class="imgItem" />
-                </div>
+       
+        <ng-container *ngIf="!cart.cartItems || cart.cartItems.length === 0">
 
-                <div class="ditailsItem">
-                  <div>
-                    <h4 class="title">{{item.productName}}</h4>
-                    <span>Size: {{item.sizeName}}</span>
-                    <br />
-                    <span>Color: {{item.colorName}}</span>
+          <div class="empty-cart-box text-center">
+            <h3>No Cart Yet 🛒</h3>
+            <p>Start shopping to add items to your cart</p>
 
-                    <div class="price">
-                      <p>{{item.priceOfUnit}} $</p>
-                    </div>
-                  </div>
-                </div>
+            <button class="butAddCart mt-3" routerLink="/Products">
+              Go To Products
+            </button>
+          </div>
 
-                <div class="act">
-                  <button class="iDelite">
-                    <i class="bi bi-trash" (click)="removeItem(item.cartItemId)"></i>
-                  </button>
+        </ng-container>
 
-                  <div class="divAddToCart">
-                    <div class="butAddNom">
-                      <button class="addNomStyle" (click)="decrease(item)">−</button>
-                      <span class="qty">{{ item.quantity }}</span>
-                      <button class="addNomStyle" (click)="increase(item)">+</button>
-                    </div>
-                  </div>
-                </div>
+        <ng-container *ngIf="cart.cartItems && cart.cartItems.length > 0">
 
+          <div *ngFor="let item of cart.cartItems" class="cart-item">
+            <div class="item">
+              <div>
+                <img [src]="item.photo" class="imgItem" />
               </div>
+
+              <div class="ditailsItem">
+                <div>
+                  <h4 class="title">{{item.productName}}</h4>
+                  <span>Size: {{item.sizeName}}</span>
+                  <br />
+                  <span>Color: {{item.colorName}}</span>
+
+                  <div class="price">
+                    <p>{{item.priceOfUnit}} $</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="act">
+                <button class="iDelite">
+                  <i class="bi bi-trash" (click)="removeItem(item.cartItemId)"></i>
+                </button>
+
+                <div class="divAddToCart">
+                  <div class="butAddNom">
+                    <button class="addNomStyle" (click)="decrease(item)">−</button>
+                    <span class="qty">{{ item.quantity }}</span>
+                    <button class="addNomStyle" (click)="increase(item)">+</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </ng-container>
+
+      </div>
+
+      
+      <div class="col-lg-5 col-md-12 mt-4 mt-lg-0">
+        <div class="divorderSummary">
+          <div class="subtotal ">
+            <h2 class="orderSummary">Order Summary</h2>
+
+            <div class="summaryRow">
+              <span>Subtotal</span>
+              <span class="numSubtotal">${{ cart.subtotal || 0 }}</span>
+            </div>
+
+            <div class="summaryRow">
+              <span>
+                Discount User (- {{ (cart.subtotal ? (cart.userDiscount / cart.subtotal) * 100 : 0) | number:'1.0-0' }} %)
+              </span>
+              <span class="numSubtotal colorSubtotal">-${{ cart.userDiscount || 0 }}</span>
+            </div>
+
+            <div *ngIf="cart.couponCode" class="summaryRow text-success">
+              <span>
+                Coupon {{cart.couponCode}}
+                (- {{ (cart.subtotal ? (cart.couponDiscount / cart.subtotal) * 100 : 0) | number:'1.0-0' }} %)
+                <span class="remove-coupon" (click)="removeCoupon()">Remove</span>
+              </span>
+              <span>- ${{cart.couponDiscount}}</span>
+            </div>
+
+            <div class="summaryRow">
+              <span>Delivery Fee</span>
+              <span class="numSubtotal">${{ cart.deliveryFee || 0 }}</span>
+            </div>
+
+            <hr class="lineStyle">
+
+            <div class="summaryRow totalRow">
+              <span>Total</span>
+              <span class="numSubtotal">${{ cart.total || 0 }}</span>
             </div>
 
           </div>
 
-          <!-- Order Summary -->
-          <div class="col-lg-5 col-md-12 mt-4 mt-lg-0">
-            <div class="divorderSummary">
-              <div class="subtotal ">
-                <h2 class="orderSummary">Order Summary</h2>
-                <div class="summaryRow">
-                  <span>Subtotal</span>
-                  <span class="numSubtotal">${{ cart.subtotal }}</span>
-                </div>
-
-                <div class="summaryRow">
-                  <span>
-                    Discount User (- {{ (cart.userDiscount / cart.subtotal) * 100 | number:'1.0-0' }} %)
-                  </span>
-                  <span class="numSubtotal colorSubtotal">-${{ cart.userDiscount }}</span>
-                </div>
-
-                <div *ngIf="cart.couponCode" class="summaryRow text-success">
-                  <span>
-                    Coupon {{cart.couponCode}}
-                    (- {{ (cart.couponDiscount / cart.subtotal) * 100 | number:'1.0-0' }} %)
-                    <span class="remove-coupon" (click)="removeCoupon()">Remove</span>
-                  </span>
-                  <span>- ${{cart.couponDiscount}}</span>
-                </div>
-
-                <div class="summaryRow">
-                  <span>Delivery Fee</span>
-                  <span class="numSubtotal">${{ cart.deliveryFee }}</span>
-                </div>
-
-                <hr class="lineStyle">
-
-                <div class="summaryRow totalRow">
-                  <span>Total</span>
-                  <span class="numSubtotal">${{ cart.total }}</span>
-                </div>
-
-              </div>
-
-
-              <div class="checkout">
-                <div class="inputWrapper">
-                  <i class="bi bi-tag inputIcon"></i>
-                  <input type="text"class="inputCheckout" placeholder="Add promo code SALE20"
-                         [(ngModel)]="couponCode" />
-                </div>
-
-                <button class="butCheckout" (click)="applyCoupon()">Apply</button>
-
-              </div>
-
-              <div>
-                <button class="butAddCart" routerLink="/Checkout">Go to Checkout</button>
-              </div>
+          <div class="checkout">
+            <div class="inputWrapper">
+              <i class="bi bi-tag inputIcon"></i>
+              <input type="text" class="inputCheckout"
+                     placeholder="Add promo code SALE20"
+                     [(ngModel)]="couponCode" />
             </div>
+
+            <button class="butCheckout" (click)="applyCoupon()">Apply</button>
+          </div>
+
+          <div>
+            <button class="butAddCart" routerLink="/Checkout">
+              Go to Checkout
+            </button>
           </div>
 
         </div>
-      
+      </div>
 
     </div>
+
   </div>
 </div>

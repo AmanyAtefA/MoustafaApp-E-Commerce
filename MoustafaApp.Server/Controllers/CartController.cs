@@ -11,7 +11,7 @@ namespace MoustafaApp.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+   
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
@@ -26,7 +26,7 @@ namespace MoustafaApp.Server.Controllers
             _mapper = mapper;
         }
 
-
+        [Authorize]
         [HttpGet("GetCartByUserId")]
         public async Task<IActionResult> GetCartsByUserId()
         {
@@ -119,7 +119,7 @@ namespace MoustafaApp.Server.Controllers
             return Ok(cart);
         }
 
-
+        [Authorize]
         [HttpPost("checkout")]
         public async Task<IActionResult> Checkout([FromBody] AddressDto dto)
         {

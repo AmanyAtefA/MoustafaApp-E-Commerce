@@ -416,20 +416,38 @@
     display: none;
   }
 
+
+
   .nav-search {
     background: transparent;
-    flex: 1;
-    min-width: 0;
-    margin-left: 45px;
+    flex: 0 0 auto;
+    position: relative;
+    flex-direction: row-reverse;
+    margin-left: auto;
+    flex: 0 0 auto;
+
   }
 
-   .nav-search input {
-     display: none;
-   }
+    .nav-search input {
+      width: 0;
+      opacity: 0;
+      transition: 0.3s;
+      background: #f0f0f0;
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: none;
+      right: 30px;
+    }
 
-   .nav-search i {
-     font-size: 20px;
-   }
+    .nav-search.open input {
+      width: 160px;
+      opacity: 1;
+    }
+
+    .nav-search i {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
 
   .navStyle {
     display: flex;

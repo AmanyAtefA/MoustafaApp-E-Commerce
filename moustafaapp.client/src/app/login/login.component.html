@@ -7,7 +7,7 @@
       <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-5">
         <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
           <div class="d-flex align-items-center justify-content-between mb-3">
-            <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Shop.Co</h3>
+            <h3 class="text-primary" >  <i class="fa fa-user-edit me-2"></i><a routerLink="/Home">Shop.Co</a></h3>
             <h3>Sign In</h3>
           </div>
           <div class="form-floating mb-3">
@@ -45,6 +45,7 @@
           </div>
           <button [disabled]="UserLoginForm.invalid" type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
           <p class="text-center mb-0">Don't have an Account? <a routerLink="/Register"> Sign Up</a></p>
+          <p class="text-center mb-0"><a routerLink="/Home"> Go to Home</a></p>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 
 
 
@@ -11,11 +12,19 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
 
 
-  constructor(private http: HttpClient) {}
 
-  ngOnInit() {
-  
-  }
+constructor(private router: Router) { }
+
+ngOnInit() {
+  //this.router.events.subscribe(event => {
+  //  if (event instanceof NavigationEnd) {
+  //    window.scrollTo({
+  //      top: 120,
+  //      behavior: 'smooth'
+  //    });
+  //  }
+  //});
+}
 
  
 

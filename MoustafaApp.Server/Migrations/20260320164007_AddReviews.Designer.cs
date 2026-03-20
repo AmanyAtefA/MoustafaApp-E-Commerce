@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoustafaApp.Server.Data;
 
@@ -11,9 +12,11 @@ using MoustafaApp.Server.Data;
 namespace MoustafaApp.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260320164007_AddReviews")]
+    partial class AddReviews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -634,7 +637,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 1,
                             BrandId = 1,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2026, 3, 20, 17, 11, 36, 408, DateTimeKind.Utc).AddTicks(7128),
+                            CreatedAt = new DateTime(2026, 3, 20, 16, 40, 5, 213, DateTimeKind.Utc).AddTicks(3694),
                             DepartmentId = 1,
                             Description = "This graphic t-shirt which is perfect for any occasion. Crafted from a soft and breathable fabric, it offers superior comfort and style.",
                             Discount = 13,
@@ -650,7 +653,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 2,
                             BrandId = 2,
                             CategoryId = 2,
-                            CreatedAt = new DateTime(2026, 3, 20, 17, 11, 36, 408, DateTimeKind.Utc).AddTicks(7148),
+                            CreatedAt = new DateTime(2026, 3, 20, 16, 40, 5, 213, DateTimeKind.Utc).AddTicks(3706),
                             DepartmentId = 1,
                             Description = "Comfortable skinny fit jeans",
                             Discount = 8,
@@ -666,7 +669,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 3,
                             BrandId = 5,
                             CategoryId = 3,
-                            CreatedAt = new DateTime(2026, 3, 20, 17, 11, 36, 408, DateTimeKind.Utc).AddTicks(7164),
+                            CreatedAt = new DateTime(2026, 3, 20, 16, 40, 5, 213, DateTimeKind.Utc).AddTicks(3714),
                             DepartmentId = 1,
                             Description = "Classic checkered shirt",
                             Discount = 0,
@@ -682,7 +685,7 @@ namespace MoustafaApp.Server.Migrations
                             ProductId = 4,
                             BrandId = 4,
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2026, 3, 20, 17, 11, 36, 408, DateTimeKind.Utc).AddTicks(7176),
+                            CreatedAt = new DateTime(2026, 3, 20, 16, 40, 5, 213, DateTimeKind.Utc).AddTicks(3723),
                             DepartmentId = 1,
                             Description = "Striped raglan tee",
                             Discount = 18,
@@ -967,7 +970,7 @@ namespace MoustafaApp.Server.Migrations
                     b.HasData(
                         new
                         {
-                            ReviewId = 37,
+                            ReviewId = 1,
                             DatePosted = new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProductId = 24,
                             Rating = 4.5m,
@@ -975,7 +978,7 @@ namespace MoustafaApp.Server.Migrations
                         },
                         new
                         {
-                            ReviewId = 38,
+                            ReviewId = 2,
                             DatePosted = new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProductId = 24,
                             Rating = 4.5m,
@@ -983,7 +986,7 @@ namespace MoustafaApp.Server.Migrations
                         },
                         new
                         {
-                            ReviewId = 39,
+                            ReviewId = 3,
                             DatePosted = new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProductId = 24,
                             Rating = 4.5m,
@@ -991,7 +994,7 @@ namespace MoustafaApp.Server.Migrations
                         },
                         new
                         {
-                            ReviewId = 40,
+                            ReviewId = 4,
                             DatePosted = new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProductId = 24,
                             Rating = 4.5m,
@@ -999,7 +1002,7 @@ namespace MoustafaApp.Server.Migrations
                         },
                         new
                         {
-                            ReviewId = 41,
+                            ReviewId = 5,
                             DatePosted = new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProductId = 24,
                             Rating = 4.5m,
@@ -1007,7 +1010,7 @@ namespace MoustafaApp.Server.Migrations
                         },
                         new
                         {
-                            ReviewId = 42,
+                            ReviewId = 6,
                             DatePosted = new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProductId = 24,
                             Rating = 4.5m,

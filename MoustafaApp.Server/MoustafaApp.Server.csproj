@@ -7,6 +7,7 @@
 
     <!-- مسار Angular -->
     <ClientAppDir>$(ProjectDir)..\moustafaapp.client\</ClientAppDir>
+    <UserSecretsId>131dafff-8272-485a-8857-42a2c81c6896</UserSecretsId>
   </PropertyGroup>
 
   <!-- Build Angular قبل Publish -->
@@ -20,8 +21,7 @@
     <AngularFiles Include="$(ClientAppDir)dist\moustafaapp.client\browser\**\*" />
   </ItemGroup>
 
-  <Copy SourceFiles="@(AngularFiles)"
-        DestinationFiles="@(AngularFiles->'$(PublishDir)wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+  <Copy SourceFiles="@(AngularFiles)" DestinationFiles="@(AngularFiles->'$(PublishDir)wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
 
 </Target>
 
